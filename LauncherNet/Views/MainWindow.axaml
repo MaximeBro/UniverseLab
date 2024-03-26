@@ -1,0 +1,43 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:LauncherNet.ViewModels"
+        xmlns:views="using:LauncherNet.Views"
+        x:Class="LauncherNet.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="LauncherNet"
+        WindowStartupLocation="CenterScreen"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1">
+    
+    <Grid RowDefinitions="Auto, *">
+        <!-- Titlebar -->
+        <Border Grid.Row="0" Background="#404040" Name="TitleBarBorder">
+            <Grid ColumnDefinitions="Auto, *, Auto">
+                <TextBlock Grid.Column="0" Name="TitleBarText" VerticalAlignment="Center" Margin="20 0 0 0" Foreground="White">
+                    LauncherNet
+                </TextBlock>
+                <Button Grid.Column="2" Height="32" Width="32" Background="Transparent" Command="{Binding CloseCommand}">
+                    <TextBlock FontFamily="{StaticResource FontAwesomeSolid}" Text="&#xf00d;" Foreground="White" ToolTip.Tip="Fermer"
+                               VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" />
+                    <Button.Styles>
+                        <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                            <Setter Property="Background" Value="Red"/>
+                        </Style>
+                        <Style Selector="Button:not(:pointerover) /template/ ContentPresenter#PART_ContentPresenter">
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Style>
+                        <Style Selector="Button">
+                            <Setter Property="CornerRadius" Value="0"/>
+                        </Style>
+                    </Button.Styles>
+                </Button>
+            </Grid>
+        </Border>
+        
+        <!-- MainContent -->
+        <views:MainPage DataContext="{Binding MainPage}" Grid.Row="1" />
+    </Grid>
+    
+</Window>
