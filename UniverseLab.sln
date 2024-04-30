@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LauncherNet", "LauncherNet\LauncherNet.csproj", "{E753B9F3-02A0-4125-B654-590E8293B760}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScumDB", "ScumDB\ScumDB.csproj", "{E51A93CD-987F-46ED-B83E-8F692B9897D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +8,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E753B9F3-02A0-4125-B654-590E8293B760}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E753B9F3-02A0-4125-B654-590E8293B760}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E753B9F3-02A0-4125-B654-590E8293B760}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E753B9F3-02A0-4125-B654-590E8293B760}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E51A93CD-987F-46ED-B83E-8F692B9897D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E51A93CD-987F-46ED-B83E-8F692B9897D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E51A93CD-987F-46ED-B83E-8F692B9897D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E51A93CD-987F-46ED-B83E-8F692B9897D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

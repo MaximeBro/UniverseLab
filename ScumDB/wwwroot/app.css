@@ -1,0 +1,21 @@
+* { outline: none; }
+
+.text-white { color: #fff!important; }
+
+.gradient-title {
+    background: linear-gradient(82deg,#594ae2 0%,#f69 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    outline: none;
+}
+
+.clickable-app:hover {
+    background-color: rgba(0, 0, 0, .15)!important;
+    border-radius: 4px!important;
+    cursor: pointer;
+}
+
+.darkless-bg { background-color: #1E1E2D!important; }
+.dark-bg { background-color: #1A1A27!important; }
+.darker-bg { background-color: #161621!important; }
+.purple-font { color: #7d57fa!important; }
