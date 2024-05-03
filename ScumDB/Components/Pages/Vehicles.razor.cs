@@ -2,16 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
 using MudBlazor;
+using ScumDB.Components.Dialogs;
 using ScumDB.Databases;
 using ScumDB.Extensions;
 using ScumDB.Models;
-using ScumDB.Services;
 
 namespace ScumDB.Components.Pages;
 
 public partial class Vehicles
 {
 	[Inject] public IDbContextFactory<ScumDbContext> Factory { get; set; } = null!;
+	[Inject] public IDialogService DialogService { get; set; } = null!;
 	[Inject] public IJSRuntime JsRuntime { get; set; } = null!;
 	[Inject] public ISnackbar Snackbar { get; set; } = null!;
 
@@ -37,20 +38,48 @@ public partial class Vehicles
 	
 	protected override async Task OnInitializedAsync()
 	{
-		var db = await Factory.CreateDbContextAsync();
-		_vehicles = db.Vehicles.AsNoTracking().Where(x => !string.IsNullOrWhiteSpace(x.OwnerId) && x.OwnerId.StartsWith("7")).OrderBy(x => x.OwnerId).ToList();
-		var accounts = db.Accounts.AsNoTracking().ToList();
-		await db.DisposeAsync();
+		await RefreshDataAsync();
+	}
 
-		foreach (var vehicle in _vehicles)
+	private async Task RemoveVehicleAsync(VehicleModel vehicle)
+	{
+		var parameters = new DialogParameters<ConfirmDialog> { { x => x.Text, "Voulez-vous vraiment supprimer ce véhicule ?" } };
+		var instance = await DialogService.ShowAsync<ConfirmDialog>(string.Empty, parameters, Hardcoded.DialogOptions);
+		var result = await instance.Result;
+		if (result is { Data: true })
 		{
-			vehicle.OwnerName = accounts.FirstOrDefault(x => x.SteamId == vehicle.OwnerId)?.Name;
+			var db = await Factory.CreateDbContextAsync();
+			db.Vehicles.Remove(vehicle);
+			await db.SaveChangesAsync();
+			await db.DisposeAsync();
+			await RefreshDataAsync();
+		}
+	}
+
+	private async Task PurgeVehiclesAsync()
+	{
+		var parameters = new DialogParameters<ConfirmDialog> { { x => x.Text, "Voulez-vous vraiment tenter une purge des véhicules ?" } };
+		var instance = await DialogService.ShowAsync<ConfirmDialog>(string.Empty, parameters, Hardcoded.DialogOptions);
+		var result = await instance.Result;
+		if (result is { Data: true })
+		{
+			var db = await Factory.CreateDbContextAsync();
+			var toDell = db.Vehicles.Where(x => !x.OwnerId!.StartsWith("7")).ToList();
+			db.Vehicles.RemoveRange(toDell);
+			await db.SaveChangesAsync();
+			await db.DisposeAsync();
+			await RefreshDataAsync();
+			Snackbar.Add("Purge effectuée !", Severity.Success, options =>
+			{
+				options.VisibleStateDuration = 1500;
+				options.ShowCloseIcon = false;
+			});
 		}
 	}
 
 	private async Task CopyToClipboardAsync(VehicleModel vehicle)
 	{
-		var coords = $"{vehicle.PositionX.ToMapFormat()},{vehicle.PositionY.ToMapFormat()},{vehicle.PositionZ.ToMapFormat()}";
+		var coords = $"{vehicle.PositionX},{vehicle.PositionY},{vehicle.PositionZ}";
 		await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", coords);
 		Snackbar.Add("Coordonnées copiées dans le presse-papier", Severity.Info, options =>
 		{
@@ -60,9 +89,33 @@ public partial class Vehicles
 		});
 	}
 
+	private async Task CopyToClipboardAsync(int id)
+	{
+		await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", id);
+		Snackbar.Add("ID copié dans le presse-papier", Severity.Info, options =>
+		{
+			options.VisibleStateDuration = 1500;
+			options.ShowCloseIcon = false;
+			options.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
+		});
+	}
+
 	private async Task OpenMapAsync(VehicleModel vehicle)
 	{
-		var coords = $"{vehicle.PositionX.ToMapFormat()},{vehicle.PositionY.ToMapFormat()},{vehicle.PositionZ.ToMapFormat()}";
+		var coords = $"{vehicle.PositionX},{vehicle.PositionY},{vehicle.PositionZ}";
 		await JsRuntime.InvokeVoidAsync("open", $"https://scum-map.com/en/map/{coords}", "_blank");
+	}
+
+	private async Task RefreshDataAsync()
+	{
+		var db = await Factory.CreateDbContextAsync();
+		_vehicles = db.Vehicles.AsNoTracking().Where(x => !string.IsNullOrWhiteSpace(x.OwnerId) && x.OwnerId.StartsWith("7")).OrderBy(x => x.OwnerId).ToList();
+		var accounts = db.Accounts.AsNoTracking().ToList();
+		await db.DisposeAsync();
+
+		foreach (var vehicle in _vehicles)
+		{
+			vehicle.OwnerName = accounts.FirstOrDefault(x => x.SteamId == vehicle.OwnerId)?.Name;
+		}
 	}
 }

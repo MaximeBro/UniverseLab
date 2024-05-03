@@ -6,19 +6,43 @@
     <MudDataGrid T="VehicleModel" Items="@_vehicles" QuickFilter="@QuickFilter" FixedHeader FixedFooter Bordered Striped Height="70vh"
                  Class="dark-bg mud-elevation-5" HeaderClass="dark-bg" FooterClass="dark-bg" RowClass="dark-bg">
         <ToolBarContent>
-            <MudText Class="text-white">Véhicules</MudText>
+            <MudText Class="text-white mr-4">Véhicules</MudText>
+            <AuthorizeView Roles="Admin">
+                <Authorized>
+                    <MudTooltip Text="Ajouter" Placement="Placement.Top" Arrow>
+                        <MudIconButton Icon="@IconsM.Filled.AddBox" Color="Color.Success" Size="Size.Small" Href="/backoffice/vehicles" />
+                    </MudTooltip>
+                    <MudTooltip Class="ml-1" Text="Purge" Placement="Placement.Top" Arrow>
+                        <MudIconButton Class="ml-2" Icon="@IconsM.Filled.Delete" Color="Color.Error" Size="Size.Small" OnClick="@PurgeVehiclesAsync" />
+                    </MudTooltip>
+                </Authorized>
+            </AuthorizeView>
             <MudSpacer/>
-            <MudTextField T="string" @bind-Value="_search" Label="Rechercher" Placeholder="Laika" Immediate Adornment="Adornment.Start" AdornmentIcon="@(IconsM.Filled.Search)" Clearable />
+            <MudTextField T="string" @bind-Value="_search" Label="Rechercher" Placeholder="Laika" Immediate Adornment="Adornment.Start" AdornmentIcon="@(IconsM.Filled.Search)" Clearable/>
         </ToolBarContent>
         <Columns>
             <PropertyColumn Title="Propriétaire (nom)" Property="x => x.OwnerName" HeaderClass="dark-bg" FooterClass="dark-bg"/>
             <PropertyColumn Title="Propriétaire (steamID)" AggregateDefinition="Aggregation" Property="x => x.OwnerId" HeaderClass="dark-bg" FooterClass="dark-bg"/>
+            <TemplateColumn Title="ID véhicule" HeaderClass="dark-bg" FooterClass="dark-bg">
+                <CellTemplate Context="row">
+                    <MudGrid Spacing="0">
+                        <MudItem xs="10">
+                            <MudText>#@row.Item.VehicleId</MudText>
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudTooltip Text="Copier l'ID du véhicule" Placement="Placement.Left" Arrow>
+                                <MudIconButton Size="Size.Small" Icon="@(IconsM.Filled.ContentCopy)" OnClick="@(async () => await CopyToClipboardAsync(row.Item.VehicleId))"/>
+                            </MudTooltip>
+                        </MudItem>
+                    </MudGrid>
+                </CellTemplate>
+            </TemplateColumn>
             <PropertyColumn Title="Véhicule" Property="x => x.Name" HeaderClass="dark-bg" FooterClass="dark-bg"/>
             <TemplateColumn Title="Position" HeaderClass="dark-bg" FooterClass="dark-bg">
                 <CellTemplate Context="row">
                     <MudGrid Spacing="0">
                         <MudItem xs="10">
-                            <MudText>X:@row.Item.PositionX.ToString("F2") Y:@row.Item.PositionY.ToString("F2") Z:@row.Item.PositionZ.ToString("F2")</MudText>
+                            <MudText>X:@row.Item.PositionX Y:@row.Item.PositionY Z:@row.Item.PositionZ</MudText>
                         </MudItem>
                         <MudItem xs="2">
                             <MudTooltip Text="Copier les coordonnées" Placement="Placement.Left" Arrow>
@@ -31,6 +55,22 @@
                     </MudGrid>
                 </CellTemplate>
             </TemplateColumn>
+            <AuthorizeView Roles="Admin">
+                <Authorized>
+                    <TemplateColumn Title="Actions" HeaderClass="dark-bg" FooterClass="dark-bg">
+                        <CellTemplate Context="row">
+                            <MudStack Row Spacing="4">
+                                <MudTooltip Text="Éditer" Placement="Placement.Left" Arrow>
+                                    <MudIconButton Icon="@IconsM.Filled.Edit" Color="Color.Primary" Size="Size.Small"/>
+                                </MudTooltip>
+                                <MudTooltip Text="Supprimer" Placement="Placement.Left" Arrow>
+                                    <MudIconButton Icon="@IconsM.Filled.Delete" Color="Color.Error" Size="Size.Small" OnClick="@(async() => await RemoveVehicleAsync(row.Item))" />
+                                </MudTooltip>
+                            </MudStack>
+                        </CellTemplate>
+                    </TemplateColumn>
+                </Authorized>
+            </AuthorizeView>
         </Columns>
     </MudDataGrid>
 </MudContainer>

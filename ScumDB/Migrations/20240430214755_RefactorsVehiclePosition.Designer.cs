@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScumDB.Databases;
 
@@ -10,9 +11,11 @@ using ScumDB.Databases;
 namespace ScumDB.Migrations
 {
     [DbContext(typeof(ScumDbContext))]
-    partial class ScumDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240430214755_RefactorsVehiclePosition")]
+    partial class RefactorsVehiclePosition
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");

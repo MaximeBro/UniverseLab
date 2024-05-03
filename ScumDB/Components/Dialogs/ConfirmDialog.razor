@@ -1,0 +1,20 @@
+﻿<MudDialog>
+    <DialogContent>
+        <MudIconButton Class="ml-n4" Icon="@IconsM.Filled.Close" Color="Color.Dark" OnClick="@(() => Dialog.Close())" />
+        <MudStack Class="px-4 py-2" Justify="Justify.SpaceEvenly" Row="false" Spacing="0">
+            @foreach (var text in Text.Split("\n"))
+            {
+                <MudText Class="open-sans-600" Typo="Typo.h6" Align="Align.Center">@text</MudText>
+            }
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Dark" Variant="Variant.Filled" OnClick="@(() => Dialog.Close(false))">Annuler</MudButton>
+        <MudButton Color="Color.Error" Variant="Variant.Filled" OnClick="@(() => Dialog.Close(true))">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] public MudDialogInstance Dialog { get; set; } = null!;
+    [Parameter] public string Text { get; set; } = null!;
+}

@@ -1,28 +1,38 @@
 ﻿using System.Net;
+using System.Runtime.InteropServices.JavaScript;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using ScumDB.Databases;
 using ScumDB.Models;
+using ScumDB.Models.Requests;
 
 namespace ScumDB.Services;
 
-public class FetchService(IHttpClientFactory clientFactory, IConfiguration configuration, IDbContextFactory<ScumDbContext> factory)
+public class FetchService(
+	IHttpClientFactory clientFactory,
+	IConfiguration configuration,
+	IDbContextFactory<ScumDbContext> factory)
 {
 	public async Task FetchSteamNamesAsync(IEnumerable<string?> steamIDs)
 	{
 		List<KeyValuePair<string, string>> accounts = [];
-		
+
 		var apiKey = configuration.GetSection("Steam")["API.Key"] ?? string.Empty;
 		var client = clientFactory.CreateClient();
 		foreach (var id in steamIDs)
 		{
-			var response = await client.GetAsync($"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={apiKey}&steamids={id}");
+			if (id is null) continue;
+			var response =
+				await client.GetAsync(
+					$"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={apiKey}&steamids={id}");
 			if (response.StatusCode == HttpStatusCode.OK)
 			{
-				var content = await response.Content.ReadAsStreamAsync();
-				content.Position = 0;
-				var doc = await JsonDocument.ParseAsync(content);
-				accounts.Add(new (id, doc.RootElement.GetProperty("response").GetProperty("players")[0].GetProperty("personaname").GetString() ?? string.Empty));
+				var content = await response.Content.ReadAsStringAsync();
+				var result = JsonSerializer.Deserialize<ApiResponse>(content);
+				if (result is { Response: { Players: [var first, ..] } })
+				{
+					accounts.Add(new(id, result.Response.Players.First().PersonaName ?? string.Empty));
+				}
 			}
 		}
 
@@ -37,5 +47,5 @@ public class FetchService(IHttpClientFactory clientFactory, IConfiguration confi
 
 		await db.SaveChangesAsync();
 		await db.DisposeAsync();
-	} 
+	}
 }

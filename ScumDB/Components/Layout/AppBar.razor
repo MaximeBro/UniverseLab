@@ -1,4 +1,27 @@
 ﻿<MudAppBar Color="Color.Dark" Style="background-color: #1A1A27!important;">
+    @if (!string.IsNullOrWhiteSpace(_name))
+    {
+        <MudMenu @ref="_menu" Icon="@IconsM.Filled.AccountCircle" Size="Size.Small" Class="icon-hoverable white-all pa-1 mr-3" PopoverClass="dark-bg" ListClass="rounded-lg"
+                 Style="border: 2px solid white; border-radius: 50%;" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
+            <MudStack Class="pt-1" Row="false" Spacing="0">
+                <MudStack Class="px-4" Row AlignItems="AlignItems.Center">
+                    <MudAvatar Variant="Variant.Filled" Color="Color.Dark">@_name[0].ToString().ToUpper()</MudAvatar>
+                    <MudStack Class="py-2" Row="false" Justify="Justify.FlexStart" Spacing="0">
+                        <MudText Class="text-white">@_name</MudText>
+                    </MudStack>
+                </MudStack>
+                <MudDivider Class="my-2" Style="border-color: grey!important;" />
+                <MudLink Class="text-white py-1" OnClick="@Logout" Underline="Underline.Hover" Style="text-decoration-color: #fff;">
+                    <MudText Class="text-white" Align="Align.Center">Se déconnecter</MudText>
+                </MudLink>
+            </MudStack>
+        </MudMenu>
+    }
+    else
+    {
+        <MudIconButton Icon="@IconsM.Filled.AccountCircle" Size="Size.Small" Class="icon-hoverable white-all pa-1 mr-3"
+                       Style="border: 2px solid white; border-radius: 50%;" Href="/web/login" />
+    }
     <MudButton Class="clickable-app text-white" Variant="Variant.Text" DisableElevation DisableRipple Href="/">
         <MudText Class="gradient-title" Style="font-weight: 700; font-size: 1rem;" Inline>Scum</MudText>
         <MudText Style="font-weight: 700; font-size: 1rem;" Inline>Db</MudText>
@@ -8,3 +31,37 @@
         <MudImage Height="24" Style="width: auto;" Src="./assets/transparent-brand.png" Alt="UniverseStudio"/>
     </MudLink>
 </MudAppBar>
+
+@code {
+    [Inject] public NotificationService NotificationService { get; set; } = null!;
+    [Inject] public NavigationManager NavManager { get; set; } = null!;
+        
+    [CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; } = null!;
+
+    private string _name = string.Empty;
+    private string _token = string.Empty;
+    private MudMenu _menu = null!;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshStateAsync();
+        NotificationService.OnAuthenticationNotificationReceived += RefreshStateAsync;
+    }
+
+    private async Task RefreshStateAsync()
+    {
+        var state = await AuthenticationState;
+        if (state.User.Identity is { IsAuthenticated: true })
+        {
+            _name = state.User.FindFirst(x => x.Type == ClaimTypes.GivenName)?.Value ?? string.Empty;
+            _token = state.User.FindFirst(x => x.Type == "token")?.Value ?? string.Empty;
+            StateHasChanged();
+        }
+    }
+
+    private void Logout()
+    {
+        _menu.CloseMenu();
+        NavManager.NavigateTo($"/api/logout/{_token}", true);
+    }
+}

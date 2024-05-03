@@ -3,8 +3,8 @@
 
 <MudContainer Class="mt-12" MaxWidth="MaxWidth.ExtraLarge">
     <MudPaper Class="rounded dark-bg" Elevation="5">
-        <MudStack Row="false" Spacing="0">
-            <MudTextField T="string" @bind-Value="_text" Label="Command result" Lines="8" MaxLength="1000000" Variant="Variant.Text" Immediate Clearable/>
+        <MudStack Class="pa-4" Row="false" Spacing="0">
+            <MudTextField T="string" @bind-Value="_text" Label="Command result" Lines="8" MaxLength="1000000" Variant="Variant.Outlined" Immediate Clearable/>
             <MudButton Class="mt-2 text-white" Color="Color.Dark" OnClick="@TryInsertAsync">Try Insert</MudButton>
         </MudStack>
     </MudPaper>

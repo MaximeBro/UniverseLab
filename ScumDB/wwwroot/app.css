@@ -1,6 +1,12 @@
 * { outline: none; }
 
 .text-white { color: #fff!important; }
+.white-all * { color: #fff!important; }
+
+.icon-hoverable:hover {
+    background-color: rgba(0, 0, 0, .1)!important;
+    border-radius: 50%!important;
+}
 
 .gradient-title {
     background: linear-gradient(82deg,#594ae2 0%,#f69 100%);

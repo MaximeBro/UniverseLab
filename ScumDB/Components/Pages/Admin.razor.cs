@@ -7,7 +7,7 @@ using ScumDB.Services;
 
 namespace ScumDB.Components.Pages;
 
-public partial class AdminPage
+public partial class Admin
 {
 	[Inject] public IDbContextFactory<ScumDbContext> Factory { get; set; } = null!;
 	[Inject] public ISnackbar Snackbar { get; set; } = null!;
@@ -17,14 +17,13 @@ public partial class AdminPage
 
 	private async Task TryInsertAsync()
 	{
-		var db = await Factory.CreateDbContextAsync();
 		var vehicles = new List<VehicleModel>();
 		
 		var lines = _text.Split("#", StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim());
 		foreach (var line in lines)
 		{
 			var data = line.Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToArray();
-			if (data.Count() >= 7)
+			if (data.Count() >= 8 && data[7].StartsWith("7"))
 			{
 				try
 				{
@@ -34,25 +33,26 @@ public partial class AdminPage
 						Blueprint = data[1],
 						OwnerId = data[7],
 						VehicleId = int.Parse(data[0].Replace(":", string.Empty)),
-						PositionX = Math.Round(double.Parse(data[3].Replace("X=", string.Empty).Replace(".", ",")), 2),
-						PositionY = Math.Round(double.Parse(data[4].Replace("Y=", string.Empty).Replace(".", ",")), 2),
-						PositionZ = Math.Round(double.Parse(data[5].Replace("Z=", string.Empty).Replace(".", ",")), 2),
+						PositionX = data[3].Replace("X=", string.Empty),
+						PositionY = data[4].Replace("Y=", string.Empty),
+						PositionZ = data[5].Replace("Z=", string.Empty),
 					});
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
 					continue;
 				}
 			}
 		}
 
-		db.Vehicles.RemoveRange(db.Vehicles.ToList());
-		db.Vehicles.AddRange(vehicles);
+		var db = await Factory.CreateDbContextAsync();
+		var toAdd = vehicles.Where(x => db.Vehicles.All(y => y.VehicleId != x.VehicleId && y.OwnerId != x.OwnerId)).ToList();
+		db.Vehicles.AddRange(toAdd);
 
-		Snackbar.Add($"{vehicles.Count()} véhicule(s) ajouté(s)", Severity.Success, options =>
+		Snackbar.Add($"{toAdd.Count()} véhicule(s) ajouté(s)", Severity.Success, options =>
 		{
 			options.VisibleStateDuration = 1500;
-		});		
+		});
 		await db.SaveChangesAsync();
 		await db.DisposeAsync();
 
