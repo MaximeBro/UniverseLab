@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
 using MudBlazor;
 using ScumDB.Components.Dialogs;
+using ScumDB.Components.Dialogs.Vehicles;
 using ScumDB.Databases;
 using ScumDB.Extensions;
 using ScumDB.Models;
@@ -16,7 +17,7 @@ public partial class Vehicles
 	[Inject] public IJSRuntime JsRuntime { get; set; } = null!;
 	[Inject] public ISnackbar Snackbar { get; set; } = null!;
 
-	private List<VehicleModel> _vehicles = new();
+	private List<VehicleModel> _vehicles = [];
 
 	private string _search = string.Empty;
 	private Func<VehicleModel, bool> QuickFilter => x =>
@@ -25,6 +26,7 @@ public partial class Vehicles
 		if (!string.IsNullOrWhiteSpace(x.OwnerName) && x.OwnerName.Contains(_search, StringComparison.OrdinalIgnoreCase)) return true;
 		if (x.Blueprint.Contains(_search, StringComparison.OrdinalIgnoreCase)) return true;
 		if (x.OwnerId != null && x.OwnerId.ToString()!.Contains(_search, StringComparison.OrdinalIgnoreCase)) return true;
+		if (!string.IsNullOrWhiteSpace(x.OwnerName) && x.OwnerName.Contains(_search, StringComparison.OrdinalIgnoreCase)) return true;
 		if (x.VehicleId.ToString().Contains(_search, StringComparison.OrdinalIgnoreCase)) return true;
 		
 		return false;
@@ -53,9 +55,32 @@ public partial class Vehicles
 			await db.SaveChangesAsync();
 			await db.DisposeAsync();
 			await RefreshDataAsync();
+			StateHasChanged();
 		}
 	}
 
+	private async Task AddVehiclesAsync()
+	{
+		var instance = await DialogService.ShowAsync<BulkAdd>(string.Empty, Hardcoded.DialogOptions);
+		var result = await instance.Result;
+		if (result is { Data: true })
+		{
+			await RefreshDataAsync();
+			StateHasChanged();
+		}
+	}
+
+	private async Task EditVehiclesAsync()
+	{
+		var instance = await DialogService.ShowAsync<BulkEdit>(string.Empty, Hardcoded.DialogOptions);
+		var result = await instance.Result;
+		if (result is { Data: true })
+		{
+			await RefreshDataAsync();
+			StateHasChanged();
+		}
+	}
+	
 	private async Task PurgeVehiclesAsync()
 	{
 		var parameters = new DialogParameters<ConfirmDialog> { { x => x.Text, "Voulez-vous vraiment tenter une purge des véhicules ?" } };
@@ -103,7 +128,7 @@ public partial class Vehicles
 	private async Task OpenMapAsync(VehicleModel vehicle)
 	{
 		var coords = $"{vehicle.PositionX},{vehicle.PositionY},{vehicle.PositionZ}";
-		await JsRuntime.InvokeVoidAsync("open", $"https://scum-map.com/en/map/{coords}", "_blank");
+		await JsRuntime.InvokeVoidAsync("open", $"https://scum-map.com/en/map/place/{coords}", "_blank");
 	}
 
 	private async Task RefreshDataAsync()

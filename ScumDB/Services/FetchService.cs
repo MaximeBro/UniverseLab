@@ -8,11 +8,13 @@ using ScumDB.Models.Requests;
 
 namespace ScumDB.Services;
 
-public class FetchService(
-	IHttpClientFactory clientFactory,
-	IConfiguration configuration,
-	IDbContextFactory<ScumDbContext> factory)
+public class FetchService(IHttpClientFactory clientFactory, IConfiguration configuration, IDbContextFactory<ScumDbContext> factory)
 {
+	
+	/// <summary>
+	/// Fetches all the steam profiles of the given ids using configuration's api key
+	/// </summary>
+	/// <param name="steamIDs">A list of <see cref="KeyValuePair{TKey,TValue}"/> as a pair of steamID and given-name</param>
 	public async Task FetchSteamNamesAsync(IEnumerable<string?> steamIDs)
 	{
 		List<KeyValuePair<string, string>> accounts = [];

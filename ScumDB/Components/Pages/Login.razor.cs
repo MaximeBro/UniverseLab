@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
+using ScumDB.Extensions;
 using ScumDB.Models.Enums;
 using ScumDB.Services;
 using IconsM = MudBlazor.Icons.Material;
@@ -16,6 +17,7 @@ public partial class Login
 	[Inject] public UserTokenHandler UserTokenHandler { get; set; } = null!;
 	[Inject] public NavigationManager NavManager { get; set; } = null!;
 	[Inject] public NotificationService NotificationService { get; set; } = null!;
+	[Inject] public ISnackbar Snackbar { get; set; } = null!;
 	
 	[CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; } = null!;
 
@@ -38,22 +40,30 @@ public partial class Login
 	{
 		var identifier = Configuration.GetSection("Admin")["id"];
 		var password = Configuration.GetSection("Admin")["pwd"];
-		var guid = Guid.NewGuid();
 
-		var claims = new[]
+		if (_model.Identifier == identifier && _model.Password == password)
 		{
-			new Claim(ClaimTypes.GivenName, "Thomas Winter"),
-			new Claim(ClaimTypes.Role, UserRole.Admin.ToString()),
-			new Claim("token", guid.ToString()),
-		};
+			var guid = Guid.NewGuid();
+
+			var claims = new[]
+			{
+				new Claim(ClaimTypes.GivenName, "Thomas Winter"),
+				new Claim(ClaimTypes.Role, UserRole.Admin.ToString()),
+				new Claim("token", guid.ToString()),
+			};
 		
-		var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-		var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+			var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+			var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 		
-		UserTokenHandler.Tokens.Add(guid, claimsPrincipal);
-		NavManager.NavigateTo($"/api/login/{guid}", true);
-		NotificationService.SendAuthNotification();
-		return;
+			UserTokenHandler.Tokens.Add(guid, claimsPrincipal);
+			NavManager.NavigateTo($"/api/login/{guid}", true);
+			NotificationService.SendAuthNotification();
+			return;
+		}
+		else
+		{
+			Snackbar.Add("Mauvais couple d'identifiants", Severity.Error, Hardcoded.SnackbarOptions);
+		}
 	}
 	
 	private sealed class LoginModel

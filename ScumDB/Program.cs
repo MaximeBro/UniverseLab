@@ -8,11 +8,12 @@ using ScumDB.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseUrls("https://localhost:5005/", "http://localhost:5004/");
+builder.WebHost.UseStaticWebAssets();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
-	options.Cookie.Name = "ScumDb.authentication";
+	options.Cookie.Name = "ScumDb.Authentication.Token";
 	options.LoginPath = "/web/login";
 	options.LogoutPath = "/";
 });
@@ -29,6 +30,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<FetchService>();
 builder.Services.AddSingleton<UserTokenHandler>();
 builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<IVehicleService, VehicleService>();
 
 builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();

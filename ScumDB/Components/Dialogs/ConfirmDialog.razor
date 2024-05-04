@@ -1,6 +1,6 @@
-﻿<MudDialog>
+﻿<MudDialog Class="darkless-bg">
     <DialogContent>
-        <MudIconButton Class="ml-n4" Icon="@IconsM.Filled.Close" Color="Color.Dark" OnClick="@(() => Dialog.Close())" />
+        <MudIconButton Class="ml-n4 icon-hoverable-light" Icon="@IconsM.Filled.Close" OnClick="@(() => Dialog.Close())" />
         <MudStack Class="px-4 py-2" Justify="Justify.SpaceEvenly" Row="false" Spacing="0">
             @foreach (var text in Text.Split("\n"))
             {
@@ -9,8 +9,8 @@
         </MudStack>
     </DialogContent>
     <DialogActions>
-        <MudButton Color="Color.Dark" Variant="Variant.Filled" OnClick="@(() => Dialog.Close(false))">Annuler</MudButton>
-        <MudButton Color="Color.Error" Variant="Variant.Filled" OnClick="@(() => Dialog.Close(true))">Ok</MudButton>
+        <MudButton Color="Color.Dark" Variant="Variant.Filled" Size="Size.Small" OnClick="@(() => Dialog.Close(false))">Annuler</MudButton>
+        <MudButton Color="Color.Error" Variant="Variant.Filled" Size="Size.Small" OnClick="@(() => Dialog.Close(true))">Ok</MudButton>
     </DialogActions>
 </MudDialog>
 
