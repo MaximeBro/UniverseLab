@@ -8,6 +8,13 @@
                     <MudAvatar Variant="Variant.Filled" Color="Color.Dark">@_name[0].ToString().ToUpper()</MudAvatar>
                     <MudStack Class="py-2" Row="false" Justify="Justify.FlexStart" Spacing="0">
                         <MudText Class="text-white">@_name</MudText>
+                        <AuthorizeView Roles="Admin">
+                            <Authorized>
+                                <MudLink OnClick="@ToAdminPanel" Underline="Underline.Always" Style="text-decoration-color: #fff;">
+                                    <MudText Class="text-white">Espace admin</MudText>
+                                </MudLink>
+                            </Authorized>
+                        </AuthorizeView>
                     </MudStack>
                 </MudStack>
                 <MudDivider Class="my-2" Style="border-color: grey!important;" />
@@ -59,6 +66,12 @@
         }
     }
 
+    private void ToAdminPanel()
+    {
+        _menu.CloseMenu();
+        NavManager.NavigateTo("/admin/web-panel/", true);
+    }
+    
     private void Logout()
     {
         _menu.CloseMenu();

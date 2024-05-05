@@ -20,21 +20,22 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddDbContextFactory<ScumDbContext>(options =>
 {
-	options.UseSqlite("Data Source=./stored-data/scum.db");
+	options.UseSqlite("Data Source=../stored-data/scum.db"); // solution folder
 });
 
 
 builder.Services.AddMudServices();
 builder.Services.AddHttpClient();
 
-builder.Services.AddScoped<FetchService>();
 builder.Services.AddSingleton<UserTokenHandler>();
 builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<IFetchService, FetchService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 
 builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();
 
+// Max data supported by interop calls (used for inputs)
 builder.Services.AddServerSideBlazor().AddHubOptions(options => options.MaximumReceiveMessageSize = 64 * 1024);
 
 var app = builder.Build();
@@ -47,6 +48,11 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+#pragma warning disable ASP0014
+// Extends session idle time to 1h30 (experimental)
+// app.UseEndpoints(e => e.MapBlazorHub(options => options.WebSockets.CloseTimeout = TimeSpan.FromMinutes(90)));
+#pragma warning disable ASP0014
 
 app.UseStaticFiles();
 app.UseRouting();

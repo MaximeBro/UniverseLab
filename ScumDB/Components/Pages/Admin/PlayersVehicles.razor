@@ -1,31 +1,19 @@
-﻿@page "/"
+﻿@page "/admin/web-panel/vehicles"
 
-<PageTitle>ScumDb - Véhicules</PageTitle>
+<PageTitle>ScumDb - WebPanel (vehicles)</PageTitle>
 
-<MudContainer Class="mt-12" MaxWidth="MaxWidth.ExtraLarge">
-    <MudDataGrid T="VehicleModel" Items="@_vehicles" QuickFilter="@QuickFilter" FixedHeader FixedFooter Bordered Height="70vh"
+<MudContainer Class="mt-2" MaxWidth="MaxWidth.ExtraLarge">
+    <MudBreadcrumbs Items="@_breadcrumbItems" />
+    <MudDataGrid T="VehicleModel" Items="_models" QuickFilter="@QuickFilter" FixedHeader Bordered Height="70vh"
                  Class="dark-bg" Elevation="5">
         <ToolBarContent>
             <MudText Class="text-white mr-4" Typo="Typo.h6">Véhicules</MudText>
-            <AuthorizeView Roles="Admin">
-                <Authorized>
-                    <MudTooltip Text="Ajouter" Placement="Placement.Top" Arrow>
-                        <MudIconButton Icon="@IconsM.Filled.AddBox" Color="Color.Success" OnClick="@AddVehiclesAsync" />
-                    </MudTooltip>
-                    <MudTooltip Text="Mettre à jour les positions des véhicules" Placement="Placement.Top" Arrow>
-                        <MudIconButton Icon="@IconsM.Filled.EditLocation" Color="Color.Secondary" OnClick="@EditVehiclesAsync" />
-                    </MudTooltip>
-                    <MudTooltip Text="Purge" Placement="Placement.Top" Arrow>
-                        <MudIconButton Icon="@IconsM.Filled.Delete" Color="Color.Error" OnClick="@PurgeVehiclesAsync" />
-                    </MudTooltip>
-                </Authorized>
-            </AuthorizeView>
             <MudSpacer/>
             <MudTextField T="string" @bind-Value="_search" Label="Rechercher" Placeholder="Laika" Immediate Adornment="Adornment.Start" AdornmentIcon="@(IconsM.Filled.Search)" Clearable/>
         </ToolBarContent>
         <Columns>
-            <PropertyColumn Title="Propriétaire (nom)" Property="x => x.OwnerName" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" AggregateDefinition="Aggregation" />
-            <PropertyColumn Title="Propriétaire (steamID)" Property="x => x.OwnerId" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" />
+            <PropertyColumn Title="Propriétaire (nom)" Property="x => x.OwnerName" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" AggregateDefinition="Aggregation"/>
+            <PropertyColumn Title="Propriétaire (steamID)" Property="x => x.OwnerId" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border"/>
             <TemplateColumn Title="ID véhicule" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border">
                 <CellTemplate Context="row">
                     <MudGrid Spacing="0">
@@ -72,20 +60,6 @@
                     </MudGrid>
                 </CellTemplate>
             </TemplateColumn>
-            <AuthorizeView Roles="Admin">
-                <Authorized>
-                    <TemplateColumn Title="Actions" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border">
-                        <CellTemplate Context="row">
-                            <MudStack Row Justify="Justify.Center">
-                                <MudTooltip Text="Supprimer" Placement="Placement.Left" Arrow>
-                                    <MudIconButton Icon="@IconsM.Filled.Delete" Color="Color.Error" Size="Size.Small" OnClick="@(async() => await RemoveVehicleAsync(row.Item))" />
-                                </MudTooltip>
-                            </MudStack>
-                        </CellTemplate>
-                    </TemplateColumn>
-                </Authorized>
-            </AuthorizeView>
         </Columns>
     </MudDataGrid>
 </MudContainer>
-

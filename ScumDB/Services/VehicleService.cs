@@ -9,6 +9,23 @@ namespace ScumDB.Services;
 public class VehicleService(IDbContextFactory<ScumDbContext> factory) : IVehicleService
 {
 
+    public async Task<List<VehicleModel>> GetAllAsync(bool bindOwner = true)
+    {
+        var db = await factory.CreateDbContextAsync();
+        var vehicles = await db.Vehicles.AsNoTracking().ToListAsync();
+        if (bindOwner)
+        {
+            var accounts = await db.Accounts.AsNoTracking().ToListAsync();
+            foreach (var vehicle in vehicles)
+            {
+                vehicle.OwnerName = accounts.FirstOrDefault(x => x.SteamId == vehicle.OwnerId)?.Name;
+            }
+        }
+        await db.DisposeAsync();
+
+        return vehicles;
+    }
+    
     /// <summary>
     /// Retrieves all the <see cref="VehicleModel"/> from the database according to the given ids.
     /// </summary>

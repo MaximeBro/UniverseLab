@@ -23,7 +23,7 @@
 @code {
     [CascadingParameter] public MudDialogInstance Dialog { get; set; } = null!;
 
-    [Inject] public FetchService FetchService { get; set; } = null!;
+    [Inject] public IFetchService FetchService { get; set; } = null!;
     [Inject] public IVehicleService VehicleService { get; set; } = null!;
     [Inject] public ISnackbar Snackbar { get; set; } = null!;
 
@@ -40,7 +40,7 @@
         {
             options.VisibleStateDuration = 1500;
         });
-        await FetchService.FetchSteamNamesAsync(vehicles.Select(x => x.OwnerId).Distinct());
+        await FetchService.AddAsync(vehicles.Select(x => x.OwnerId).Distinct());
         _loading = false;
 
         Dialog.Close(true);

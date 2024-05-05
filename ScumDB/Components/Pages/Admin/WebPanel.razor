@@ -1,0 +1,36 @@
+﻿@page "/admin/web-panel"
+@attribute [Authorize(Roles = "Admin")]
+
+<PageTitle>ScumDb - WebPanel</PageTitle>
+
+<MudContainer Class="mt-2" MaxWidth="MaxWidth.ExtraLarge">
+    <MudBreadcrumbs Items="@_breadcrumbItems" />
+    <MudGrid Justify="Justify.Center" Spacing="4">
+        <MudItem xs="12" sm="6" md="4">
+            <MudLink Underline="Underline.None" Href="/admin/web-panel/vehicles">
+                <MudPaper Class="pa-4 dark-bg" Elevation="5">
+                    <MudStack Row="false" Spacing="0">
+                        <MudStack Row Justify="Justify.FlexStart" Spacing="3" AlignItems="AlignItems.Center">
+                            <MudIcon Class="text-white" Icon="@IconsM.Filled.DirectionsCar"/>
+                            <MudText Class="text-white" Typo="Typo.h6">Gestion des véhicules</MudText>
+                        </MudStack>
+                    </MudStack>
+                </MudPaper>
+            </MudLink>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="4">
+            <MudLink Underline="Underline.None" Href="/admin/web-panel/steam-accounts">
+                <MudPaper Class="pa-4 dark-bg" Elevation="5">
+                    <MudStack Row="false" Spacing="0">
+                        <MudStack Row Justify="Justify.FlexStart" Spacing="3" AlignItems="AlignItems.Center">
+                            <MudIcon Class="text-white" Icon="@IconsC.Brands.Steam"/>
+                            <MudText Class="text-white" Typo="Typo.h6">Gestion des comtpes steam</MudText>
+                        </MudStack>
+                    </MudStack>
+                </MudPaper>
+            </MudLink>
+        </MudItem>
+
+    </MudGrid>
+</MudContainer>

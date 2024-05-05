@@ -32,3 +32,6 @@
 .purple-font { color: #7d57fa!important; }
 
 .dark-border { border-color: #1A1A27!important; }
+.footer-dark-border { 
+    border-top: 1px solid var(--mud-palette-table-lines);
+}

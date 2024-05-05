@@ -39,4 +39,10 @@ public static class Hardcoded
 			_ => $"Inconnu ({blueprint})"
 		};
 	}
+
+	public static AggregateDefinition<T> GetAggregateCountOf<T>() => new()
+	{
+		Type = AggregateType.Count,
+		DisplayFormat = "{value} éléments sélectionnés"
+	};
 }
