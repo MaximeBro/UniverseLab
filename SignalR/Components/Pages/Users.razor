@@ -1,0 +1,26 @@
+﻿@page "/"
+
+<PageTitle>SignalR - Users</PageTitle>
+
+<MudContainer Class="mt-4" MaxWidth="MaxWidth.ExtraExtraLarge">
+    <MudPaper Class="rounded-lg" Elevation="5">
+        <MudToolBar Class="px-3" DisableGutters>
+            <MudIconButton Color="Color.Success" Icon="@Icons.Material.Filled.AddBox" OnClick="@AddUserAsync"/>
+        </MudToolBar>
+    </MudPaper>
+    <MudGrid Class="mt-4 px-3" Spacing="3" Justify="Justify.FlexStart">
+        @foreach (var user in users)
+        {
+            <MudItem xs="12" sm="6" md="3">
+                <MudStack Class="pa-3 mud-elevation-2 rounded" Row="false" Spacing="0">
+                    <MudStack Row>
+                        <MudText>@(user.Firstname) @(user.Lastname)</MudText>
+                        <MudSpacer/>
+                        <MudIconButton Color="Color.Error" Icon="@Icons.Material.Filled.Delete" OnClick="@(async() => await RemoveUserAsync(user))"/>
+                    </MudStack>
+                    <MudText>@user.Email</MudText>
+                </MudStack>
+            </MudItem>
+        }
+    </MudGrid>
+</MudContainer>

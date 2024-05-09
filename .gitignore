@@ -355,3 +355,13 @@ ScumDB/pub/
 UniverseStudio/pub/
 
 UniverseStudio/appsettings.Development.json
+
+ScumDB/Properties/
+
+ScumDB/appsettings.Development.json
+
+SignalR/appsettings.Development.json
+
+SignalR/Properties/
+
+stored-data/

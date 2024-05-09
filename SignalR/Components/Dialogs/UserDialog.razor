@@ -1,0 +1,33 @@
+﻿@using SignalR.Models
+<MudDialog>
+    <DialogContent>
+        <MudStack Row="false" Spacing="0">
+            <MudStack Row>
+                <MudTextField T="string" @bind-Value="firstname" Label="Prénom" Placeholder="Jean" Style="min-width: 220px;"/>
+                <MudTextField T="string" @bind-Value="lastname" Label="Nom" Placeholder="Dupont" Style="min-width: 220px;"/>
+            </MudStack>
+            <MudTextField T="string" @bind-Value="email" InputType="InputType.Email" Label="Email" Placeholder="prénom.nom@sasp.fr"/>
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@Submit" Color="Color.Success" Variant="Variant.Filled">Enregistrer</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] public MudDialogInstance Dialog { get; set; } = null!;
+
+    private string firstname = string.Empty;
+    private string lastname = string.Empty;
+    private string email = string.Empty;
+
+    private void Submit()
+    {
+        Dialog.Close(new UserModel
+        {
+            Firstname = firstname,
+            Lastname = lastname,
+            Email = email
+        });
+    }
+}
