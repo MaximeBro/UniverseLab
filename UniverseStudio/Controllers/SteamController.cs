@@ -5,8 +5,10 @@ using UniverseStudio.Services;
 namespace UniverseStudio.Controllers;
 
 [Route("/api/v1/[controller]")]
+[ServiceFilter(typeof(SteamControllerFilter))]
 public class SteamController(IFetchService fetchService) : Controller
 {
+	
 	[HttpGet("GetSteamAccount/{steamID}")]
 	public async Task<IActionResult> GetSteamAccount(string steamID)
 	{
