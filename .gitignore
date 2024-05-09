@@ -351,3 +351,7 @@ MigrationBackup/
 .idea/
 
 ScumDB/pub/
+
+UniverseStudio/pub/
+
+UniverseStudio/appsettings.Development.json
