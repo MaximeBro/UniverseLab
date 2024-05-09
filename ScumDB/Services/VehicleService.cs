@@ -27,7 +27,7 @@ public class VehicleService(IDbContextFactory<ScumDbContext> factory) : IVehicle
     }
     
     /// <summary>
-    /// Retrieves all the <see cref="VehicleModel"/> from the database according to the given ids.
+    /// Retrieves all the <see cref="VehicleModel"/> from database according to the given ids.
     /// </summary>
     /// <param name="vehicleIds">A list vehicle ids</param>
     /// <returns>A list of <see cref="VehicleModel"/></returns>
@@ -71,7 +71,7 @@ public class VehicleService(IDbContextFactory<ScumDbContext> factory) : IVehicle
     public async Task<int> AddAsync(List<VehicleModel> vehicles)
     {
         var db = await factory.CreateDbContextAsync();
-        var toAdd = vehicles.Where(x => db.Vehicles.All(y => y.VehicleId != x.VehicleId && y.OwnerId != x.OwnerId)).ToList();
+        var toAdd = vehicles.Where(x => db.Vehicles.All(y => y.VehicleId != x.VehicleId)).ToList();
         db.Vehicles.AddRange(toAdd);
 
         await db.SaveChangesAsync();

@@ -53,6 +53,21 @@ public partial class SteamAccounts
         Snackbar.Add("Données mises à jour !", Severity.Success, Hardcoded.SnackbarOptions);
     }
 
+    private async Task PurgeAsync()
+    {
+        _loading = true;
+        var db = await Factory.CreateDbContextAsync();
+        var distinct = (await db.Accounts.AsNoTracking().ToListAsync()).DistinctBy(x => x.SteamId);
+        db.Accounts.RemoveRange(db.Accounts);
+        db.Accounts.AddRange(distinct);
+        await db.SaveChangesAsync();
+        await db.DisposeAsync();
+        await RefreshDataAsync();
+        StateHasChanged();
+        _loading = false;
+        Snackbar.Add("Données mises à jour !", Severity.Success, Hardcoded.SnackbarOptions);
+    }
+
     private async Task RefreshDataAsync()
     {
         var db = await Factory.CreateDbContextAsync();

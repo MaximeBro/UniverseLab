@@ -12,6 +12,9 @@
             <MudTooltip Text="Forcer la mise à jour" Placement="Placement.Top" Arrow>
                 <MudIconButton Icon="@IconsM.Filled.Update" Color="Color.Warning" OnClick="@ForceUpdateAsync" />
             </MudTooltip>
+            <MudTooltip Class="ml-1" Text="Purge" Placement="Placement.Top" Arrow>
+                <MudIconButton Class="ml-2" Icon="@IconsM.Filled.DeleteSweep" Color="Color.Error" OnClick="@PurgeAsync" />
+            </MudTooltip>
             <MudSpacer/>
             <MudTextField T="string" @bind-Value="_search" Label="Rechercher" Placeholder="Laika" Immediate Adornment="Adornment.Start" AdornmentIcon="@(IconsM.Filled.Search)" Clearable/>
         </ToolBarContent>
