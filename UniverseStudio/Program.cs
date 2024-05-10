@@ -1,5 +1,6 @@
 using MudBlazor.Services;
 using UniverseStudio.Components;
+using UniverseStudio.Controllers;
 using UniverseStudio.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IFetchService, FetchService>();
+builder.Services.AddScoped<SteamControllerFilter>();
 
 builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();

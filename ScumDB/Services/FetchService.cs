@@ -27,6 +27,7 @@ public class FetchService(IHttpClientFactory clientFactory, IConfiguration confi
 				var content = await response.Content.ReadAsStringAsync();
 				var result = JsonSerializer.Deserialize<SteamAccountModel>(content);
 				if(result != null) accounts.Add(result);
+				response.Dispose();
 			}
 		}
 
