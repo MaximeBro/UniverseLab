@@ -26,6 +26,7 @@ builder.Services.AddDbContextFactory<ScumDbContext>(options =>
 
 builder.Services.AddMudServices();
 builder.Services.AddHttpClient();
+builder.Services.AddControllers();
 
 builder.Services.AddSingleton<UserTokenHandler>();
 builder.Services.AddScoped<NotificationService>();
@@ -60,6 +61,8 @@ app.UseAntiforgery();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllers();
 
 app.UseLogin();
 app.UseLogout();

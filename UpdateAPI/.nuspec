@@ -1,0 +1,17 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+    <metadata>
+        <id>UniverseLab.UpdateAPI</id>
+        <version>1.0.0</version>
+        <authors>UniverseStudio</authors>
+        <owners>UniverseStudio</owners>
+        <copyright>Copyright © 2024 UniverseStudio</copyright>
+        <title>UpdateAPI</title>
+        <description>Intern API for UniverseStudio apps.</description>
+        <dependencies>
+            <group targetFramework="net8.0"/>
+            <dependency id="Microsoft.Extensions.Configuration" version="8.0.0" />
+            <dependency id="Microsoft.AspNetCore.Mvc.ViewFeatures" version="2.2.0" />
+        </dependencies>
+    </metadata>
+</package>

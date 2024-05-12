@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalR", "SignalR\SignalR.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniverseStudio", "UniverseStudio\UniverseStudio.csproj", "{D76D6E93-8E23-4496-A972-D0706C43C65D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateAPI", "UpdateAPI\UpdateAPI.csproj", "{E121E58E-8FE0-4504-AF95-849F6922D2DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{D76D6E93-8E23-4496-A972-D0706C43C65D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D76D6E93-8E23-4496-A972-D0706C43C65D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D76D6E93-8E23-4496-A972-D0706C43C65D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E121E58E-8FE0-4504-AF95-849F6922D2DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E121E58E-8FE0-4504-AF95-849F6922D2DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E121E58E-8FE0-4504-AF95-849F6922D2DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E121E58E-8FE0-4504-AF95-849F6922D2DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
