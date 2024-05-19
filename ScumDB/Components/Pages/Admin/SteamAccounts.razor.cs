@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
+using ScumDB.Components.Dialogs;
+using ScumDB.Components.Dialogs.Steam;
 using ScumDB.Databases;
 using ScumDB.Extensions;
 using ScumDB.Models;
@@ -11,6 +13,7 @@ namespace ScumDB.Components.Pages.Admin;
 public partial class SteamAccounts
 {
     [Inject] public IDbContextFactory<ScumDbContext> Factory { get; set; } = null!;
+    [Inject] public IDialogService DialogService { get; set; } = null!;
     [Inject] public IFetchService FetchService { get; set; } = null!;
     [Inject] public ISnackbar Snackbar { get; set; } = null!;
 
@@ -40,6 +43,34 @@ public partial class SteamAccounts
             new BreadcrumbItem("Comptes steam", null, disabled: true)
         });
         await RefreshDataAsync();
+    }
+
+    private async Task AddAsync()
+    {
+        var instance = await DialogService.ShowAsync<AddAccount>(string.Empty, Hardcoded.DialogOptions);
+        var result = await instance.Result;
+        if (result is { Data: true })
+        {
+            await RefreshDataAsync();
+            StateHasChanged();
+        }
+    }
+
+    private async Task RemoveAsync(SteamAccountModel model)
+    {
+        var parameters = new DialogParameters<ConfirmDialog> { { x => x.Text, "Voulez-vous vraiment supprimer ce compte steam ?" } };
+        var instance = await DialogService.ShowAsync<ConfirmDialog>(string.Empty, parameters, Hardcoded.DialogOptions);
+        var result = await instance.Result;
+        if (result is { Data: true })
+        {
+            var db = await Factory.CreateDbContextAsync();
+            db.Accounts.Remove(model);
+            await db.SaveChangesAsync();
+            await db.DisposeAsync();
+
+            await RefreshDataAsync();
+            StateHasChanged();
+        }
     }
 
     private async Task ForceUpdateAsync()

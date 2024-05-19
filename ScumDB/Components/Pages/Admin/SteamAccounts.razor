@@ -9,8 +9,11 @@
                  Class="dark-bg" Elevation="5">
         <ToolBarContent>
             <MudText Class="text-white mr-4" Typo="Typo.h6">Comptes steam</MudText>
-            <MudTooltip Text="Forcer la mise à jour" Placement="Placement.Top" Arrow>
-                <MudIconButton Icon="@IconsM.Filled.Update" Color="Color.Warning" OnClick="@ForceUpdateAsync" />
+            <MudTooltip Text="Ajouter un compte steam" Placement="Placement.Top" Arrow>
+                <MudIconButton Icon="@IconsM.Filled.AddBox" Color="Color.Tertiary" OnClick="@AddAsync" />
+            </MudTooltip>
+            <MudTooltip Class="ml-1" Text="Forcer la mise à jour" Placement="Placement.Top" Arrow>
+                <MudIconButton Class="ml-2" Icon="@IconsM.Filled.Update" Color="Color.Warning" OnClick="@ForceUpdateAsync" />
             </MudTooltip>
             <MudTooltip Class="ml-1" Text="Purge" Placement="Placement.Top" Arrow>
                 <MudIconButton Class="ml-2" Icon="@IconsM.Filled.DeleteSweep" Color="Color.Error" OnClick="@PurgeAsync" />
@@ -22,6 +25,13 @@
             <PropertyColumn Title="SteamID" Property="x => x.SteamId" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" Sortable="true" Filterable="true" AggregateDefinition="@_aggregation"/>
             <PropertyColumn Title="Nom du compte" Property="x => x.Name" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" Sortable="true" Filterable="true"/>
             <PropertyColumn Title="Mis à jour le" Property="x => x.SavedAt" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" Format="dd-MM-yyyy" Sortable="true" Filterable="true"/>
+            <TemplateColumn Title="Actions" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" IsEditable="false" Sortable="false" Filterable="false">
+                <CellTemplate Context="row">
+                    <MudStack Row Justify="Justify.Center">
+                        <MudIconButton Icon="@IconsM.Filled.Delete" Color="Color.Error" Size="Size.Small" OnClick="@(async() => await RemoveAsync(row.Item))"/>
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
         </Columns>
     </MudDataGrid>
 </MudContainer>
