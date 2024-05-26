@@ -26,12 +26,8 @@ public class VehicleService(IDbContextFactory<ScumDbContext> factory) : IVehicle
         return vehicles;
     }
     
-    /// <summary>
-    /// Retrieves all the <see cref="VehicleModel"/> from database according to the given ids.
-    /// </summary>
-    /// <param name="vehicleIds">A list vehicle ids</param>
-    /// <returns>A list of <see cref="VehicleModel"/></returns>
-    public async Task<List<VehicleModel>> GetRelatedOfAsync(List<int> vehicleIds)
+    /// <inheritdoc/>
+    public async Task<List<VehicleModel>> GetVehiclesByIds(List<int> vehicleIds)
     {
         var db = await factory.CreateDbContextAsync();
         var vehicles = db.Vehicles.AsNoTracking().Where(x => vehicleIds.Contains(x.VehicleId)).ToList();
@@ -39,14 +35,11 @@ public class VehicleService(IDbContextFactory<ScumDbContext> factory) : IVehicle
         return vehicles;
     }
     
-    /// <summary>
-    /// Updates all the <see cref="VehicleModel"/>'s location from DB according to the given vehicles id and location.
-    /// </summary>
-    /// <param name="vehicles">A list of <see cref="VehicleModel"/></param>
-    public async Task UpdateVehiclesLocationAsync(List<VehicleModel> vehicles)
+    /// <inheritdoc/>
+    public async Task<int> UpdateVehiclesLocationAsync(List<VehicleModel> vehicles)
     {
-        var toUpdate = await GetRelatedOfAsync(vehicles.Select(x => x.VehicleId).ToList());
-        foreach (var vehicle in toUpdate)
+        var vehiclesToUpdate = await GetVehiclesByIds(vehicles.Select(x => x.VehicleId).ToList());
+        foreach (var vehicle in vehiclesToUpdate)
         {
             var newLocation = vehicles.FirstOrDefault(x => x.VehicleId == vehicle.VehicleId);
             if (newLocation != null)
@@ -58,26 +51,24 @@ public class VehicleService(IDbContextFactory<ScumDbContext> factory) : IVehicle
         }
 
         var db = await factory.CreateDbContextAsync();
-        db.Vehicles.UpdateRange(toUpdate);
+        db.Vehicles.UpdateRange(vehiclesToUpdate);
         await db.SaveChangesAsync();
         await db.DisposeAsync();
+
+        return vehiclesToUpdate.Count;
     }
 
-    /// <summary>
-    /// Adds the given vehicles to the database if they aren't yet registered.
-    /// </summary>
-    /// <param name="vehicles">A list of <see cref="VehicleModel"/></param>
-    /// <returns>The count of successfully added vehicles</returns>
-    public async Task<int> AddAsync(List<VehicleModel> vehicles)
+    /// <inheritdoc/>
+    public async Task<int> TryAddAsync(List<VehicleModel> vehicles)
     {
         var db = await factory.CreateDbContextAsync();
-        var toAdd = vehicles.Where(x => db.Vehicles.All(y => y.VehicleId != x.VehicleId)).ToList();
-        db.Vehicles.AddRange(toAdd);
+        var vehiclesToAdd = vehicles.Where(x => db.Vehicles.All(y => y.VehicleId != x.VehicleId)).ToList();
+        db.Vehicles.AddRange(vehiclesToAdd);
 
         await db.SaveChangesAsync();
         await db.DisposeAsync();
 
-        return toAdd.Count;
+        return vehiclesToAdd.Count;
     }
     
     /// <summary>
@@ -112,6 +103,7 @@ public class VehicleService(IDbContextFactory<ScumDbContext> factory) : IVehicle
         await db.DisposeAsync();
     }
 
+    /// <inheritdoc/>
     public Task<List<VehicleModel>> ParseAsync(string content)
     {
         List<VehicleModel> vehicles = [];

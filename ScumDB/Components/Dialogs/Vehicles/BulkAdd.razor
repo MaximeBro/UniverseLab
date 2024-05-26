@@ -34,7 +34,7 @@
     {
         _loading = true;
         var vehicles = await VehicleService.ParseAsync(_insert);
-        var count = await VehicleService.AddAsync(vehicles);
+        var count = await VehicleService.TryAddAsync(vehicles);
         
         Snackbar.Add($"{count} véhicule(s) ajouté(s)", Severity.Success, options =>
         {

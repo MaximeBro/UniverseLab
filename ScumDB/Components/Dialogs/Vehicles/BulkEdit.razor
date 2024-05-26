@@ -34,10 +34,10 @@
     {
         _loading = true;
         var vehicles = await VehicleService.ParseAsync(_insert);
-        var existing = await VehicleService.GetRelatedOfAsync(vehicles.Select(x => x.VehicleId).ToList());
-        await VehicleService.UpdateVehiclesLocationAsync(existing);
+        var existing = await VehicleService.GetVehiclesByIds(vehicles.Select(x => x.VehicleId).ToList());
+        var updated = await VehicleService.UpdateVehiclesLocationAsync(existing);
         
-        Snackbar.Add($"{0} véhicules modifiés avec succès !", Severity.Success, Hardcoded.SnackbarOptions);
+        Snackbar.Add($"{updated} véhicules modifiés avec succès !", Severity.Success, Hardcoded.SnackbarOptions);
         _loading = false;
 
         Dialog.Close(true);

@@ -1,0 +1,46 @@
+﻿@using Microsoft.EntityFrameworkCore
+@using ScumDB.Databases
+<MudDialog Class="darkless-bg">
+    <DialogContent>
+        <MudIconButton Class="ml-n4 icon-hoverable-light" Icon="@IconsM.Filled.Close" OnClick="@(() => Dialog.Close())" />
+        <MudStack Class="px-4 py-2" Justify="Justify.SpaceEvenly" Row Spacing="5">
+            <MudTextField T="string" @bind-Value="_steamId" Label="SteamID" Placeholder="76561100000000000" />
+            <MudTextField T="string" @bind-Value="_name" Label="Pseudonyme" Placeholder="Jean Kévin" />
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="@SubmitAsync">Enregistrer</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter] public SteamAccountModel? Account { get; set; }
+    
+    [Inject] public IDbContextFactory<ScumDbContext> Factory { get; set; } = null!;
+    
+    private string _steamId = string.Empty;
+    private string _name = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        if (Account != null)
+        {
+            _steamId = Account.SteamId;
+            _name = Account.Name;
+        }
+    }
+
+    private async Task SubmitAsync()
+    {
+        if (!string.IsNullOrWhiteSpace(_steamId) && !string.IsNullOrWhiteSpace(_name))
+        {
+            var db = await Factory.CreateDbContextAsync();
+            db.Accounts.Add(new SteamAccountModel { SteamId = _steamId, Name = _name });
+            await db.SaveChangesAsync();
+            await db.DisposeAsync();
+            Dialog.Close(true);
+        }
+    }
+}

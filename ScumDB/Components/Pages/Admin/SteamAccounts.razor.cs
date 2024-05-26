@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using ScumDB.Components.Dialogs;
@@ -45,29 +45,12 @@ public partial class SteamAccounts
         await RefreshDataAsync();
     }
 
-    private async Task AddAsync()
+    private async Task AddAccountAsync()
     {
-        var instance = await DialogService.ShowAsync<AddAccount>(string.Empty, Hardcoded.DialogOptions);
+        var instance = await DialogService.ShowAsync<SteamAccount>(string.Empty, Hardcoded.DialogOptions);
         var result = await instance.Result;
         if (result is { Data: true })
         {
-            await RefreshDataAsync();
-            StateHasChanged();
-        }
-    }
-
-    private async Task RemoveAsync(SteamAccountModel model)
-    {
-        var parameters = new DialogParameters<ConfirmDialog> { { x => x.Text, "Voulez-vous vraiment supprimer ce compte steam ?" } };
-        var instance = await DialogService.ShowAsync<ConfirmDialog>(string.Empty, parameters, Hardcoded.DialogOptions);
-        var result = await instance.Result;
-        if (result is { Data: true })
-        {
-            var db = await Factory.CreateDbContextAsync();
-            db.Accounts.Remove(model);
-            await db.SaveChangesAsync();
-            await db.DisposeAsync();
-
             await RefreshDataAsync();
             StateHasChanged();
         }
@@ -97,6 +80,23 @@ public partial class SteamAccounts
         StateHasChanged();
         _loading = false;
         Snackbar.Add("Données mises à jour !", Severity.Success, Hardcoded.SnackbarOptions);
+    }
+
+    private async Task RemoveAccountAsync(SteamAccountModel model)
+    {
+        var parameters = new DialogParameters<ConfirmDialog> { { x => x.Text, "Voulez-vous vraiment supprimer ce compte steam ?" } };
+        var instance = await DialogService.ShowAsync<ConfirmDialog>(string.Empty, parameters, Hardcoded.DialogOptions);
+        var result = await instance.Result;
+        if (result is { Data: true })
+        {
+            var db = await Factory.CreateDbContextAsync();
+            db.Accounts.Remove(model);
+            await db.SaveChangesAsync();
+            await db.DisposeAsync();
+            
+            await RefreshDataAsync();
+            StateHasChanged();
+        }
     }
 
     private async Task RefreshDataAsync()

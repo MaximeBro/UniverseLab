@@ -1,4 +1,5 @@
-﻿@page "/admin/web-panel/steam-accounts"
+@page "/admin/web-panel/steam-accounts"
+@using Microsoft.EntityFrameworkCore.Metadata
 @attribute [Authorize(Roles = "Admin")]
 
 <PageTitle>ScumDb - WebPanel (Comptes steam)</PageTitle>
@@ -10,7 +11,7 @@
         <ToolBarContent>
             <MudText Class="text-white mr-4" Typo="Typo.h6">Comptes steam</MudText>
             <MudTooltip Text="Ajouter un compte steam" Placement="Placement.Top" Arrow>
-                <MudIconButton Icon="@IconsM.Filled.AddBox" Color="Color.Tertiary" OnClick="@AddAsync" />
+                <MudIconButton Icon="@IconsM.Rounded.AddBox" Color="Color.Success" OnClick="@AddAccountAsync" />
             </MudTooltip>
             <MudTooltip Class="ml-1" Text="Forcer la mise à jour" Placement="Placement.Top" Arrow>
                 <MudIconButton Class="ml-2" Icon="@IconsM.Filled.Update" Color="Color.Warning" OnClick="@ForceUpdateAsync" />
@@ -25,10 +26,10 @@
             <PropertyColumn Title="SteamID" Property="x => x.SteamId" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" Sortable="true" Filterable="true" AggregateDefinition="@_aggregation"/>
             <PropertyColumn Title="Nom du compte" Property="x => x.Name" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" Sortable="true" Filterable="true"/>
             <PropertyColumn Title="Mis à jour le" Property="x => x.SavedAt" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" Format="dd-MM-yyyy" Sortable="true" Filterable="true"/>
-            <TemplateColumn Title="Actions" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" IsEditable="false" Sortable="false" Filterable="false">
+            <TemplateColumn IsEditable="false" Filterable="false" Sortable="false" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border">
                 <CellTemplate Context="row">
                     <MudStack Row Justify="Justify.Center">
-                        <MudIconButton Icon="@IconsM.Filled.Delete" Color="Color.Error" Size="Size.Small" OnClick="@(async() => await RemoveAsync(row.Item))"/>
+                        <MudIconButton Size="Size.Small" Color="Color.Error" Icon="@IconsM.Rounded.Delete" OnClick="@(async() => await RemoveAccountAsync(row.Item))"/>
                     </MudStack>
                 </CellTemplate>
             </TemplateColumn>
