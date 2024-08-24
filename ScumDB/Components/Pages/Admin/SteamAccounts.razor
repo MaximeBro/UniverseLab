@@ -1,17 +1,17 @@
 @page "/admin/web-panel/steam-accounts"
-@using Microsoft.EntityFrameworkCore.Metadata
 @attribute [Authorize(Roles = "Admin")]
 
 <PageTitle>ScumDb - WebPanel (Comptes steam)</PageTitle>
-
 <MudContainer Class="mt-2" MaxWidth="MaxWidth.ExtraLarge">
     <MudBreadcrumbs Items="@_breadcrumbItems" />
-    <MudDataGrid T="SteamAccountModel" Items="@_models" QuickFilter="@QuickFilter" FixedHeader FixedFooter Bordered Height="70vh"
-                 Class="dark-bg" Elevation="5">
+    <MudDataGrid T="SteamAccountModel" Items="@_models" QuickFilter="@QuickFilter" FixedHeader FixedFooter Bordered Height="70vh" Class="dark-bg" Elevation="5">
         <ToolBarContent>
             <MudText Class="text-white mr-4" Typo="Typo.h6">Comptes steam</MudText>
-            <MudTooltip Text="Ajouter un compte steam" Placement="Placement.Top" Arrow>
-                <MudIconButton Icon="@IconsM.Rounded.AddBox" Color="Color.Success" OnClick="@AddAccountAsync" />
+            <MudTooltip Text="Ajouter" Placement="Placement.Top" Arrow>
+                <MudIconButton Icon="@IconsM.Filled.AddBox" Color="Color.Success" OnClick="@AddAccountAsync" />
+            </MudTooltip>
+            <MudTooltip Text="Forcer la mise à jour" Placement="Placement.Top" Arrow>
+                <MudIconButton Icon="@IconsM.Filled.Update" Color="Color.Warning" OnClick="@ForceUpdateAsync" />
             </MudTooltip>
             <MudTooltip Class="ml-1" Text="Forcer la mise à jour" Placement="Placement.Top" Arrow>
                 <MudIconButton Class="ml-2" Icon="@IconsM.Filled.Update" Color="Color.Warning" OnClick="@ForceUpdateAsync" />
@@ -20,16 +20,21 @@
                 <MudIconButton Class="ml-2" Icon="@IconsM.Filled.DeleteSweep" Color="Color.Error" OnClick="@PurgeAsync" />
             </MudTooltip>
             <MudSpacer/>
-            <MudTextField T="string" @bind-Value="_search" Label="Rechercher" Placeholder="Laika" Immediate Adornment="Adornment.Start" AdornmentIcon="@(IconsM.Filled.Search)" Clearable/>
+            <MudTextField T="string" @bind-Value="_search" Label="Rechercher" Placeholder="Laika" Immediate Adornment="Adornment.Start" AdornmentIcon="@IconsM.Filled.Search" Clearable/>
         </ToolBarContent>
         <Columns>
             <PropertyColumn Title="SteamID" Property="x => x.SteamId" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" Sortable="true" Filterable="true" AggregateDefinition="@_aggregation"/>
             <PropertyColumn Title="Nom du compte" Property="x => x.Name" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" Sortable="true" Filterable="true"/>
             <PropertyColumn Title="Mis à jour le" Property="x => x.SavedAt" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" Format="dd-MM-yyyy" Sortable="true" Filterable="true"/>
-            <TemplateColumn IsEditable="false" Filterable="false" Sortable="false" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border">
+            <TemplateColumn HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border">
                 <CellTemplate Context="row">
-                    <MudStack Row Justify="Justify.Center">
-                        <MudIconButton Size="Size.Small" Color="Color.Error" Icon="@IconsM.Rounded.Delete" OnClick="@(async() => await RemoveAccountAsync(row.Item))"/>
+                    <MudStack Row Justify="Justify.SpaceEvenly">
+                        <MudTooltip Text="Éditer" Placement="Placement.Top" Arrow>
+                            <MudIconButton OnClick="@(async () => await EditAccountAsync(row.Item!))" Icon="@IconsM.Filled.Edit" Color="Color.Tertiary" Size="Size.Small"/>
+                        </MudTooltip>
+                        <MudTooltip Text="Supprimer" Placement="Placement.Top" Arrow>
+                            <MudIconButton OnClick="@(async () => await DeleteAccountAsync(row.Item!))" Icon="@IconsM.Filled.Delete" Color="Color.Error" Size="Size.Small"/>
+                        </MudTooltip>
                     </MudStack>
                 </CellTemplate>
             </TemplateColumn>

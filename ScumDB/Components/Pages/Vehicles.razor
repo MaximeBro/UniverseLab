@@ -1,16 +1,18 @@
 ﻿@page "/"
-
+    
 <PageTitle>ScumDb - Véhicules</PageTitle>
 
 <MudContainer Class="mt-12" MaxWidth="MaxWidth.ExtraLarge">
-    <MudDataGrid T="VehicleModel" Items="@_vehicles" QuickFilter="@QuickFilter" FixedHeader FixedFooter Bordered Height="70vh"
-                 Class="dark-bg" Elevation="5">
+    <MudDataGrid T="VehicleModel" Items="@_vehicles" QuickFilter="@QuickFilter" FixedHeader FixedFooter Bordered Height="70vh" Class="dark-bg" Elevation="5">
         <ToolBarContent>
             <MudText Class="text-white mr-4" Typo="Typo.h6">Véhicules</MudText>
             <AuthorizeView Roles="Admin">
                 <Authorized>
                     <MudTooltip Text="Ajouter" Placement="Placement.Top" Arrow>
-                        <MudIconButton Icon="@IconsM.Filled.AddBox" Color="Color.Success" OnClick="@AddVehiclesAsync" />
+                        <MudMenu Icon="@IconsM.Filled.AddBox" IconColor="Color.Success" Color="Color.Success" AnchorOrigin="Origin.CenterRight" TransformOrigin="Origin.CenterLeft">
+                            <MudMenuItem OnClick="@AddVehicleAsync">Ajout simple</MudMenuItem>
+                            <MudMenuItem OnClick="@AddVehiclesAsync">Ajout de masse</MudMenuItem>
+                        </MudMenu>
                     </MudTooltip>
                     <MudTooltip Text="Mettre à jour les positions des véhicules" Placement="Placement.Top" Arrow>
                         <MudIconButton Icon="@IconsM.Filled.EditLocation" Color="Color.Secondary" OnClick="@EditVehiclesAsync" />

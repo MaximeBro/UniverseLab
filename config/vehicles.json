@@ -1,0 +1,16 @@
+{
+  "BPC_Laika" : "Laika",
+  "BPC_WolfsWagen" : "WolfsWagen",
+  "BPC_Rager" : "Rager",
+  "BPC_Dirtbike" : "Moto-cross",
+  "BPC_MountainBike" : "VTT",
+  "BPC_CityBike" : "Bicyclette",
+  "BP_WheelBarrow_Metal" : "Brouette en métal",
+  "BP_WheelBarrow_Improvised" : "Brouette improvisée",
+  "BPC_Kinglet_Duster" : "Avion",
+  "BPC_SUP" : "Paddle",
+  "BPC_Barba" : "Radeau",
+  "BPC_BigRaft" : "Radeau (grand)",
+  "BPC_SmallRaft" : "Radeau (petit)",
+  "BPC_RIS" : "Quad"
+}

@@ -1,43 +1,41 @@
-﻿using MudBlazor;
+﻿using System.Globalization;
+using MudBlazor;
+using ScumDB.Components.Pages;
 
 namespace ScumDB.Extensions;
 
 public static class Hardcoded
 {
-	public static DialogOptions DialogOptions => new DialogOptions()
+	public static CultureInfo French => new CultureInfo("fr-FR");
+	
+	public static readonly DialogOptions DialogOptions = new DialogOptions
 	{
 		CloseButton = false,
 		NoHeader = true,
-		DisableBackdropClick = false,
+		BackdropClick = true,
 		MaxWidth = MaxWidth.Medium,
 		CloseOnEscapeKey = true
 	};
-
 		
-	public static Action<SnackbarOptions> SnackbarOptions = options =>
+	public static readonly Action<SnackbarOptions> SnackbarOptions = options =>
 	{
 		options.ShowCloseIcon = false;
 		options.VisibleStateDuration = 1500;
 		options.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
 	};
+
+	public static readonly BlockMask SteamIdMask = new BlockMask("", 
+		new Block('7'), new Block('6'), new Block('5'), new Block('6'), new Block('1', 2, 2), // 765611
+					new Block('0', 11, 11)); // Unique identifier represented as 11 digits
 	
-	public static string GetVehicleName(string blueprint)
+	public static readonly PatternMask PositionMask = new PatternMask("000000.0000");
+	
+	public static readonly PatternMask VehicleIdMask = new PatternMask("00000") { Placeholder = '_' };
+	
+	public static string GetVehicleName(string blueprint, IConfiguration configuration)
 	{
-		return blueprint switch
-		{
-			"BPC_Laika" => "Laika",
-			"BPC_WolfsWagen" => "WolfsWagen",
-			"BPC_Rager" => "Rager",
-			"BPC_Dirtbike" => "Moto-cross",
-			"BPC_MountainBike" => "VTT",
-			"BPC_CityBike" => "Bicyclette",
-			"BP_WheelBarrow_Metal" => "Brouette en métal",
-			"BP_WheelBarrow_Improvised" => "Brouette improvisée",
-			"BPC_Kinglet_Duster" => "Avion",
-			"BPC_SUP" => "Paddle",
-			"BPC_Barba" => "Radeau",
-			_ => $"Inconnu ({blueprint})"
-		};
+		var name = configuration[blueprint] ?? string.Empty;
+		return string.IsNullOrWhiteSpace(name) ? $"Inconnu {blueprint}" : name;
 	}
 
 	public static AggregateDefinition<T> GetAggregateCountOf<T>() => new()

@@ -1,0 +1,88 @@
+﻿<MudDialog Class="darkless-bg">
+    <DialogContent>
+        <MudIconButton Class="ml-n4 icon-hoverable-light" Icon="@IconsM.Filled.Close" OnClick="@(() => Dialog.Close())" />
+        <MudStack Class="px-4 py-2" Justify="Justify.SpaceEvenly" Row="false" Spacing="0">
+            <MudStack Row Spacing="4">
+                <MudTextField T="string" @bind-Value="_vehicleId" AdornmentText="#" Adornment="Adornment.Start" Mask="@Hardcoded.VehicleIdMask" Variant="Variant.Outlined" 
+                              Label="ID Véhicule" Placeholder="12345"/>
+                <MudSelect T="string" @bind-Value="_blueprint" Label="Blueprint" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
+                    @foreach (var blueprint in PersistentData.Blueprints)
+                    {
+                        <MudSelectItem Value="@blueprint.Key">@blueprint.Value</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudStack>
+            <MudStack Row Spacing="0">
+                <MudTextField T="string" @bind-Value="_steamId" Mask="@Hardcoded.SteamIdMask" Label="Steam ID" Placeholder="76561100000000000" Variant="Variant.Outlined"/>
+            </MudStack>
+            <MudStack Row Spacing="4">
+                <MudTextField T="string" @bind-Value="_posX" Mask="@Hardcoded.PositionMask" Placeholder="123456.1234" Label="X" Variant="Variant.Outlined"/>
+                <MudTextField T="string" @bind-Value="_posY" Mask="@Hardcoded.PositionMask" Placeholder="123456.1234" Label="Y" Variant="Variant.Outlined"/>
+                <MudTextField T="string" @bind-Value="_posZ" Mask="@Hardcoded.PositionMask" Placeholder="123456.1234" Label="Z" Variant="Variant.Outlined"/>
+            </MudStack>
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        @if (_loading)
+        {
+            <MudButton Class="d-flex" Style="flex-direction: row; align-items: center; justify-content: center;" Color="Color.Success" Variant="Variant.Filled" Disabled>
+                <MudProgressCircular Indeterminate Size="Size.Small" Class="text-white"/>
+                <MudText Class="ml-1 text-white">Chargement...</MudText>
+            </MudButton>
+        }
+        else
+        {
+            <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="@SubmitAsync">Enregistrer</MudButton>
+        }
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Inject] public PersistentData PersistentData { get; set; } = null!;
+    [Inject] public IFetchService FetchService { get; set; } = null!;
+    [Inject] public IVehicleService VehicleService { get; set; } = null!;
+    [Inject] public ISnackbar Snackbar { get; set; } = null!;
+
+    private string _steamId = string.Empty;
+    private string _vehicleId = string.Empty;
+    private string _blueprint = string.Empty;
+    private string _posX = string.Empty;
+    private string _posY = string.Empty;
+    private string _posZ = string.Empty;
+    
+    private bool _loading;
+
+    protected override void OnInitialized()
+    {
+        _blueprint = PersistentData.Blueprints.FirstOrDefault().Key ?? string.Empty;
+    }
+
+    private async Task SubmitAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_vehicleId) || string.IsNullOrWhiteSpace(_steamId)) return;
+        
+        _loading = true;
+        var vehicle = new VehicleModel
+        {
+            OwnerId = _steamId,
+            Blueprint = _blueprint,
+            VehicleId = int.Parse(_vehicleId),
+            Name = PersistentData.Blueprints.GetValueOrDefault(_blueprint) ?? $"Inconnu {_blueprint}",
+            PositionX = _posX,
+            PositionY = _posY,
+            PositionZ = _posZ
+        };
+        await VehicleService.AddAsync(vehicle);
+        
+        Snackbar.Add("Véhicule ajouté", Severity.Success, options =>
+        {
+            options.VisibleStateDuration = 1500;
+        });
+        await FetchService.AddAccountsAsync(vehicle.OwnerId);
+        _loading = false;
+
+        Dialog.Close(true);
+    }
+}

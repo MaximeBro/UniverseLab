@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using ScumDB.Components.Dialogs;
-using ScumDB.Components.Dialogs.Steam;
+using ScumDB.Components.Dialogs.SteamAccounts;
 using ScumDB.Databases;
 using ScumDB.Extensions;
 using ScumDB.Models;
@@ -13,8 +13,8 @@ namespace ScumDB.Components.Pages.Admin;
 public partial class SteamAccounts
 {
     [Inject] public IDbContextFactory<ScumDbContext> Factory { get; set; } = null!;
-    [Inject] public IDialogService DialogService { get; set; } = null!;
     [Inject] public IFetchService FetchService { get; set; } = null!;
+    [Inject] public IDialogService DialogService { get; set; } = null!;
     [Inject] public ISnackbar Snackbar { get; set; } = null!;
 
     private List<SteamAccountModel> _models = [];
@@ -47,15 +47,48 @@ public partial class SteamAccounts
 
     private async Task AddAccountAsync()
     {
-        var instance = await DialogService.ShowAsync<SteamAccount>(string.Empty, Hardcoded.DialogOptions);
+        var instance = await DialogService.ShowAsync<SteamAccountDialog>(string.Empty, Hardcoded.DialogOptions);
         var result = await instance.Result;
-        if (result is { Data: true })
+        if (result is { Data: SteamAccountModel model })
         {
+            await using var db = await Factory.CreateDbContextAsync();
+            db.Accounts.Add(model);
+            await db.SaveChangesAsync();
             await RefreshDataAsync();
             StateHasChanged();
         }
     }
 
+    private async Task EditAccountAsync(SteamAccountModel model)
+    {
+        var parameters = new DialogParameters<SteamAccountDialog> { { x => x.Model, model } };
+        var instance = await DialogService.ShowAsync<SteamAccountDialog>(string.Empty, parameters, Hardcoded.DialogOptions);
+        var result = await instance.Result;
+        if (result is { Data: SteamAccountModel newModel })
+        {
+            await using var db = await Factory.CreateDbContextAsync();
+            newModel.Id = model.Id;
+            db.Accounts.Update(newModel);
+            await db.SaveChangesAsync();
+            await RefreshDataAsync();
+            StateHasChanged();
+        }
+    }
+
+    private async Task DeleteAccountAsync(SteamAccountModel model)
+    {
+        var parameters = new DialogParameters<ConfirmDialog> { { x => x.Text, "Voulez-vous vraiment supprimer ce compte steam ?" } };
+        var instance = await DialogService.ShowAsync<ConfirmDialog>(string.Empty, parameters, Hardcoded.DialogOptions);
+        var result = await instance.Result;
+        if (result is { Data: true })
+        {
+            await using var db = await Factory.CreateDbContextAsync();
+            db.Accounts.Remove(model);
+            await RefreshDataAsync();
+            StateHasChanged();
+        }
+    }
+    
     private async Task ForceUpdateAsync()
     {
         _loading = true;

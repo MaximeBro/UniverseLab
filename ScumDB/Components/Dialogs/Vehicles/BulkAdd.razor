@@ -1,4 +1,4 @@
-﻿<MudDialog Class="darkless-bg">
+<MudDialog Class="darkless-bg">
     <DialogContent>
         <MudIconButton Class="ml-n4 icon-hoverable-light" Icon="@IconsM.Filled.Close" OnClick="@(() => Dialog.Close())" />
         <MudStack Class="px-4 py-2" Justify="Justify.SpaceEvenly" Row="false" Spacing="0">
@@ -34,13 +34,13 @@
     {
         _loading = true;
         var vehicles = await VehicleService.ParseAsync(_insert);
-        var count = await VehicleService.TryAddAsync(vehicles);
+        var count = await VehicleService.AddAsync(vehicles.ToArray());
         
         Snackbar.Add($"{count} véhicule(s) ajouté(s)", Severity.Success, options =>
         {
             options.VisibleStateDuration = 1500;
         });
-        await FetchService.AddAsync(vehicles.Select(x => x.OwnerId).Distinct());
+        await FetchService.AddAccountsAsync(vehicles.Select(x => x.OwnerId).Distinct().ToArray());
         _loading = false;
 
         Dialog.Close(true);

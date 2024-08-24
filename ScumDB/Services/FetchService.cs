@@ -15,9 +15,8 @@ public class FetchService(IHttpClientFactory clientFactory, IConfiguration confi
 	public async Task<List<SteamAccountModel>> FetchSteamNamesAsync(IEnumerable<string?> steamIDs)
 	{
 		List<SteamAccountModel> accounts = [];
-
-		var apiKey = configuration.GetSection("Steam")["API.Key"] ?? string.Empty;
-		var client = clientFactory.CreateClient();
+		
+		using var client = clientFactory.CreateClient();
 		foreach (var id in steamIDs)
 		{
 			if (id is null) continue;
@@ -30,26 +29,23 @@ public class FetchService(IHttpClientFactory clientFactory, IConfiguration confi
 				response.Dispose();
 			}
 		}
-
-		client.Dispose();
+		
 		return accounts;
 	}
 	
-	public async Task AddAsync(IEnumerable<string?> steamIDs)
+	public async Task AddAccountsAsync(params string?[] steamIDs)
 	{
 		var accounts = await FetchSteamNamesAsync(steamIDs);
-		var db = await factory.CreateDbContextAsync();
+		await using var db = await factory.CreateDbContextAsync();
 		var newAccounts = accounts.Where(x => !db.Accounts.Select(y => y.SteamId).Contains(x.SteamId)).ToList();
 		await db.Accounts.AddRangeAsync(newAccounts);
-
 		await db.SaveChangesAsync();
-		await db.DisposeAsync();
 	}
 
 	public async Task UpdateAsync(IEnumerable<SteamAccountModel> models)
 	{
 		var accounts = await FetchSteamNamesAsync(models.Select(x => x.SteamId).ToList());
-		var db = await factory.CreateDbContextAsync();
+		await using var db = await factory.CreateDbContextAsync();
 		var toUpdate = await db.Accounts.AsNoTracking().Where(x => accounts.Select(y => y.SteamId).Contains(x.SteamId)).ToListAsync();
 		foreach (var account in toUpdate)
 		{
@@ -63,6 +59,5 @@ public class FetchService(IHttpClientFactory clientFactory, IConfiguration confi
 
 		db.UpdateRange(toUpdate);
 		await db.SaveChangesAsync();
-		await db.DisposeAsync();
 	}
 }

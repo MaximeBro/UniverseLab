@@ -34,8 +34,7 @@
     {
         _loading = true;
         var vehicles = await VehicleService.ParseAsync(_insert);
-        var existing = await VehicleService.GetVehiclesByIds(vehicles.Select(x => x.VehicleId).ToList());
-        var updated = await VehicleService.UpdateVehiclesLocationAsync(existing);
+        var updated = await VehicleService.UpdateVehiclesLocationAsync(vehicles.ToList());
         
         Snackbar.Add($"{updated} véhicules modifiés avec succès !", Severity.Success, Hardcoded.SnackbarOptions);
         _loading = false;

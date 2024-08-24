@@ -43,6 +43,28 @@ public partial class Vehicles
 		await RefreshDataAsync();
 	}
 
+	private async Task AddVehicleAsync()
+	{
+		var instance = await DialogService.ShowAsync<SimpleAdd>(string.Empty, Hardcoded.DialogOptions);
+		var result = await instance.Result;
+		if (result is { Data: true })
+		{
+			await RefreshDataAsync();
+			StateHasChanged();
+		}
+	}
+	
+	private async Task AddVehiclesAsync()
+	{
+		var instance = await DialogService.ShowAsync<BulkAdd>(string.Empty, Hardcoded.DialogOptions);
+		var result = await instance.Result;
+		if (result is { Data: true })
+		{
+			await RefreshDataAsync();
+			StateHasChanged();
+		}
+	}
+
 	private async Task RemoveVehicleAsync(VehicleModel vehicle)
 	{
 		var parameters = new DialogParameters<ConfirmDialog> { { x => x.Text, "Voulez-vous vraiment supprimer ce véhicule ?" } };
@@ -50,21 +72,9 @@ public partial class Vehicles
 		var result = await instance.Result;
 		if (result is { Data: true })
 		{
-			var db = await Factory.CreateDbContextAsync();
+			await using var db = await Factory.CreateDbContextAsync();
 			db.Vehicles.Remove(vehicle);
 			await db.SaveChangesAsync();
-			await db.DisposeAsync();
-			await RefreshDataAsync();
-			StateHasChanged();
-		}
-	}
-
-	private async Task AddVehiclesAsync()
-	{
-		var instance = await DialogService.ShowAsync<BulkAdd>(string.Empty, Hardcoded.DialogOptions);
-		var result = await instance.Result;
-		if (result is { Data: true })
-		{
 			await RefreshDataAsync();
 			StateHasChanged();
 		}
@@ -88,13 +98,12 @@ public partial class Vehicles
 		var result = await instance.Result;
 		if (result is { Data: true })
 		{
-			var db = await Factory.CreateDbContextAsync();
-			var toDell = db.Vehicles.Where(x => !x.OwnerId!.StartsWith("7")).ToList();
-			db.Vehicles.RemoveRange(toDell);
+			await using var db = await Factory.CreateDbContextAsync();
+			var nbDeleted = await db.Vehicles.ExecuteDeleteAsync();
 			await db.SaveChangesAsync();
-			await db.DisposeAsync();
 			await RefreshDataAsync();
-			Snackbar.Add("Purge effectuée !", Severity.Success, options =>
+			StateHasChanged();
+			Snackbar.Add($"{nbDeleted} véhicules supprimés !", Severity.Success, options =>
 			{
 				options.VisibleStateDuration = 1500;
 				options.ShowCloseIcon = false;
@@ -133,10 +142,9 @@ public partial class Vehicles
 
 	private async Task RefreshDataAsync()
 	{
-		var db = await Factory.CreateDbContextAsync();
+		await using var db = await Factory.CreateDbContextAsync();
 		_vehicles = db.Vehicles.AsNoTracking().Where(x => !string.IsNullOrWhiteSpace(x.OwnerId) && x.OwnerId.StartsWith("7")).OrderBy(x => x.OwnerId).ToList();
 		var accounts = db.Accounts.AsNoTracking().ToList();
-		await db.DisposeAsync();
 
 		foreach (var vehicle in _vehicles)
 		{

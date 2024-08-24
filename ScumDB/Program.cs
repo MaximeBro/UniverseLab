@@ -7,6 +7,10 @@ using ScumDB.Extensions;
 using ScumDB.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var configPath = new DirectoryInfo(Path.Combine(builder.Environment.ContentRootPath, "../config/vehicles.json")).FullName;
+builder.Configuration.AddJsonFile(configPath, optional: false, reloadOnChange: true);
+
 builder.WebHost.UseUrls("https://localhost:5005/", "http://localhost:5004/");
 builder.WebHost.UseStaticWebAssets();
 
@@ -28,6 +32,7 @@ builder.Services.AddMudServices();
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 
+builder.Services.AddSingleton<PersistentData>();
 builder.Services.AddSingleton<UserTokenHandler>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<IFetchService, FetchService>();
@@ -50,11 +55,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-#pragma warning disable ASP0014
-// Extends session idle time to 1h30 (experimental)
-// app.UseEndpoints(e => e.MapBlazorHub(options => options.WebSockets.CloseTimeout = TimeSpan.FromMinutes(90)));
-#pragma warning disable ASP0014
-
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAntiforgery();
@@ -69,6 +69,10 @@ app.UseLogout();
 
 app.MapRazorComponents<App>()
 	.AddInteractiveServerRenderMode();
+
+var scope = app.Services.CreateScope();
+var persistentData = scope.ServiceProvider.GetRequiredService<PersistentData>();
+await persistentData.InitAsync(app);
 
 await RunMigrationAsync<ScumDbContext>(app);
 

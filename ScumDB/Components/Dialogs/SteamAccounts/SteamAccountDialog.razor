@@ -1,0 +1,47 @@
+﻿<MudDialog Class="darkless-bg">
+    <DialogContent>
+        <MudIconButton Class="ml-n4 icon-hoverable-light" Icon="@IconsM.Filled.Close" OnClick="@(() => Dialog.Close())" />
+        <MudStack Class="px-4 py-2" Row Spacing="2">
+            <MudTextField T="string" @bind-Value="_steamId" Label="SteamId" Immediate Clearable Variant="Variant.Outlined" />
+            <MudTextField T="string" @bind-Value="_name" Label="Nom du compte" Immediate Clearable Variant="Variant.Outlined" />
+        </MudStack>
+        <MudStack>
+            <MudDatePicker @bind-Date="_updatedAt" Label="Mis à jour le" Culture="@Hardcoded.French" />
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="@Submit">Enregistrer</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter] public SteamAccountModel? Model { get; set; }
+
+    private string _steamId = string.Empty;
+    private string _name = string.Empty;
+    private DateTime? _updatedAt = DateTime.Today;
+
+    protected override void OnInitialized()
+    {
+        if (Model != null)
+        {
+            _steamId = Model.SteamId;
+            _name = Model.Name;
+            _updatedAt = Model.SavedAt;
+        }
+    }
+
+    private void Submit()
+    {
+        if(Model != null) _updatedAt = DateTime.Today;
+        
+        Dialog.Close(new SteamAccountModel
+        {
+            SteamId = _steamId,
+            Name = _name,
+            SavedAt = _updatedAt.GetValueOrDefault(DateTime.Today)
+        });
+    }
+}

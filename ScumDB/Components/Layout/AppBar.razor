@@ -10,7 +10,7 @@
                         <MudText Class="text-white">@_name</MudText>
                         <AuthorizeView Roles="Admin">
                             <Authorized>
-                                <MudLink OnClick="@ToAdminPanel" Underline="Underline.Always" Style="text-decoration-color: #fff;">
+                                <MudLink OnClick="@ToAdminPanelAsync" Underline="Underline.Always" Style="text-decoration-color: #fff;">
                                     <MudText Class="text-white">Espace admin</MudText>
                                 </MudLink>
                             </Authorized>
@@ -18,7 +18,7 @@
                     </MudStack>
                 </MudStack>
                 <MudDivider Class="my-2" Style="border-color: grey!important;" />
-                <MudLink Class="text-white py-1" OnClick="@Logout" Underline="Underline.Hover" Style="text-decoration-color: #fff;">
+                <MudLink Class="text-white py-1" OnClick="@LogoutAsync" Underline="Underline.Hover" Style="text-decoration-color: #fff;">
                     <MudText Class="text-white" Align="Align.Center">Se déconnecter</MudText>
                 </MudLink>
             </MudStack>
@@ -66,15 +66,15 @@
         }
     }
 
-    private void ToAdminPanel()
+    private async Task ToAdminPanelAsync()
     {
-        _menu.CloseMenu();
+        await _menu.CloseMenuAsync();
         NavManager.NavigateTo("/admin/web-panel/", true);
     }
     
-    private void Logout()
+    private async Task LogoutAsync()
     {
-        _menu.CloseMenu();
+        await _menu.CloseMenuAsync();
         NavManager.NavigateTo($"/api/logout/{_token}", true);
     }
 }
