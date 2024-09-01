@@ -30,48 +30,30 @@
             <PropertyColumn Title="Propriétaire (steamID)" Property="x => x.OwnerId" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" />
             <TemplateColumn Title="ID véhicule" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border">
                 <CellTemplate Context="row">
-                    <MudGrid Spacing="0">
-                        <MudItem xs="10">
-                            <MudText>@($"#{row.Item.VehicleId}")</MudText>
-                        </MudItem>
-                        <MudItem xs="2">
-                            <MudTooltip Text="Copier l'ID du véhicule" Placement="Placement.Left" Arrow>
-                                <MudIconButton Size="Size.Small" Icon="@(IconsM.Filled.ContentCopy)" OnClick="@(async () => await CopyToClipboardAsync(row.Item.VehicleId))"/>
-                            </MudTooltip>
-                        </MudItem>
-                    </MudGrid>
+                    <MudStack Row Justify="Justify.Center">
+                        <MudText>@($"#{row.Item.VehicleId}")</MudText>
+                        <MudTooltip Text="Copier l'ID du véhicule" Placement="Placement.Left" Arrow>
+                            <MudIconButton Size="Size.Small" Icon="@(IconsM.Filled.ContentCopy)" OnClick="@(async () => await CopyToClipboardAsync(row.Item.VehicleId))"/>
+                        </MudTooltip>
+                    </MudStack>
                 </CellTemplate>
             </TemplateColumn>
             <PropertyColumn Title="Véhicule" Property="x => x.Name" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border"/>
             <TemplateColumn Title="Position (X, Y, Z)" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border">
                 <CellTemplate Context="row">
-                    <MudGrid Spacing="3">
-                        <MudItem xs="3">
-                            <MudText>
-                                <strong>X</strong>(<span style="text-decoration: underline;">@row.Item.PositionX</span>)
-                            </MudText>
-                        </MudItem>
-                        <MudItem xs="3">
-                            <MudText>
-                                <strong>Y</strong>(<span style="text-decoration: underline;">@row.Item.PositionY</span>)
-                            </MudText>
-                        </MudItem>
-                        <MudItem xs="3">
-                            <MudText>
-                                <strong>Z</strong>(<span style="text-decoration: underline;">@row.Item.PositionZ</span>)
-                            </MudText>
-                        </MudItem>
-                        <MudItem xs="1">
+                    <MudStack Row="false">
+                        <MudStack Row Justify="Justify.FlexStart">
+                            <MudText>X=@row.Item.PositionX Y=@row.Item.PositionY Z=@row.Item.PositionZ</MudText>
+                        </MudStack>
+                        <MudStack Row Justify="Justify.FlexEnd" Spacing="2">
                             <MudTooltip Text="Copier les coordonnées" Placement="Placement.Left" Arrow>
                                 <MudIconButton Size="Size.Small" Icon="@(IconsM.Filled.ContentCopy)" OnClick="@(async () => await CopyToClipboardAsync(row.Item))"/>
                             </MudTooltip>
-                        </MudItem>
-                        <MudItem xs="1">
                             <MudTooltip Text="Ouvrir la carte interactive" Placement="Placement.Left" Arrow>
                                 <MudIconButton Class="purple-font" Size="Size.Small" Icon="@(IconsM.Filled.OpenInBrowser)" OnClick="@(async () => await OpenMapAsync(row.Item))"/>
                             </MudTooltip>
-                        </MudItem>
-                    </MudGrid>
+                        </MudStack>
+                    </MudStack>
                 </CellTemplate>
             </TemplateColumn>
             <AuthorizeView Roles="Admin">

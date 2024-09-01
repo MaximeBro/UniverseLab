@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
 using MudBlazor;
@@ -7,19 +8,23 @@ using ScumDB.Components.Dialogs.Vehicles;
 using ScumDB.Databases;
 using ScumDB.Extensions;
 using ScumDB.Models;
+using ScumDB.Services.Hubs;
 
 namespace ScumDB.Components.Pages;
 
-public partial class Vehicles
+public partial class Vehicles : ComponentBase
 {
 	[Inject] public IDbContextFactory<ScumDbContext> Factory { get; set; } = null!;
 	[Inject] public IDialogService DialogService { get; set; } = null!;
 	[Inject] public IJSRuntime JsRuntime { get; set; } = null!;
 	[Inject] public ISnackbar Snackbar { get; set; } = null!;
+	[Inject] public NavigationManager NavManager { get; set; } = null!;
 
 	private List<VehicleModel> _vehicles = [];
 
 	private string _search = string.Empty;
+	private readonly Guid _circuitId = Guid.NewGuid();
+	private HubConnection? _hubConnection;
 	private Func<VehicleModel, bool> QuickFilter => x =>
 	{
 		if (x.Name.Contains(_search, StringComparison.OrdinalIgnoreCase)) return true;
@@ -41,7 +46,26 @@ public partial class Vehicles
 	protected override async Task OnInitializedAsync()
 	{
 		await RefreshDataAsync();
+		_hubConnection = new HubConnectionBuilder().WithUrl(NavManager.ToAbsoluteUri(VehiclesHub.HubUrl)).Build();
+
+		_hubConnection.On<string, Guid>(VehiclesHub.HubMethod, (message, circuit) =>
+		{
+			if (circuit == _circuitId) return;
+			
+			if (message == nameof(Vehicles))
+			{
+				InvokeAsync(async () =>
+				{
+					await RefreshDataAsync();
+					StateHasChanged();
+				});
+			}
+		});
+		
+		await _hubConnection.StartAsync();
 	}
+	
+	private async Task SendUpdateAsync() => await _hubConnection!.InvokeAsync(VehiclesHub.HubMethod, nameof(Vehicles), _circuitId);
 
 	private async Task AddVehicleAsync()
 	{
@@ -50,6 +74,7 @@ public partial class Vehicles
 		if (result is { Data: true })
 		{
 			await RefreshDataAsync();
+			await SendUpdateAsync();
 			StateHasChanged();
 		}
 	}
@@ -61,6 +86,7 @@ public partial class Vehicles
 		if (result is { Data: true })
 		{
 			await RefreshDataAsync();
+			await SendUpdateAsync();
 			StateHasChanged();
 		}
 	}
@@ -76,6 +102,7 @@ public partial class Vehicles
 			db.Vehicles.Remove(vehicle);
 			await db.SaveChangesAsync();
 			await RefreshDataAsync();
+			await SendUpdateAsync();
 			StateHasChanged();
 		}
 	}
@@ -87,6 +114,7 @@ public partial class Vehicles
 		if (result is { Data: true })
 		{
 			await RefreshDataAsync();
+			await SendUpdateAsync();
 			StateHasChanged();
 		}
 	}
@@ -102,6 +130,7 @@ public partial class Vehicles
 			var nbDeleted = await db.Vehicles.ExecuteDeleteAsync();
 			await db.SaveChangesAsync();
 			await RefreshDataAsync();
+			await SendUpdateAsync();
 			StateHasChanged();
 			Snackbar.Add($"{nbDeleted} véhicules supprimés !", Severity.Success, options =>
 			{
@@ -113,13 +142,13 @@ public partial class Vehicles
 
 	private async Task CopyToClipboardAsync(VehicleModel vehicle)
 	{
-		var coords = $"{vehicle.PositionX},{vehicle.PositionY},{vehicle.PositionZ}";
+		var coords = $"X={vehicle.PositionX} Y={vehicle.PositionY} Z={vehicle.PositionZ}";
 		await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", coords);
 		Snackbar.Add("Coordonnées copiées dans le presse-papier", Severity.Info, options =>
 		{
 			options.VisibleStateDuration = 1500;
 			options.ShowCloseIcon = false;
-			options.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
+			options.DuplicatesBehavior = SnackbarDuplicatesBehavior.Allow;
 		});
 	}
 
@@ -130,7 +159,7 @@ public partial class Vehicles
 		{
 			options.VisibleStateDuration = 1500;
 			options.ShowCloseIcon = false;
-			options.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
+			options.DuplicatesBehavior = SnackbarDuplicatesBehavior.Allow;
 		});
 	}
 
@@ -143,7 +172,7 @@ public partial class Vehicles
 	private async Task RefreshDataAsync()
 	{
 		await using var db = await Factory.CreateDbContextAsync();
-		_vehicles = db.Vehicles.AsNoTracking().Where(x => !string.IsNullOrWhiteSpace(x.OwnerId) && x.OwnerId.StartsWith("7")).OrderBy(x => x.OwnerId).ToList();
+		_vehicles = db.Vehicles.AsNoTracking().OrderBy(x => x.OwnerId).ToList();
 		var accounts = db.Accounts.AsNoTracking().ToList();
 
 		foreach (var vehicle in _vehicles)

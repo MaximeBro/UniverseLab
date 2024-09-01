@@ -43,4 +43,11 @@ public static class Hardcoded
 		Type = AggregateType.Count,
 		DisplayFormat = "{value} éléments sélectionnés"
 	};
+
+	public static class Hubs
+	{
+		public const string PublicEndpoint= "/api/refresh/public";
+		public const string PrivateEndpoint = "/api/refresh/private";
+		public const string AdminEndpoint = "/api/refresh/admin";
+	}
 }

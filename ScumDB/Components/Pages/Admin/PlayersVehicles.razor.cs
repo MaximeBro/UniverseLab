@@ -12,8 +12,8 @@ public partial class PlayersVehicles
 {
     [Inject] public IDbContextFactory<ScumDbContext> Factory { get; set; } = null!;
     [Inject] public IVehicleService VehicleService { get; set; } = null!;
-    [Inject] public IJSRuntime JsRuntime { get; set; } = null!; 
-    [Inject] public ISnackbar Snackbar { get; set; } = null!; 
+    [Inject] public IJSRuntime JsRuntime { get; set; } = null!;
+    [Inject] public ISnackbar Snackbar { get; set; } = null!;
     
     private List<VehicleModel> _models = [];
     private string _search = string.Empty;

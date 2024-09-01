@@ -5,6 +5,7 @@ using ScumDB.Components;
 using ScumDB.Databases;
 using ScumDB.Extensions;
 using ScumDB.Services;
+using ScumDB.Services.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,8 @@ builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<IFetchService, FetchService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 
+builder.Services.AddSignalR();
+
 builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();
 
@@ -66,6 +69,8 @@ app.MapControllers();
 
 app.UseLogin();
 app.UseLogout();
+
+app.MapHub<VehiclesHub>(VehiclesHub.HubUrl);
 
 app.MapRazorComponents<App>()
 	.AddInteractiveServerRenderMode();
