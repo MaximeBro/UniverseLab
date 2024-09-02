@@ -365,3 +365,5 @@ SignalR/appsettings.Development.json
 SignalR/Properties/
 
 stored-data/
+
+config/

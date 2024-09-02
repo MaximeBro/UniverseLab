@@ -14,10 +14,11 @@ namespace ScumDB.Components.Pages;
 public partial class Login
 {
 	[Inject] public IConfiguration Configuration { get; set; } = null!;
+	[Inject] public ISnackbar Snackbar { get; set; } = null!;
 	[Inject] public UserTokenHandler UserTokenHandler { get; set; } = null!;
 	[Inject] public NavigationManager NavManager { get; set; } = null!;
 	[Inject] public NotificationService NotificationService { get; set; } = null!;
-	[Inject] public ISnackbar Snackbar { get; set; } = null!;
+	[Inject] public PersistentData PersistentData { get; set; } = null!;
 	
 	[CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; } = null!;
 
@@ -38,16 +39,14 @@ public partial class Login
 
 	private void TryLogin()
 	{
-		var identifier = Configuration.GetSection("Admin")["id"];
-		var password = Configuration.GetSection("Admin")["pwd"];
-
-		if (_model.Identifier == identifier && _model.Password == password)
+		var id = PersistentData.Accounts.Keys.FirstOrDefault(x => string.Equals(x, _model.Identifier, StringComparison.CurrentCultureIgnoreCase));
+		if (!string.IsNullOrWhiteSpace(id) && PersistentData.Accounts[id] == _model.Password)
 		{
 			var guid = Guid.NewGuid();
 
 			var claims = new[]
 			{
-				new Claim(ClaimTypes.GivenName, "Thomas Winter"),
+				new Claim(ClaimTypes.GivenName, id),
 				new Claim(ClaimTypes.Role, UserRole.Admin.ToString()),
 				new Claim("token", guid.ToString()),
 			};

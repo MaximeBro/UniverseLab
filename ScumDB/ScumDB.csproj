@@ -23,6 +23,23 @@
       <_ContentIncludedByDefault Remove="wwwroot\bootstrap\bootstrap.min.css.map" />
       <_ContentIncludedByDefault Remove="pub\ScumDB.deps.json" />
       <_ContentIncludedByDefault Remove="pub\ScumDB.runtimeconfig.json" />
+      <_ContentIncludedByDefault Remove="pub\appsettings.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="pub\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="pub\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="pub\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="pub\**" />
     </ItemGroup>
 
 </Project>
