@@ -1,0 +1,54 @@
+﻿@page "/"
+@page "/accueil"
+
+
+<PageTitle>ScumDb</PageTitle>
+
+<MudPaper Square Elevation="0" Width="100%">
+    <div class="home-first-bg">
+        <MudContainer MaxWidth="MaxWidth.Large" Style="padding-bottom: 200px;">
+            <MudGrid Spacing="0">
+                <MudItem Class="px-xs-auto" xs="12" md="6">
+                    <div class="px-0" style="padding: 50px 0;">
+                        <MudText Inline Class="gradient-title" Style="font-weight: 700; font-size: 4rem;" Typo="Typo.h1">Scum</MudText>
+                        <MudText Inline Class="text-white" Style="font-weight: 700; font-size: 4rem;" Typo="Typo.h1">Db</MudText>
+                        <MudText Class="text-white" Style="font-weight: 700; font-size: 3rem;" Typo="Typo.h2">Présente</MudText>
+                        <MudText Class="home-para" Typo="Typo.subtitle1">
+                            Explorez notre application web, conçue pour la communauté Scum de UniverseStudio.
+                            Ergonomique, facile d'utilisation et pensée pour les gérants de serveur Scum et leurs joueurs.
+                        </MudText>
+                        <MudStack Class="mt-8" Row>
+                            <MudButton Class="text-white gradient-button rounded-lg" Style="text-transform: none;" Variant="Variant.Filled" Href="/vehicles" Size="Size.Large">
+                                Découvrir
+                            </MudButton>
+                            <MudButton Class="ml-2 white-text rounded-lg" Style="text-transform: none; border-color: #fff;" Variant="Variant.Outlined" Size="Size.Large"
+                                       StartIcon="@IconsC.Brands.GitHub" Href="https://github.com/MaximeBro" Target="_blank">
+                                Suivre sur Github
+                            </MudButton>
+                        </MudStack>
+                    </div>
+                </MudItem>
+                <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert>
+                    <MudItem xs="0" sm="0" md="6" Style="padding: 100px 25px;">
+                        <MudStack Style="height: 100%;" Row="false" AlignItems="AlignItems.Center">
+                            <div class="my-auto home-api-border ml-12">
+                                <MudImage Class="home-api-img" Src="/assets/api.webp" Fluid/>
+                            </div>
+                        </MudStack>
+                    </MudItem>
+                </MudHidden>
+            </MudGrid>
+        </MudContainer>
+    </div>
+    
+    <div class="home-second-bg mt-n4">
+        <MudHidden Breakpoint="Breakpoint.Xs" Invert><div Style="margin-top: -120px;"></div></MudHidden>
+        <MudContainer MaxWidth="MaxWidth.Large" Style="overflow: hidden;">
+            <MudStack Row="false">
+                <MudText Class="public-sans" Color="Color.Primary" Typo="Typo.h5" Style="font-weight: 600; font-size: 1.1rem;" GutterBottom>Rejoignez-nous sur discord !</MudText>
+            </MudStack>
+            <DiscordWidget ServerId="1231665250349355070" InviteId="HGht8zSm2b" FooterText="Venez saluer les autres membres de la communauté..." JoinButtonText="Rejoignez-nous"/>
+            <div style="height: 250px;"></div>
+        </MudContainer>
+    </div>
+</MudPaper>

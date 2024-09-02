@@ -1,0 +1,111 @@
+﻿@if (_failed)
+{
+    <MudPaper Elevation="5">
+        <MudStack Row="false" Spacing="0">
+            <MudStack Row Class="py-3 px-4 rounded-t" AlignItems="AlignItems.Center" Style="background-color: #5865F2;">
+                <MudImage Src="/assets/discord-logo.svg" Height="32"/>
+                <MudSpacer/>
+            </MudStack>
+            <MudStack Row="false" Spacing="2" Justify="Justify.Center" AlignItems="AlignItems.Center" 
+                      Class="py-4" Style="background-color: hsl(225 calc(1*6.3%) 12.5% /1);">
+                <MudText Class="text-white">Une erreur s'est produite :(</MudText>
+                <MudLink OnClick="@GetServerStatusAsync">Rafraîchir</MudLink>
+            </MudStack>
+        </MudStack>
+    </MudPaper>
+    return;
+}
+
+@if (_widgetStatus is null)
+{
+    <MudPaper Elevation="5">
+        <MudStack Row="false" Spacing="0">
+            <MudStack Row Class="py-3 px-4 rounded-t" AlignItems="AlignItems.Center" Style="background-color: #5865F2;">
+                <MudImage Src="/assets/discord-logo.svg" Height="32"/>
+                <MudSpacer/>
+            </MudStack>
+            <MudStack Row Spacing="2" Justify="Justify.Center" AlignItems="AlignItems.Center" 
+                      Class="py-3" Style="background-color: hsl(225 calc(1*6.3%) 12.5% /1);">
+                <MudProgressCircular Indeterminate Color="Color.Default"/>
+                <MudText Class="text-white">Chargement en cours...</MudText>
+            </MudStack>
+        </MudStack>
+    </MudPaper>
+    return;
+}
+
+<MudPaper Elevation="5">
+    <MudStack Row="false" Spacing="0">
+
+        @* Widget Header *@
+        <MudStack Row Class="py-3 px-4 rounded-t" AlignItems="AlignItems.Center" Style="background-color: #5865F2;">
+            <MudImage Src="/assets/discord-logo.svg" Height="32"/>
+            <MudSpacer/>
+            <MudText><strong class="text-white">@_widgetStatus.PresenceCount</strong> Membres connectés</MudText>
+        </MudStack>
+        @* Widget Header *@
+
+        @* Widget Body*@
+        <MudStack Row="false" Class="py-2 px-3" Style="background-color: hsl(225 calc(1*6.3%) 12.5% /1); height: 300px; overflow-y: auto;">
+            @foreach (var channel in _widgetStatus.Channels.OrderBy(x => x.Position))
+            {
+                <MudStack Row AlignItems="AlignItems.Center">
+                    <MudIcon Icon="@IconsM.Filled.VolumeUp"/>
+                    <MudText Style="text-transform: none;">@channel.Name</MudText>
+                </MudStack>
+                
+                foreach (var member in _widgetStatus.Members.Where(x => x.ChannelId == channel.Id))
+                {
+                    <MudStack Class="pl-5 mt-n1 mb-1" Row AlignItems="AlignItems.Center">
+                        <div style="height: 32px;">
+                            <MudBadge Dot Overlap Origin="Origin.BottomRight" Color="@GetStatusColor(member.Status)">
+                                <MudAvatar Style="height: 32px; width: 32px;">
+                                    <MudImage Src="@member.AvatarUrl" Alt="@($"Avatar de {member.Username}")"/>
+                                </MudAvatar>
+                            </MudBadge>
+                        </div>
+                        <MudText Style="text-transform: none;">@member.Username</MudText>
+                    </MudStack>
+                }
+            }
+            
+            <MudDivider Class="mt-2" FlexItem DividerType="DividerType.Middle"/>
+            <MudText Class="mt-3" Style="text-transform: uppercase;">Membres connectés</MudText>
+            @foreach (var member in _widgetStatus.Members.Where(x => x.Status == "online").OrderBy(x => x.Id))
+            {
+                <MudStack Class="pl-3 my-1" Row AlignItems="AlignItems.Center">
+                    <div style="height: 32px;">
+                        <MudBadge Dot Overlap Origin="Origin.BottomRight" Color="@GetStatusColor(member.Status)">
+                            <MudAvatar Style="height: 32px; width: 32px;">
+                                <MudImage Src="@member.AvatarUrl" Alt="@($"Avatar de {member.Username}")"/>
+                            </MudAvatar>
+                        </MudBadge>
+                    </div>
+                    <MudText>@member.Username</MudText>
+                    @if (member.Game != null)
+                    {
+                        <MudSpacer/>
+                        <MudText Typo="Typo.subtitle2">@member.Game.Name</MudText>
+                    }
+                </MudStack>
+            }
+        </MudStack>
+        @* Widget Body*@
+        
+        @* Widget Footer *@
+        <MudStack Row Justify="Justify.Center" AlignItems="AlignItems.Center" Class="py-2 pl-5 pr-3 rounded-b mud-elevation-1" Spacing="4"
+                  Style="background-color: hsl(225 calc(1*6.3%) 12.5% /1); border-top: 1px solid rgba(0, 0, 0, .30);">
+            @if (!string.IsNullOrWhiteSpace(FooterText))
+            {
+                <MudHidden Invert Breakpoint="Breakpoint.MdAndUp">
+                    <MudText>@FooterText</MudText>
+                    <MudSpacer/>
+                </MudHidden>
+            }
+            
+            <MudButton Target="_blank" Href="@($"https://discord.gg/{InviteId}")" Style="text-transform: none;" Variant="Variant.Filled">@JoinButtonText</MudButton>
+        </MudStack>
+        @* Widget Footer *@
+        
+    </MudStack>
+</MudPaper>

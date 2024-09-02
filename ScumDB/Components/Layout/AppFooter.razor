@@ -1,0 +1,49 @@
+﻿<MudPaper Class="all-z1" Elevation="0" Square Style="z-index: 1300!important; background-color: #1A1A27;">
+    <MudContainer Class="py-10" MaxWidth="MaxWidth.Large">
+        <MudGrid>
+            <MudItem xs="12">
+                <MudImage Class="my-auto" Height="24" Style="width: auto;" Src="/assets/transparent-brand.png" Alt="UniverseStudio"/>
+            </MudItem>
+            <MudItem xs="12" sm="7" md="8">
+                <MudStack Row="false">
+                    <MudText Style="color: #BDBDBD;">
+                        ScumDb WebPanel est une application web développée et maintenue par UniverseStudio. Cette application a été conçue pour la communauté française de UniverseStudio par son gérant.
+                    </MudText>
+                    <MudSpacer/>
+                    <MudToolBar Class="pa-0">
+                        <MudIconButton Style="color: #BDBDBD;" Icon="@IconsC.Brands.Steam" Href="https://steamcommunity.com/id/phil-mcfly/" Target="_blank"/>
+                        <MudIconButton Style="color: #BDBDBD;" Icon="@IconsC.Brands.Discord" Href="https://discord.gg/HGht8zSm2b" Target="_blank"/>
+                        <MudIconButton Style="color: #BDBDBD;" Icon="@IconsC.Brands.GitHub" Href="https://github.com/MaximeBro" Target="_blank"/>
+                    </MudToolBar>
+                </MudStack>
+            </MudItem>
+            <MudHidden Breakpoint="Breakpoint.SmAndUp" Invert>
+                <MudItem xs="0" sm="1" md="1">
+                    <MudDivider DividerType="DividerType.Middle" Vertical/>
+                </MudItem>
+            </MudHidden>
+            <MudHidden Breakpoint="Breakpoint.Xs" Invert>
+                <MudItem xs="12">
+                    <MudDivider DividerType="DividerType.Middle"/>
+                </MudItem>
+            </MudHidden>
+            <MudItem xs="12" sm="4" md="3">
+                <MudStack Row="false">
+                    <MudText Class="ml-4" Typo="Typo.h6" Style="color: #BDBDBD;"><b>Menu</b></MudText>
+                    <MudLink Class="ml-4" Href="/" Style="color: #BDBDBD!important;">Accueil</MudLink>
+                    <MudLink Class="ml-4" Href="/vehicles" Style="color: #BDBDBD!important;">Véhicules</MudLink>
+                    <AuthorizeView Roles="Admin">
+                        <Authorized>
+                            <MudLink Class="ml-4" Href="/admin/web-panel" Style="color: #BDBDBD!important;">Espace admin</MudLink>
+                        </Authorized>
+                    </AuthorizeView>
+                </MudStack>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+</MudPaper>
+<MudPaper Class="darker-bg" Elevation="0" Square>
+    <MudContainer Class="py-5" MaxWidth="MaxWidth.Large">
+        <MudText Style="color: #BDBDBD;">Copyright © 2024 UniverseStudio</MudText>
+    </MudContainer>
+</MudPaper>

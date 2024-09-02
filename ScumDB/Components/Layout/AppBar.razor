@@ -1,7 +1,23 @@
 ﻿<MudAppBar Color="Color.Dark" Style="background-color: #1A1A27!important;">
+    <MudLink Href="/">
+        <MudImage Height="32" Style="width: auto;" Src="/assets/U_transparent.png" Alt="UniverseStudio"/>
+    </MudLink>
+    <MudButton Href="/" Class="appbar-btn ml-4" Style="text-transform: none;">
+        <MudText Class="gradient-title" Style="font-weight: 700; font-size: 1rem;" Inline>Scum</MudText>
+        <MudText Class="text-white" Style="font-weight: 700; font-size: 1rem;" Inline>Db</MudText>
+    </MudButton>
+    <MudButton Href="/vehicles" StartIcon="@IconsM.Filled.Toys" Class="appbar-btn text-white ml-4" Style="text-transform: none;">Véhicules</MudButton>
+    <AuthorizeView>
+        <Authorized>
+            <MudButton Href="/admin/web-panel" StartIcon="@IconsM.Filled.AdminPanelSettings" Class="appbar-btn text-white ml-4" Style="text-transform: none;">WebPanel</MudButton>
+        </Authorized>
+    </AuthorizeView>
+    <MudSpacer/>
+    
     @if (!string.IsNullOrWhiteSpace(_name))
     {
-        <MudMenu @ref="_menu" Icon="@IconsM.Filled.AccountCircle" Size="Size.Small" Class="icon-hoverable white-all pa-1 mr-3" PopoverClass="dark-bg" ListClass="rounded-lg"
+        <MudText Class="text-white" Style="font-weight: 700; font-size: 1rem;">@_name</MudText>
+        <MudMenu @ref="_menu" Icon="@IconsM.Filled.AccountCircle" Size="Size.Small" Class="icon-hoverable white-all pa-1 mx-3" PopoverClass="dark-bg" ListClass="rounded-lg"
                  Style="border: 2px solid white; border-radius: 50%;" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
             <MudStack Class="pt-1" Row="false" Spacing="0">
                 <MudStack Class="px-4" Row AlignItems="AlignItems.Center">
@@ -17,8 +33,8 @@
                         </AuthorizeView>
                     </MudStack>
                 </MudStack>
-                <MudDivider Class="my-2" Style="border-color: grey!important;" />
-                <MudLink Class="text-white py-1" OnClick="@LogoutAsync" Underline="Underline.Hover" Style="text-decoration-color: #fff;">
+                <MudDivider Class="my-2" Style="border-color: grey!important;"/>
+                <MudLink Class="text-white pb-2" OnClick="@LogoutAsync" Underline="Underline.Hover" Style="text-decoration-color: #fff;">
                     <MudText Class="text-white" Align="Align.Center">Se déconnecter</MudText>
                 </MudLink>
             </MudStack>
@@ -27,54 +43,6 @@
     else
     {
         <MudIconButton Icon="@IconsM.Filled.AccountCircle" Size="Size.Small" Class="icon-hoverable white-all pa-1 mr-3"
-                       Style="border: 2px solid white; border-radius: 50%;" Href="/web/login" />
+                       Style="border: 2px solid white; border-radius: 50%;" Href="/admin/web-panel/login"/>
     }
-    <MudButton Class="clickable-app text-white" Variant="Variant.Text" DisableElevation DisableRipple Href="/">
-        <MudText Class="gradient-title" Style="font-weight: 700; font-size: 1rem;" Inline>Scum</MudText>
-        <MudText Style="font-weight: 700; font-size: 1rem;" Inline>Db</MudText>
-    </MudButton>
-    <MudSpacer/>
-    <MudLink Href="/">
-        <MudImage Height="32" Style="width: auto;" Src="/assets/U_transparent.png" Alt="UniverseStudio"/>
-    </MudLink>
 </MudAppBar>
-
-@code {
-    [Inject] public NotificationService NotificationService { get; set; } = null!;
-    [Inject] public NavigationManager NavManager { get; set; } = null!;
-        
-    [CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; } = null!;
-
-    private string _name = string.Empty;
-    private string _token = string.Empty;
-    private MudMenu _menu = null!;
-    
-    protected override async Task OnInitializedAsync()
-    {
-        await RefreshStateAsync();
-        NotificationService.OnAuthenticationNotificationReceived += RefreshStateAsync;
-    }
-
-    private async Task RefreshStateAsync()
-    {
-        var state = await AuthenticationState;
-        if (state.User.Identity is { IsAuthenticated: true })
-        {
-            _name = state.User.FindFirst(x => x.Type == ClaimTypes.GivenName)?.Value ?? string.Empty;
-            _token = state.User.FindFirst(x => x.Type == "token")?.Value ?? string.Empty;
-            StateHasChanged();
-        }
-    }
-
-    private async Task ToAdminPanelAsync()
-    {
-        await _menu.CloseMenuAsync();
-        NavManager.NavigateTo("/admin/web-panel/", true);
-    }
-    
-    private async Task LogoutAsync()
-    {
-        await _menu.CloseMenuAsync();
-        NavManager.NavigateTo($"/api/logout/{_token}", true);
-    }
-}

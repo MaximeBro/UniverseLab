@@ -6,7 +6,7 @@ using ScumDB.Models;
 
 namespace ScumDB.Services;
 
-public class FetchService(IHttpClientFactory clientFactory, IConfiguration configuration, IDbContextFactory<ScumDbContext> factory) : IFetchService
+public class FetchService(IHttpClientFactory clientFactory, IDbContextFactory<ScumDbContext> factory) : IFetchService
 {
 	/// <summary>
 	/// Fetches all the steam profiles of the given ids using configuration's api key
