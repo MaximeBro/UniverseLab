@@ -58,6 +58,17 @@ public partial class SteamAccounts
             StateHasChanged();
         }
     }
+    
+    private async Task AddAccountsAsync()
+    {
+        var instance = await DialogService.ShowAsync<BulkAdd>(string.Empty, Hardcoded.DialogOptions);
+        var result = await instance.Result;
+        if (result is { Data: true })
+        {
+            await RefreshDataAsync();
+            StateHasChanged();
+        }
+    }
 
     private async Task EditAccountAsync(SteamAccountModel model)
     {

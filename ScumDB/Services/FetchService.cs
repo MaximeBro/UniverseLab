@@ -41,6 +41,16 @@ public class FetchService(IHttpClientFactory clientFactory, IDbContextFactory<Sc
 		await db.SaveChangesAsync();
 	}
 
+	public async Task<int> AddAccountsAsync(SteamAccountModel[] accounts)
+	{
+		await using var db = await factory.CreateDbContextAsync();
+		var newAccounts = accounts.Where(x => !db.Accounts.Select(y => y.SteamId).Contains(x.SteamId)).ToList();
+		await db.Accounts.AddRangeAsync(newAccounts);
+		await db.SaveChangesAsync();
+		
+		return newAccounts.Count;
+	}
+	
 	public async Task UpdateAsync(IEnumerable<SteamAccountModel> models)
 	{
 		var accounts = await FetchSteamNamesAsync(models.Select(x => x.SteamId).ToList());
@@ -58,5 +68,24 @@ public class FetchService(IHttpClientFactory clientFactory, IDbContextFactory<Sc
 
 		db.UpdateRange(toUpdate);
 		await db.SaveChangesAsync();
+	}
+
+	public Task<SteamAccountModel[]> ParseAsync(string content)
+	{
+		List<SteamAccountModel> accounts = [];
+
+		var lines = content.Split("\n").Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+		foreach (var accountLines in lines.Chunk(6))
+		{
+			var fullName = accountLines[1].Replace("Steam:", string.Empty).Trim();
+			accounts.Add(new SteamAccountModel
+			{
+				Name = accountLines[0].Substring(4),
+				SteamName = fullName.Substring(0, fullName.IndexOf('(')).Trim(),
+				SteamId = accountLines[1].Substring(accountLines[1].IndexOf('7')).Replace(")", string.Empty),
+			});
+		}
+
+		return Task.FromResult(accounts.ToArray());
 	}
 }

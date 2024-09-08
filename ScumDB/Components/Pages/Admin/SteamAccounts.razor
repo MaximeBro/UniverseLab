@@ -8,7 +8,10 @@
         <ToolBarContent>
             <MudText Class="text-white mr-4" Typo="Typo.h6">Comptes steam</MudText>
             <MudTooltip Text="Ajouter" Placement="Placement.Top" Arrow>
-                <MudIconButton Icon="@IconsM.Filled.AddBox" Color="Color.Success" OnClick="@AddAccountAsync" />
+                <MudMenu Icon="@IconsM.Filled.AddBox" IconColor="Color.Success" Color="Color.Success" AnchorOrigin="Origin.CenterRight" TransformOrigin="Origin.CenterLeft">
+                    <MudMenuItem OnClick="@AddAccountAsync">Ajout simple</MudMenuItem>
+                    <MudMenuItem OnClick="@AddAccountsAsync">Ajout de masse</MudMenuItem>
+                </MudMenu>
             </MudTooltip>
             <MudTooltip Class="ml-1" Text="Forcer la mise à jour" Placement="Placement.Top" Arrow>
                 <MudIconButton Class="ml-2" Icon="@IconsM.Filled.Update" Color="Color.Warning" OnClick="@ForceUpdateAsync" />

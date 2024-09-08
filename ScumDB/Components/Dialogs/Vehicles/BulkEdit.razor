@@ -8,14 +8,14 @@
     <DialogActions>
         @if (_loading)
         {
-            <MudButton Class="d-flex" Style="flex-direction: row; align-items: center; justify-content: center;" Color="Color.Success" Variant="Variant.Filled" Disabled>
+            <MudButton Class="d-flex" Style="flex-direction: row; align-items: center; justify-content: center;" Color="Color.Success" Variant="Variant.Outlined" Disabled>
                 <MudProgressCircular Indeterminate Size="Size.Small" Class="text-white"/>
                 <MudText Class="ml-1 text-white">Chargement...</MudText>
             </MudButton>
         }
         else
         {
-            <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="@SubmitAsync">Enregistrer</MudButton>
+            <MudButton Color="Color.Success" Variant="Variant.Outlined" OnClick="@SubmitAsync">Enregistrer</MudButton>
         }
         
     </DialogActions>

@@ -1,0 +1,46 @@
+﻿<MudDialog Class="darkless-bg">
+    <DialogContent>
+        <MudIconButton Class="ml-n4 icon-hoverable-light" Icon="@IconsM.Filled.Close" OnClick="@(() => Dialog.Close())" />
+        <MudStack Class="px-4 py-2" Justify="Justify.SpaceEvenly" Row="false" Spacing="0">
+            <MudTextField T="string" @bind-Value="_insert" Lines="5" Label="Ajout de masse" Immediate Clearable Variant="Variant.Outlined" Style="width: 720px;" />
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        @if (_loading)
+        {
+            <MudButton Class="d-flex" Style="flex-direction: row; align-items: center; justify-content: center;" Color="Color.Success" Variant="Variant.Outlined" Disabled>
+                <MudProgressCircular Indeterminate Size="Size.Small" Class="text-white"/>
+                <MudText Class="ml-1 text-white">Chargement...</MudText>
+            </MudButton>
+        }
+        else
+        {
+            <MudButton Color="Color.Success" Variant="Variant.Outlined" OnClick="@SubmitAsync">Enregistrer</MudButton>
+        }
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Inject] public IFetchService FetchService { get; set; } = null!;
+    [Inject] public ISnackbar Snackbar { get; set; } = null!;
+
+    private string _insert = string.Empty;
+    private bool _loading;
+    
+    private async Task SubmitAsync()
+    {
+        _loading = true;
+        var accounts = await FetchService.ParseAsync(_insert);
+        var count = await FetchService.AddAccountsAsync(accounts);
+        
+        Snackbar.Add($"{count} compte(s) ajouté(s)", Severity.Success, options =>
+        {
+            options.VisibleStateDuration = 1500;
+        });
+        _loading = false;
+
+        Dialog.Close(true);
+    }
+}

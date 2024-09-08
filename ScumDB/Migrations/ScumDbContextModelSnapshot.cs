@@ -15,22 +15,29 @@ namespace ScumDB.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
             modelBuilder.Entity("ScumDB.Models.SteamAccountModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasAnnotation("Relational:JsonPropertyName", "id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasAnnotation("Relational:JsonPropertyName", "name");
 
                     b.Property<DateTime>("SavedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SteamId")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasAnnotation("Relational:JsonPropertyName", "steamId");
+
+                    b.Property<string>("SteamName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

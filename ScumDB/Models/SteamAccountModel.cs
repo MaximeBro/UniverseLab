@@ -10,6 +10,9 @@ public class SteamAccountModel
 	[JsonPropertyName("steamId")]
 	public string SteamId { get; set; } = string.Empty;
 	
+	[JsonIgnore]
+	public string SteamName { get; set; } = string.Empty;
+	
 	[JsonPropertyName("name")]
 	public string Name { get; set; } = string.Empty;
 	public DateTime SavedAt { get; set; } = DateTime.Now;
