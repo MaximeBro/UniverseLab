@@ -5,12 +5,12 @@
             <MudTextField T="string" @bind-Value="_steamId" Label="SteamId" Immediate Clearable Variant="Variant.Outlined" />
             <MudTextField T="string" @bind-Value="_name" Label="Nom du compte" Immediate Clearable Variant="Variant.Outlined" />
         </MudStack>
-        <MudStack>
+        <MudStack Class="px-4 py-2">
             <MudDatePicker @bind-Date="_updatedAt" Label="Mis à jour le" Culture="@Hardcoded.French" />
         </MudStack>
     </DialogContent>
     <DialogActions>
-        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="@Submit">Enregistrer</MudButton>
+        <MudButton Color="Color.Success" Variant="Variant.Outlined" OnClick="@Submit">Enregistrer</MudButton>
     </DialogActions>
 </MudDialog>
 

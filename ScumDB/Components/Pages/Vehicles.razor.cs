@@ -140,6 +140,17 @@ public partial class Vehicles : ComponentBase
 		}
 	}
 
+	private async Task CopyVehicleTpCommandToClipboardAsync(int vehicleId)
+	{
+		await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", $"#TeleportToVehicleId {vehicleId}");
+		Snackbar.Add("Commande copiée dans le presse-papier", Severity.Info, options =>
+		{
+			options.VisibleStateDuration = 1500;
+			options.ShowCloseIcon = false;
+			options.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
+		});
+	}
+	
 	private async Task CopyToClipboardAsync(VehicleModel vehicle)
 	{
 		var coords = $"X={vehicle.PositionX} Y={vehicle.PositionY} Z={vehicle.PositionZ}";
@@ -148,7 +159,7 @@ public partial class Vehicles : ComponentBase
 		{
 			options.VisibleStateDuration = 1500;
 			options.ShowCloseIcon = false;
-			options.DuplicatesBehavior = SnackbarDuplicatesBehavior.Allow;
+			options.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
 		});
 	}
 
@@ -159,7 +170,7 @@ public partial class Vehicles : ComponentBase
 		{
 			options.VisibleStateDuration = 1500;
 			options.ShowCloseIcon = false;
-			options.DuplicatesBehavior = SnackbarDuplicatesBehavior.Allow;
+			options.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
 		});
 	}
 

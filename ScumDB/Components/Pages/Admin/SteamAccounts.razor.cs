@@ -95,6 +95,7 @@ public partial class SteamAccounts
         {
             await using var db = await Factory.CreateDbContextAsync();
             db.Accounts.Remove(model);
+            await db.SaveChangesAsync();
             await RefreshDataAsync();
             StateHasChanged();
         }
@@ -114,33 +115,15 @@ public partial class SteamAccounts
     private async Task PurgeAsync()
     {
         _loading = true;
-        var db = await Factory.CreateDbContextAsync();
+        await using var db = await Factory.CreateDbContextAsync();
         var distinct = (await db.Accounts.AsNoTracking().ToListAsync()).DistinctBy(x => x.SteamId);
         db.Accounts.RemoveRange(db.Accounts);
         db.Accounts.AddRange(distinct);
         await db.SaveChangesAsync();
-        await db.DisposeAsync();
         await RefreshDataAsync();
         StateHasChanged();
         _loading = false;
         Snackbar.Add("Données mises à jour !", Severity.Success, Hardcoded.SnackbarOptions);
-    }
-
-    private async Task RemoveAccountAsync(SteamAccountModel model)
-    {
-        var parameters = new DialogParameters<ConfirmDialog> { { x => x.Text, "Voulez-vous vraiment supprimer ce compte steam ?" } };
-        var instance = await DialogService.ShowAsync<ConfirmDialog>(string.Empty, parameters, Hardcoded.DialogOptions);
-        var result = await instance.Result;
-        if (result is { Data: true })
-        {
-            var db = await Factory.CreateDbContextAsync();
-            db.Accounts.Remove(model);
-            await db.SaveChangesAsync();
-            await db.DisposeAsync();
-            
-            await RefreshDataAsync();
-            StateHasChanged();
-        }
     }
 
     private async Task RefreshDataAsync()

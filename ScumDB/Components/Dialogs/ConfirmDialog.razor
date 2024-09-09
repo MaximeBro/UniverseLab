@@ -4,13 +4,13 @@
         <MudStack Class="px-4 py-2" Justify="Justify.SpaceEvenly" Row="false" Spacing="0">
             @foreach (var text in Text.Split("\n"))
             {
-                <MudText Class="open-sans-600" Typo="Typo.h6" Align="Align.Center">@text</MudText>
+                <MudText Class="open-sans-600" Align="Align.Center">@text</MudText>
             }
         </MudStack>
     </DialogContent>
     <DialogActions>
         <MudButton Color="Color.Dark" Variant="Variant.Filled" Size="Size.Small" OnClick="@(() => Dialog.Close(false))">Annuler</MudButton>
-        <MudButton Color="Color.Error" Variant="Variant.Filled" Size="Size.Small" OnClick="@(() => Dialog.Close(true))">Ok</MudButton>
+        <MudButton Color="Color.Error" Variant="Variant.Outlined" Size="Size.Small" OnClick="@(() => Dialog.Close(true))">Ok</MudButton>
     </DialogActions>
 </MudDialog>
 

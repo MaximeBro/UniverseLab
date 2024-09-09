@@ -16,15 +16,16 @@
             <MudTooltip Class="ml-1" Text="Forcer la mise à jour" Placement="Placement.Top" Arrow>
                 <MudIconButton Class="ml-2" Icon="@IconsM.Filled.Update" Color="Color.Warning" OnClick="@ForceUpdateAsync" />
             </MudTooltip>
-            <MudTooltip Class="ml-1" Text="Purge" Placement="Placement.Top" Arrow>
+            <MudTooltip Class="ml-1" Text="Purge des doublons" Placement="Placement.Top" Arrow>
                 <MudIconButton Class="ml-2" Icon="@IconsM.Filled.DeleteSweep" Color="Color.Error" OnClick="@PurgeAsync" />
             </MudTooltip>
             <MudSpacer/>
-            <MudTextField T="string" @bind-Value="_search" Label="Rechercher" Placeholder="Laika" Immediate Adornment="Adornment.Start" AdornmentIcon="@IconsM.Filled.Search" Clearable/>
+            <MudTextField T="string" @bind-Value="_search" Label="Rechercher" Placeholder="765611..." Immediate Adornment="Adornment.Start" AdornmentIcon="@IconsM.Filled.Search" Clearable/>
         </ToolBarContent>
         <Columns>
             <PropertyColumn Title="SteamID" Property="x => x.SteamId" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" Sortable="true" Filterable="true" AggregateDefinition="@_aggregation"/>
-            <PropertyColumn Title="Nom du compte" Property="x => x.Name" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" Sortable="true" Filterable="true"/>
+            <PropertyColumn Title="Nom du compte" Property="x => x.SteamName" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" Sortable="true" Filterable="true"/>
+            <PropertyColumn Title="Nom en jeu" Property="x => x.Name" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" Sortable="true" Filterable="true"/>
             <PropertyColumn Title="Mis à jour le" Property="x => x.SavedAt" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" Format="dd-MM-yyyy" Sortable="true" Filterable="true"/>
             <TemplateColumn HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border">
                 <CellTemplate Context="row">

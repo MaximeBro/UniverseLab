@@ -66,58 +66,43 @@ public partial class DiscordWidget
     
     private sealed class WidgetStatus
     {
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
+        [JsonPropertyName("id")] public string Id { get; set; } = string.Empty;
 
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
+        [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
 
-        [JsonPropertyName("channels")]
-        public List<Channel> Channels { get; set; }
+        [JsonPropertyName("channels")] public List<Channel> Channels { get; set; } = [];
 
-        [JsonPropertyName("members")]
-        public List<Member> Members { get; set; }
+        [JsonPropertyName("members")] public List<Member> Members { get; set; } = [];
 
-        [JsonPropertyName("presence_count")]
-        public int PresenceCount { get; set; }
+        [JsonPropertyName("presence_count")] public int PresenceCount { get; set; }
     }
 
     private sealed class Channel
     {
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
+        [JsonPropertyName("id")] public string Id { get; set; } = string.Empty;
 
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
+        [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
 
-        [JsonPropertyName("position")]
-        public int Position { get; set; }
+        [JsonPropertyName("position")] public int Position { get; set; }
     }
 
     private sealed class Member
     {
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
+        [JsonPropertyName("id")] public string Id { get; set; } = string.Empty;
 
-        [JsonPropertyName("username")]
-        public string Username { get; set; }
+        [JsonPropertyName("username")] public string Username { get; set; } = string.Empty;
 
-        [JsonPropertyName("status")]
-        public string Status { get; set; }
+        [JsonPropertyName("status")] public string Status { get; set; } = string.Empty;
 
-        [JsonPropertyName("avatar_url")]
-        public string AvatarUrl { get; set; }
+        [JsonPropertyName("avatar_url")] public string AvatarUrl { get; set; } = string.Empty;
 
-        [JsonPropertyName("channel_id")]
-        public string ChannelId { get; set; }
+        [JsonPropertyName("channel_id")] public string ChannelId { get; set; } = string.Empty;
         
-        [JsonPropertyName("game")]
-        public Activity? Game { get; set; }
+        [JsonPropertyName("game")] public Activity? Game { get; set; }
     }
 
     private sealed class Activity
     {
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
+        [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
     }
 }

@@ -62,7 +62,7 @@ public class FetchService(IHttpClientFactory clientFactory, IDbContextFactory<Sc
 			if (old != null)
 			{
 				account.SavedAt = DateTime.Now;
-				account.Name = old.Name;
+				account.SteamName = old.Name;
 			}
 		}
 
