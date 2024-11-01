@@ -1,0 +1,64 @@
+﻿<AuthorizeView>
+    <Authorized>
+        
+        <MudDrawer Elevation="5" Class="dark-bg pt-1" Open Variant="DrawerVariant.Responsive" ClipMode="DrawerClipMode.Docked">
+            <MudNavMenu Dense Color="Color.Surface" Class="px-3 pt-1">
+                <MudNavLink Match="NavLinkMatch.Prefix" Href="/" Icon="@Icons.Rounded.Home" Class="text-white rounded-nav mb-3">
+                    Accueil
+                </MudNavLink>
+                <MudNavLink Match="NavLinkMatch.Prefix" Href="/favorites" Icon="@Icons.Outlined.StarOutline" Class="text-white rounded-nav">
+                    Favoris
+                </MudNavLink>
+                <MudNavLink Match="NavLinkMatch.Prefix" Href="/trash" Icon="@Icons.Outlined.Delete" Class="text-white rounded-nav">
+                    Corbeille
+                </MudNavLink>
+                <MudNavLink Match="NavLinkMatch.Prefix" Href="/storage" Icon="@Icons.Outlined.Cloud" Class="text-white rounded-nav">
+                    Espace de stockage
+                </MudNavLink>
+            </MudNavMenu>
+            <StorageSpaceIndicator/>
+            <MudStack Row Justify="Justify.Center" Class="py-2">
+                <MudMenu AnchorOrigin="Origin.TopLeft" TransformOrigin="Origin.TopLeft" PopoverClass="dark-bg" ListClass="rounded-lg"
+                         Style="border: 1px solid transparent;">
+                    <ActivatorContent>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Rounded.Add"
+                                   Style="border-radius: 9999px; text-transform: none;">
+                            Ajouter
+                        </MudButton>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MudStack Class="py-2" Row="false" Spacing="0">
+                            <MudList T="string">
+                                <MudListItem Class="py-1">
+                                    <MudStack Row AlignItems="AlignItems.Center">
+                                        <MudIcon Icon="@Icons.Rounded.CreateNewFolder"/>
+                                        <MudText Style="font-size: 14px;">Nouveau dossier</MudText>
+                                        <MudSpacer/>
+                                        <MudText Style="font-size: 12px; color: gray;">^N</MudText>
+                                    </MudStack>
+                                </MudListItem>
+                                <MudDivider Class="my-2"/>
+                                <MudListItem Class="py-1">Importer fichier</MudListItem>
+                                <MudListItem Class="py-1">Nouveau fichier</MudListItem>
+                            </MudList>
+                        </MudStack>
+                    </ChildContent>
+                </MudMenu>
+            </MudStack>
+        </MudDrawer>
+
+    </Authorized>
+
+    <NotAuthorized>
+
+        <MudDrawer Elevation="5" Class="dark-bg pt-1" Open Variant="DrawerVariant.Responsive" ClipMode="DrawerClipMode.Docked">
+            <MudNavMenu Dense Color="Color.Surface" Class="px-3 pt-1">
+                <MudNavLink Match="NavLinkMatch.Prefix" Href="/" Icon="@Icons.Rounded.Home" Class="text-white rounded-nav mb-3">
+                    Accueil
+                </MudNavLink>
+            </MudNavMenu>
+        </MudDrawer>
+        
+    </NotAuthorized>
+</AuthorizeView>
+

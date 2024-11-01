@@ -1,11 +1,42 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using uDrive.Components;
+using uDrive.Database;
+using uDrive.Extensions;
+using uDrive.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseUrls("https://localhost:5005/", "http://localhost:5004/");
 builder.WebHost.UseStaticWebAssets();
 
 builder.Services.AddMudServices();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+}).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+{
+    options.LoginPath = "/api/login";
+    options.LogoutPath = "/api/logout";
+})
+.AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+{
+    options.ClientId = builder.Configuration["Google:ClientId"]!;
+    options.ClientSecret = builder.Configuration["Google:ClientSecret"]!;
+    options.ClaimActions.MapJsonKey("urn:google:profile", "link");
+    options.ClaimActions.MapJsonKey("urn:google:image", "picture");
+});
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
+
+builder.Services.AddDbContextFactory<MainDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("MainDb")));
+
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<FileService>();
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
@@ -25,7 +56,13 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseRouting();
 app.UseAntiforgery();
+
+app.UseCookiePolicy();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseGoogleAuthentication();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
