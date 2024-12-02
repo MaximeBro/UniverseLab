@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using uDrive.Database;
-using uDrive.Models;
+using uDrive.Models.Enums;
 
 namespace uDrive.Services;
 
@@ -34,8 +34,10 @@ public class FileService(IDbContextFactory<MainDbContext> dbContextFactory, ICon
         return Task.FromResult<InvalidOperationException?>(null);
     }
 
-    public async Task<UserMainFolder?> GetUserMainFolderAsync(UserModel user)
+    public async Task<UserMainFolder?> GetUserMainFolderAsync(UserModel? user)
     {
+        if (user is null) return null;
+        
         await using var db = await dbContextFactory.CreateDbContextAsync();
         return db.UserMainFolders.FirstOrDefault(x => x.UserIdentifier == user.Identifier);
     }

@@ -1,6 +1,6 @@
 ﻿using MudBlazor;
 
-namespace uDrive.Models;
+namespace uDrive.Models.Enums;
 
 public class UserFile
 {

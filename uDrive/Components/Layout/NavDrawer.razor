@@ -1,7 +1,7 @@
 ﻿<AuthorizeView>
     <Authorized>
         
-        <MudDrawer Elevation="5" Class="dark-bg pt-1" Open Variant="DrawerVariant.Responsive" ClipMode="DrawerClipMode.Docked">
+        <MudDrawer Elevation="5" Class="dark-bg pt-1 pb-2" Open Variant="DrawerVariant.Responsive" ClipMode="DrawerClipMode.Docked">
             <MudNavMenu Dense Color="Color.Surface" Class="px-3 pt-1">
                 <MudNavLink Match="NavLinkMatch.Prefix" Href="/" Icon="@Icons.Rounded.Home" Class="text-white rounded-nav mb-3">
                     Accueil
@@ -17,6 +17,7 @@
                 </MudNavLink>
             </MudNavMenu>
             <StorageSpaceIndicator/>
+            <MudSpacer/>
             <MudStack Row Justify="Justify.Center" Class="py-2">
                 <MudMenu AnchorOrigin="Origin.TopLeft" TransformOrigin="Origin.TopLeft" PopoverClass="dark-bg" ListClass="rounded-lg"
                          Style="border: 1px solid transparent;">
@@ -29,7 +30,7 @@
                     <ChildContent>
                         <MudStack Class="py-2" Row="false" Spacing="0">
                             <MudList T="string">
-                                <MudListItem Class="py-1">
+                                <MudListItem Class="py-1" OnClick="@CreateDirectoryAsync">
                                     <MudStack Row AlignItems="AlignItems.Center">
                                         <MudIcon Icon="@Icons.Rounded.CreateNewFolder"/>
                                         <MudText Style="font-size: 14px;">Nouveau dossier</MudText>

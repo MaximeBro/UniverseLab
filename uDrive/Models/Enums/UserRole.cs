@@ -1,4 +1,4 @@
-﻿namespace uDrive.Models;
+﻿namespace uDrive.Models.Enums;
 
 public enum UserRole
 {

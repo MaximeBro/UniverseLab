@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using uDrive.Extensions;
-using uDrive.Models;
+using uDrive.Models.Enums;
 using uDrive.Services;
 
 namespace uDrive.Components.Components;

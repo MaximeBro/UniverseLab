@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using uDrive.Models;
+using uDrive.Models.Enums;
 
 namespace uDrive.Database;
 

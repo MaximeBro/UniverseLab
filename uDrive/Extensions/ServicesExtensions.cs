@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.EntityFrameworkCore;
 using uDrive.Database;
-using uDrive.Models;
+using uDrive.Models.Enums;
 using uDrive.Services;
 
 namespace uDrive.Extensions;

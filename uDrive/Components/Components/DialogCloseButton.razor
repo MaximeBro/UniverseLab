@@ -1,0 +1,8 @@
+@inherits ComponentBase
+
+<MudIconButton Class="@Class" Icon="@Icons.Filled.Close" Color="Color.Default" OnClick="@(() => Dialog.Close())" />
+
+@code {
+    [Parameter] public MudDialogInstance Dialog { get; set; } = null!;
+    [Parameter] public string Class { get; set; } = string.Empty;
+}

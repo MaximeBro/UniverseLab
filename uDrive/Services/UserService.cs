@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using uDrive.Database;
 using uDrive.Extensions;
-using uDrive.Models;
+using uDrive.Models.Enums;
 
 namespace uDrive.Services;
 

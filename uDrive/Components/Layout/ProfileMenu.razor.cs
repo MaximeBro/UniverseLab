@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
-using uDrive.Models;
+using uDrive.Models.Enums;
 using uDrive.Services;
 
 namespace uDrive.Components.Layout;
