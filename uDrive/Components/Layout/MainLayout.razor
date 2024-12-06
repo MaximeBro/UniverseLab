@@ -9,8 +9,10 @@
 <MudLayout>
     <AppBar/>
     <NavDrawer/>
-    <MudMainContent Class="pa-0 ma-0 dark-bg pt-16" Style="overflow: auto; min-height: 100vh;">
-        @Body
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.False" Class="pa-0 ma-0 dark-bg" Style="min-height: calc(100vh - 64px);">
+            @Body
+        </MudContainer>
     </MudMainContent>
 </MudLayout>
 

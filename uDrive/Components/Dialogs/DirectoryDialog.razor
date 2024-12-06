@@ -1,14 +1,26 @@
+@using Microsoft.EntityFrameworkCore
+@using uDrive.Database
 <EditForm Model="@_model" OnValidSubmit="@Submit">
     <MudDialog Class="dark-bg">
         <DialogContent>
-            <DialogCloseButton Dialog="@Dialog" Class="mr-n4 align-self-end"/>
+            <MudStack Row="false" Spacing="0">
+                <DialogCloseButton Justify="Justify.FlexEnd" Dialog="@Dialog" ButtonClass="mr-n4 align-self-end"/>
+                <MudText Align="Align.Center">Création d'un dossier</MudText>
+            </MudStack>
+            
             <MudStack Class="px-12 py-4" Justify="Justify.SpaceEvenly" Row="false" Spacing="0">
-                <MudTextField T="string" @bind-Value="_model.Name" Variant="Variant.Outlined" Label="Nom du répertoire" Placeholder="Images"/>
+                <MudTextField T="string" @bind-Value="_model.Name" Variant="Variant.Text" Label="Nom du répertoire" Immediate/>
+                @if (DisplayError)
+                {
+                    <MudAlert Severity="Severity.Error" Dense>
+                        Ce dossier existe déjà.
+                    </MudAlert>
+                }
             </MudStack>
         </DialogContent>
         <DialogActions>
-            <MudButton OnClick="@Close" Color="Color.Dark">Annuler</MudButton>
-            <MudButton ButtonType="ButtonType.Submit" Color="Color.Success">Ok</MudButton>
+            <MudButton OnClick="@Close" Color="Color.Default">Annuler</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Success" Disabled="@DisplayError">Ok</MudButton>
         </DialogActions>
     </MudDialog>
 </EditForm>
@@ -16,16 +28,19 @@
 @code {
     [CascadingParameter] public MudDialogInstance Dialog { get; set; } = null!;
     
-    [Parameter] public string? Name { get; set; }
+    [Parameter] public string UserIdentifier { get; set; } = null!;
+    [Parameter] public Guid? ParentId { get; set; }
+    [Inject] public IDbContextFactory<MainDbContext> Factory { get; set; } = null!;
 
     private readonly DirectoryModel _model = new();
+    private string[] _forbiddenNames = [];
+
+    private bool DisplayError => _forbiddenNames.Contains(_model.Name, StringComparer.OrdinalIgnoreCase);
     
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        if (!string.IsNullOrWhiteSpace(Name))
-        {
-            _model.Name = Name;
-        }
+        await using var db = await Factory.CreateDbContextAsync();
+        _forbiddenNames = db.UserFolders.Where(x => x.UserIdentifier == UserIdentifier && x.ParentId == ParentId).Select(x => x.Name).ToArray();
     }
 
     private void Close() => Dialog.Close();

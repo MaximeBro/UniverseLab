@@ -1,53 +1,33 @@
 ﻿<AuthorizeView>
     <Authorized>
         
-        <MudDrawer Elevation="5" Class="dark-bg pt-1 pb-2" Open Variant="DrawerVariant.Responsive" ClipMode="DrawerClipMode.Docked">
-            <MudNavMenu Dense Color="Color.Surface" Class="px-3 pt-1">
-                <MudNavLink Match="NavLinkMatch.Prefix" Href="/" Icon="@Icons.Rounded.Home" Class="text-white rounded-nav mb-3">
+        <MudDrawer Elevation="5" Class="dark-bg pt-2 pb-2" Style="overflow: hidden;" Variant="DrawerVariant.Mini" ClipMode="DrawerClipMode.Docked"
+                   @bind-Open="_docked">
+            <MudStack Row Justify="@(_docked ? Justify.FlexEnd : Justify.Center)">
+                <div>
+                    <MudIconButton Icon="@(_docked ? Icons.Rounded.MenuOpen : Icons.Rounded.Menu)" OnClick="@(() => _docked = !_docked)"/>
+                </div>
+            </MudStack>
+
+            <MudNavMenu Dense Color="Color.Surface" Class="@($"{(_docked ? "px-3" : string.Empty)} pt-1")">
+                <MudNavLink Match="NavLinkMatch.Prefix" Href="/" Icon="@Icons.Rounded.Home" Class="text-white rounded-nav">
                     Accueil
                 </MudNavLink>
-                <MudNavLink Match="NavLinkMatch.Prefix" Href="/favorites" Icon="@Icons.Outlined.StarOutline" Class="text-white rounded-nav">
+                <MudNavLink Match="NavLinkMatch.Prefix" Href="/favorites" Icon="@Icons.Outlined.StarOutline" Class="text-white rounded-nav mb-3">
                     Favoris
                 </MudNavLink>
                 <MudNavLink Match="NavLinkMatch.Prefix" Href="/trash" Icon="@Icons.Outlined.Delete" Class="text-white rounded-nav">
                     Corbeille
                 </MudNavLink>
                 <MudNavLink Match="NavLinkMatch.Prefix" Href="/storage" Icon="@Icons.Outlined.Cloud" Class="text-white rounded-nav">
-                    Espace de stockage
+                    Stockage
                 </MudNavLink>
             </MudNavMenu>
-            <StorageSpaceIndicator/>
+            <StorageSpaceIndicator Class="@($"my-2 {(_docked ? "smooth-transition" : "smooth-transition-hidden")}")" Size="@(_docked ? Size.Medium : Size.Small)"/>
             <MudSpacer/>
-            <MudStack Row Justify="Justify.Center" Class="py-2">
-                <MudMenu AnchorOrigin="Origin.TopLeft" TransformOrigin="Origin.TopLeft" PopoverClass="dark-bg" ListClass="rounded-lg"
-                         Style="border: 1px solid transparent;">
-                    <ActivatorContent>
-                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Rounded.Add"
-                                   Style="border-radius: 9999px; text-transform: none;">
-                            Ajouter
-                        </MudButton>
-                    </ActivatorContent>
-                    <ChildContent>
-                        <MudStack Class="py-2" Row="false" Spacing="0">
-                            <MudList T="string">
-                                <MudListItem Class="py-1" OnClick="@CreateDirectoryAsync">
-                                    <MudStack Row AlignItems="AlignItems.Center">
-                                        <MudIcon Icon="@Icons.Rounded.CreateNewFolder"/>
-                                        <MudText Style="font-size: 14px;">Nouveau dossier</MudText>
-                                        <MudSpacer/>
-                                        <MudText Style="font-size: 12px; color: gray;">^N</MudText>
-                                    </MudStack>
-                                </MudListItem>
-                                <MudDivider Class="my-2"/>
-                                <MudListItem Class="py-1">Importer fichier</MudListItem>
-                                <MudListItem Class="py-1">Nouveau fichier</MudListItem>
-                            </MudList>
-                        </MudStack>
-                    </ChildContent>
-                </MudMenu>
-            </MudStack>
+            <DrawerActionsMenu Class="@($"my-2 {(_docked ? "smooth-transition" : "smooth-transition-hidden")}")" Size="@(_docked ? Size.Medium : Size.Small)"/>
         </MudDrawer>
-
+            
     </Authorized>
 
     <NotAuthorized>

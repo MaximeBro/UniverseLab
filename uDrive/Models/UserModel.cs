@@ -1,4 +1,6 @@
-﻿namespace uDrive.Models.Enums;
+﻿using uDrive.Models.Enums;
+
+namespace uDrive.Models;
 
 public class UserModel
 {

@@ -3,10 +3,13 @@
     return;
 }
 
-<MudStack Row="false" Spacing="1" Justify="Justify.Center" Class="px-5 py-1">
-    <MudProgressLinear Min="0" Max="@(_maxStorage / (double)1024 * 1024)" Value="@(_currentStorage / (double)1024 * 1024)" 
-                       Rounded Class="purple-bar" Style="height: 5px;"/>
-    <MudText Align="Align.Center" Typo="Typo.body2">
-        @_currentStorage.ToFileFormat() / @_maxStorage.ToFileFormat() utilisés
-    </MudText>
+<MudStack Row="false" Spacing="1" Justify="Justify.Center" Class="@($"px-5 py-1 {Class}")">
+    @if (Size is Size.Medium or Size.Large)
+    {
+        <MudProgressLinear Min="0" Max="@(_maxStorage / (double)1024 * 1024)" Value="@(_currentStorage / (double)1024 * 1024)"
+                           Rounded Class="purple-bar" Style="height: 5px;"/>
+        <MudText Align="Align.Center" Typo="Typo.body2">
+            @_currentStorage.ToFileFormat() / @_maxStorage.ToFileFormat() utilisés
+        </MudText>
+    }
 </MudStack>

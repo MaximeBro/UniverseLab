@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using uDrive.Models.Enums;
+using uDrive.Models;
 
 namespace uDrive.Database;
 
@@ -8,7 +8,7 @@ public class MainDbContext : DbContext
     public DbSet<UserModel> Users { get; set; }
     public DbSet<UserMainFolder> UserMainFolders { get; set; }
     public DbSet<UserFolder> UserFolders { get; set; }
-    public DbSet<UserFile> Files { get; set; }
+    public DbSet<UserFile> UserFiles { get; set; }
     
     public MainDbContext(DbContextOptions<MainDbContext> options) : base(options) { }
 

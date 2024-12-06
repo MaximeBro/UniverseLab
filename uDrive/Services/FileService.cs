@@ -1,37 +1,27 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using uDrive.Database;
-using uDrive.Models.Enums;
+using uDrive.Extensions;
+using uDrive.Models;
 
 namespace uDrive.Services;
 
 public class FileService(IDbContextFactory<MainDbContext> dbContextFactory, IConfiguration configuration, ILogger<FileService> logger)
 {
-    public Task<InvalidOperationException?> InitUserFolderAsync(UserModel user)
+    public Task<Exception?> InitUserFolderAsync(UserModel user)
     {
-        var basePath = configuration["Files:ParentFolder"];
         try
         {
-            if (string.IsNullOrWhiteSpace(basePath))
+            CreateDirectory(new UserFolder
             {
-                return Task.FromException<InvalidOperationException>(new InvalidOperationException("[Configuration] Files:ParentFolder parameter is null or empty."))!;
-            }
-
-            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), basePath, user.Identifier);
-            if (Directory.Exists(folderPath))
-            {
-                logger.LogWarning("User folder already exists (user id: {id}). Removing content and creating a new one...", user.Identifier);
-                Directory.Delete(basePath, true);
-            }
-
-            Directory.CreateDirectory(folderPath);
-            logger.LogInformation("User folder at {path} successfully created for user {id}.", folderPath, user.Identifier);
+                UserIdentifier = user.Identifier,
+                Name = user.Identifier
+            }, hasUser: false);
+            return Task.FromResult<Exception?>(null);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occured while initializing user folder (user id: {id}).", user.Identifier);
+            return Task.FromResult<Exception?>(e);
         }
-
-        return Task.FromResult<InvalidOperationException?>(null);
     }
 
     public async Task<UserMainFolder?> GetUserMainFolderAsync(UserModel? user)
@@ -45,6 +35,38 @@ public class FileService(IDbContextFactory<MainDbContext> dbContextFactory, ICon
     public async Task<IEnumerable<UserFile>> GetUserFilesAsync(UserModel user)
     {
         await using var db = await dbContextFactory.CreateDbContextAsync();
-        return db.Files.Where(x => x.UserIdentifier == user.Identifier).ToList();
+        return db.UserFiles.Where(x => x.UserIdentifier == user.Identifier).ToList();
+    }
+
+    public bool CreateDirectory(UserFolder folder, bool hasUser = true)
+    {
+        var basePath = configuration["Files:ParentFolder"];
+        try
+        {
+            if (string.IsNullOrWhiteSpace(basePath))
+            { 
+                throw new InvalidOperationException("[Configuration] Files:ParentFolder parameter is null or empty.");
+            }
+            
+            var userPath = Path.Combine(Directory.GetCurrentDirectory(), basePath,
+                hasUser ? folder.UserIdentifier : string.Empty);
+            var fullPath = Path.Combine(userPath, folder.GetFullPath());
+            if (Directory.Exists(fullPath))
+            {
+                logger.LogWarning("User folder already exists (user id: {id}). Removing content and creating a new one...", folder.UserIdentifier);
+                Directory.Delete(basePath, true);
+            }
+
+            Directory.CreateDirectory(fullPath);
+            logger.LogInformation("User folder at {path} successfully created for user {id}.", fullPath, folder.UserIdentifier);
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "An error occured while creating user folder (user id: {id}).", folder.UserIdentifier);
+        }
+
+        return false;
     }
 }

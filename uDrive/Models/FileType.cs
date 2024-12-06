@@ -1,4 +1,4 @@
-﻿namespace uDrive.Models.Enums;
+﻿namespace uDrive.Models;
 
 public enum FileType
 {

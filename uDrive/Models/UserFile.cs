@@ -1,6 +1,6 @@
 ﻿using MudBlazor;
 
-namespace uDrive.Models.Enums;
+namespace uDrive.Models;
 
 public class UserFile
 {
@@ -14,7 +14,7 @@ public class UserFile
     public string Extension { get; set; } = string.Empty;
     public FileType FileType { get; set; }
     public string FileIcon { get; set; } = Icons.Custom.FileFormats.FileDocument;
-
+    
     public Guid ParentId { get; set; }
     public UserFolder? Parent { get; set; }
     

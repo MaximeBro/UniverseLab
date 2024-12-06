@@ -28,3 +28,12 @@
 .purple-bar .mud-progress-linear-bar {
     background-color: #594ae2!important;
 }
+
+.smooth-transition-hidden {
+    opacity: 0;
+}
+
+.smooth-transition {
+    opacity: 1;
+    transition: opacity .35s ease-in;
+}

@@ -64,13 +64,17 @@ namespace uDrive.Migrations
 
                     b.HasIndex("UserIdentifier");
 
-                    b.ToTable("Files");
+                    b.ToTable("UserFiles");
                 });
 
             modelBuilder.Entity("uDrive.Models.UserFolder", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")

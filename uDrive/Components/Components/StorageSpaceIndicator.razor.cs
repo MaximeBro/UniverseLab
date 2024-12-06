@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor;
 using uDrive.Extensions;
-using uDrive.Models.Enums;
+using uDrive.Models;
 using uDrive.Services;
 
 namespace uDrive.Components.Components;
@@ -9,7 +10,11 @@ namespace uDrive.Components.Components;
 public partial class StorageSpaceIndicator : ComponentBase
 {
     [CascadingParameter] public Task<AuthenticationState> AuthenticationStateTask { get; set; } = null!;
-
+    [Parameter] public Size Size { get; set; } = Size.Medium;
+    [Parameter]
+    [Category(CategoryTypes.ComponentBase.Common)]
+    public string? Class { get; set; }
+    
     [Inject] public IConfiguration Configuration { get; set; } = null!;
     [Inject] public UserService UserService { get; set; } = null!;
     [Inject] public FileService FileService { get; set; } = null!;

@@ -1,4 +1,4 @@
-﻿namespace uDrive.Models.Enums;
+﻿namespace uDrive.Models;
 
 public class UserFolder
 {
@@ -9,4 +9,5 @@ public class UserFolder
     public string Name { get; set; } = string.Empty;
     public Guid? ParentId { get; set; }
     public UserFolder? Parent { get; set; }
+    public string Color { get; set; } = "";
 }
