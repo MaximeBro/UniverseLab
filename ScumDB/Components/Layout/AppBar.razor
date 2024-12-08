@@ -14,35 +14,42 @@
     </AuthorizeView>
     <MudSpacer/>
     
-    @if (!string.IsNullOrWhiteSpace(_name))
-    {
-        <MudText Class="text-white" Style="font-weight: 700; font-size: 1rem;">@_name</MudText>
-        <MudMenu @ref="_menu" Icon="@IconsM.Filled.AccountCircle" Size="Size.Small" Class="icon-hoverable white-all pa-1 mx-3" PopoverClass="dark-bg" ListClass="rounded-lg"
-                 Style="border: 2px solid white; border-radius: 50%;" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
-            <MudStack Class="pt-1" Row="false" Spacing="0">
-                <MudStack Class="px-4" Row AlignItems="AlignItems.Center">
-                    <MudAvatar Variant="Variant.Filled" Color="Color.Dark">@_name[0].ToString().ToUpper()</MudAvatar>
-                    <MudStack Class="py-2" Row="false" Justify="Justify.FlexStart" Spacing="0">
-                        <MudText Class="text-white">@_name</MudText>
-                        <AuthorizeView Roles="Admin">
-                            <Authorized>
-                                <MudLink OnClick="@ToAdminPanelAsync" Underline="Underline.Always" Style="text-decoration-color: #fff;">
-                                    <MudText Class="text-white">Espace admin</MudText>
-                                </MudLink>
-                            </Authorized>
-                        </AuthorizeView>
+    <AuthorizeView Context="userMenuCtx">
+        <Authorized>
+            <MudText Class="text-white" Style="font-weight: 700; font-size: 1rem;">@_name</MudText>
+            <MudMenu @ref="_menu" Icon="@IconsM.Filled.AccountCircle" Size="Size.Small" Class="icon-hoverable white-all pa-1 mx-3" PopoverClass="dark-bg" ListClass="rounded-lg"
+                     AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
+                <ActivatorContent>
+                    <MudAvatar Class="darker-bg" Color="Color.Dark">
+                        @_name[0]
+                    </MudAvatar>
+                </ActivatorContent>
+                <ChildContent>
+                    <MudStack Class="pt-1" Row="false" Spacing="0">
+                        <MudStack Class="px-4" Row AlignItems="AlignItems.Center">
+                            <MudAvatar Variant="Variant.Filled" Color="Color.Dark">@_name[0].ToString().ToUpper()</MudAvatar>
+                            <MudStack Class="py-2" Row="false" Justify="Justify.FlexStart" Spacing="0">
+                                <MudText Class="text-white">@_name</MudText>
+                                <AuthorizeView Roles="Admin">
+                                    <Authorized>
+                                        <MudLink OnClick="@ToAdminPanelAsync" Underline="Underline.Always" Style="text-decoration-color: #fff;">
+                                            <MudText Class="text-white">Espace admin</MudText>
+                                        </MudLink>
+                                    </Authorized>
+                                </AuthorizeView>
+                            </MudStack>
+                        </MudStack>
+                        <MudDivider Class="my-2" Style="border-color: grey!important;"/>
+                        <MudLink Class="text-white pb-2" OnClick="@LogoutAsync" Underline="Underline.Hover" Style="text-decoration-color: #fff;">
+                            <MudText Class="text-white" Align="Align.Center">Se déconnecter</MudText>
+                        </MudLink>
                     </MudStack>
-                </MudStack>
-                <MudDivider Class="my-2" Style="border-color: grey!important;"/>
-                <MudLink Class="text-white pb-2" OnClick="@LogoutAsync" Underline="Underline.Hover" Style="text-decoration-color: #fff;">
-                    <MudText Class="text-white" Align="Align.Center">Se déconnecter</MudText>
-                </MudLink>
-            </MudStack>
-        </MudMenu>
-    }
-    else
-    {
-        <MudIconButton Icon="@IconsM.Filled.AccountCircle" Size="Size.Small" Class="icon-hoverable white-all pa-1 mr-3"
-                       Style="border: 2px solid white; border-radius: 50%;" Href="/admin/web-panel/login"/>
-    }
+                </ChildContent>
+            </MudMenu>
+        </Authorized>
+        <NotAuthorized>
+            <MudIconButton Icon="@IconsM.Filled.AccountCircle" Size="Size.Small" Class="icon-hoverable white-all pa-1 mr-3"
+                           Style="border: 2px solid white; border-radius: 50%;" Href="/admin/web-panel/login"/>
+        </NotAuthorized>
+    </AuthorizeView>
 </MudAppBar>

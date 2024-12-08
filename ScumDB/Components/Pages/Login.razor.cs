@@ -43,10 +43,11 @@ public partial class Login
 		if (!string.IsNullOrWhiteSpace(id) && PersistentData.Accounts[id] == _model.Password)
 		{
 			var guid = Guid.NewGuid();
+			var names = id.Split(".");
 
 			var claims = new[]
 			{
-				new Claim(ClaimTypes.GivenName, id),
+				new Claim(ClaimTypes.GivenName, string.Join(" ", names)),
 				new Claim(ClaimTypes.Role, UserRole.Admin.ToString()),
 				new Claim("token", guid.ToString()),
 			};

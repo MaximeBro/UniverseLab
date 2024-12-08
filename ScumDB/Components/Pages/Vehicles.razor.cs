@@ -142,7 +142,7 @@ public partial class Vehicles : ComponentBase
 
 	private async Task CopyVehicleTpCommandToClipboardAsync(int vehicleId)
 	{
-		await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", $"#TeleportToVehicleId {vehicleId}");
+		await JsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", $"#TeleportToVehicle {vehicleId}");
 		Snackbar.Add("Commande copiée dans le presse-papier", Severity.Info, options =>
 		{
 			options.VisibleStateDuration = 1500;
