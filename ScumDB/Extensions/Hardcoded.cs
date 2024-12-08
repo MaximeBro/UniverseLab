@@ -30,7 +30,7 @@ public static class Hardcoded
 	
 	public static readonly PatternMask PositionMask = new PatternMask("000000.0000");
 	
-	public static readonly PatternMask VehicleIdMask = new PatternMask("00000") { Placeholder = '_' };
+	public static readonly PatternMask VehicleIdMask = new PatternMask("000000") { Placeholder = '_' };
 	
 	public static string GetVehicleName(string blueprint, IConfiguration configuration)
 	{

@@ -45,7 +45,7 @@ builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();
 
 // Max data supported by interop calls (used for inputs)
-builder.Services.AddServerSideBlazor().AddHubOptions(options => options.MaximumReceiveMessageSize = 64 * 1024);
+builder.Services.AddServerSideBlazor().AddHubOptions(options => options.MaximumReceiveMessageSize = 4 * 1024 * 1024);
 
 var app = builder.Build();
 
