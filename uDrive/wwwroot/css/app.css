@@ -44,6 +44,7 @@
 
 * { outline: none; }
 
+.text-dark { color: #161621!important; }
 .text-white { color: #fff!important; }
 .white-all * { color: #fff!important; }
 
@@ -73,6 +74,7 @@
 .darkless-bg { background-color: #1E1E2D!important; }
 .dark-bg { background-color: #1A1A27!important; }
 .darker-bg { background-color: #161621!important; }
+
 .purple-font { color: #7d57fa!important; }
 
 .dark-border { border-color: #1A1A27!important; }

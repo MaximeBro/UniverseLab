@@ -29,13 +29,18 @@ public class FileService(IDbContextFactory<MainDbContext> dbContextFactory, ICon
         if (user is null) return null;
         
         await using var db = await dbContextFactory.CreateDbContextAsync();
-        return db.UserMainFolders.FirstOrDefault(x => x.UserIdentifier == user.Identifier);
+        return db.UserMainFolders
+            .Include(x => x.User)
+            .FirstOrDefault(x => x.UserIdentifier == user.Identifier);
     }
     
     public async Task<IEnumerable<UserFile>> GetUserFilesAsync(UserModel user)
     {
         await using var db = await dbContextFactory.CreateDbContextAsync();
-        return db.UserFiles.Where(x => x.UserIdentifier == user.Identifier).ToList();
+        return db.UserFiles
+            .Include(x => x.User)
+            .Include(x => x.Parent)
+            .Where(x => x.UserIdentifier == user.Identifier).ToList();
     }
 
     public bool CreateDirectory(UserFolder folder, bool hasUser = true)
