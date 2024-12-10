@@ -24,10 +24,14 @@ public partial class DrawerActionsMenu : AuthorizedComponentBase
     [Inject] public FileService FileService { get; set; } = null!;
     
     private MudMenu _actionsMenu = null!;
+    private UserMainFolder _mainFolder = null!;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        
+        await using var db = await Factory.CreateDbContextAsync();
+        _mainFolder = db.UserMainFolders.First(x => x.UserIdentifier == User!.Identifier);
     }
 
     private async Task CreateDirectoryAsync()
@@ -46,6 +50,7 @@ public partial class DrawerActionsMenu : AuthorizedComponentBase
                 UserIdentifier = User!.Identifier,
                 Name = name,
             };
+            
             if (FileService.CreateDirectory(folder))
             {
                 await using var db = await Factory.CreateDbContextAsync();
@@ -60,6 +65,33 @@ public partial class DrawerActionsMenu : AuthorizedComponentBase
     private async Task CreateFileAsync()
     {
         await _actionsMenu.CloseMenuAsync();
+        
+        var options = Hardcoded.DialogOptions;
+        options.MaxWidth = MaxWidth.Medium;
+        var instance = await DialogService.ShowAsync<FileDialog>(string.Empty, options);
+        var result = await instance.Result;
+
+        if (result is { Data: string name })
+        {
+            var file = new UserFile
+            {
+                UserIdentifier = User!.Identifier,
+                FileName = name,
+                FileIcon = name.IconByExtension(),
+                ParentId = _mainFolder.Id,
+                Extension = name.ExtractExtension(),
+                FileType = name.FileTypeByExtension(),
+            };
+            
+            if (FileService.CreateFile(file))
+            {
+                await using var db = await Factory.CreateDbContextAsync();
+                db.UserFiles.Add(file);
+                await db.SaveChangesAsync();
+                // TODO: Send notification to update user view & display custom toast
+                Snackbar.Add<Toast>(null, Severity.Normal);
+            }
+        }
     }
 
     private void OpenChangedHandler(bool value) => OnOpenChanged?.Invoke(value);

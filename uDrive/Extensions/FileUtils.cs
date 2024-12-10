@@ -12,7 +12,11 @@ public static class FileUtils
     /// </summary>
     public const long DefaultMaxStorage = 2147483648L;
 
-    public static readonly string[] SupportedLengthFormats = { "o", "Ko", "Mo", "Go", "To" };
+    public static readonly string[] SupportedLengthFormats = ["o", "Ko", "Mo", "Go", "To"];
+    public static readonly string[] CodeExtensions = ["cs", "razor", "dll", "exe", "json", "xml", "xaml", "java", "js", "jar", "ts", "tsx", "c", "py", "cshtml"];
+    public static readonly string[] ImageExtensions = ["png", "jpg", "jpeg", "webp", "gif", "apng", "avif", "svg", "bmp", "ico", "tiff"];
+    public static readonly string[] VideoExtensions = ["mp4", "mov", "avi", "wmv", "avchd", "webm", "flv"];
+    public static readonly string[] MusicExtensions = ["mp3", "wav", "acc", "flac", "ogg"];
 
     public static string ToFileFormat(this long @this)
     {
@@ -27,7 +31,7 @@ public static class FileUtils
     {
         if (@this.Parent is null || @this.Parent.Parent == null)
         {
-            return $"/{@this.FileName}";
+            return $"./{@this.FileName}";
         }
         
         List<UserFolder> folders = [];
@@ -87,11 +91,44 @@ public static class FileUtils
         };
     }
 
+    public static string ExtractExtension(this string @this) => @this.Split(".").LastOrDefault(string.Empty);
+    
+    public static string IconByExtension(this string @this)
+    {
+        var extension = @this.ExtractExtension();
+        return extension switch
+        {
+            "txt" => Icons.Custom.FileFormats.FileDocument,
+            "xlsx" => Icons.Custom.FileFormats.FileExcel,
+            "docx" => Icons.Custom.FileFormats.FileWord,
+            "pdf" => Icons.Custom.FileFormats.FilePdf,
+            var x when ImageExtensions.Contains(x) => Icons.Custom.FileFormats.FileImage,
+            var x when MusicExtensions.Contains(x) => Icons.Custom.FileFormats.FileMusic,
+            var x when VideoExtensions.Contains(x) => Icons.Custom.FileFormats.FileVideo,
+            var x when CodeExtensions.Contains(x) => Icons.Custom.FileFormats.FileCode,
+            _ => Icons.Material.Rounded.QuestionMark
+        };
+    }
+
+    public static FileType FileTypeByExtension(this string @this)
+    {
+        return @this.ExtractExtension() switch
+        {
+            "txt"  or "xlsx" or "docx" or "pdf" => FileType.Document,
+            "zip" or "tar" or "7zip" or "targz" => FileType.Archive, 
+            var x when ImageExtensions.Contains(x) => FileType.Image,
+            var x when MusicExtensions.Contains(x) => FileType.Audio,
+            var x when VideoExtensions.Contains(x) => FileType.Video,
+            var x when CodeExtensions.Contains(x) => FileType.Code,
+            _ => FileType.Unknown
+        };
+    }
+
     public static string Icon(this InteractiveItem @this)
     {
         return @this.Type switch
         {
-            ItemType.File => Icons.Custom.FileFormats.FileDocument,
+            ItemType.File => @this.Name.IconByExtension(),
             ItemType.Folder => Icons.Custom.Uncategorized.Folder,
             _ => Icons.Material.Rounded.QuestionMark,
         };

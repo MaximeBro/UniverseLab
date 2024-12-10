@@ -29,4 +29,6 @@ public partial class Home : AuthorizedComponentBase
         _items.AddRange(folders.Select(x => x.ToInteractiveItem()).ToList());
         _items.AddRange(files.Select(x => x.ToInteractiveItem()).ToList());
     }
+    
+    
 }

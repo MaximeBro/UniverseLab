@@ -19,7 +19,7 @@
                 <MudNavLink Match="NavLinkMatch.Prefix" Href="/trash" Icon="@Icons.Outlined.Delete" Class="text-white rounded-nav">
                     Corbeille
                 </MudNavLink>
-                <MudNavLink Match="NavLinkMatch.Prefix" Href="/storage" Icon="@Icons.Outlined.Cloud" Class="text-white rounded-nav">
+                <MudNavLink Match="NavLinkMatch.Prefix" Href="/storage" Icon="@Icons.Outlined.Cloud" Class="text-white rounded-nav mb-3">
                     Stockage
                 </MudNavLink>
                 
@@ -33,7 +33,7 @@
             </MudNavMenu>
             <StorageSpaceIndicator Class="@($"my-2 {(_docked ? "smooth-transition" : "smooth-transition-hidden")}")" Size="@(_docked ? Size.Medium : Size.Small)"/>
             <MudSpacer/>
-            <DrawerActionsMenu Class="@($"my-2 {(_docked ? "smooth-transition" : "smooth-transition-hidden")}")" Size="@(_docked ? Size.Medium : Size.Small)"/>
+            <DrawerActionsMenu Class="my-2" Size="@(_docked ? Size.Medium : Size.Small)"/>
         </MudDrawer>
             
     </Authorized>

@@ -74,4 +74,35 @@ public class FileService(IDbContextFactory<MainDbContext> dbContextFactory, ICon
 
         return false;
     }
+
+    public bool CreateFile(UserFile file)
+    {
+        var basePath = configuration["Files:ParentFolder"];
+        try
+        {
+            if (string.IsNullOrWhiteSpace(basePath))
+            { 
+                throw new InvalidOperationException("[Configuration] Files:ParentFolder parameter is null or empty.");
+            }
+            
+            var userPath = Path.Combine(Directory.GetCurrentDirectory(), basePath, file.UserIdentifier);
+            var fullPath = Path.Combine(userPath, file.GetFullPath());
+            if (File.Exists(fullPath))
+            {
+                logger.LogWarning("User file already exists (user id: {id}). Aborting creation...", file.UserIdentifier);
+                return false;
+            }
+
+            File.Create(fullPath);
+            logger.LogInformation("User file at {path} successfully created for user {id}.", fullPath, file.UserIdentifier);
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "An error occured while creating user folder (user id: {id}).", file.UserIdentifier);
+        }
+
+        return false;
+    }
 }

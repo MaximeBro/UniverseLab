@@ -8,7 +8,7 @@
             @if (Size is Size.Medium or Size.Large)
             {
                 <MudButton Variant="Variant.Filled" Size="Size.Small" StartIcon="@Icons.Rounded.Add"
-                           Class="brand-400" Style="border-radius: 4px; text-transform: none;">
+                           Class="brand-500" Style="border-radius: 4px; text-transform: none;">
                     Ajouter
                 </MudButton>
             }
@@ -28,12 +28,12 @@
                             <MudText Style="font-size: 12px; color: gray;">^N</MudText>
                         </MudStack>
                     </MudListItem>
-                    <MudListItem Class="py-1" OnClick="@CreateDirectoryAsync">
+                    <MudListItem Class="py-1" OnClick="@CreateFileAsync">
                         <MudStack Row AlignItems="AlignItems.Center">
-                            <MudIcon Icon="@Icons.Rounded.CreateNewFolder"/>
+                            <MudIcon Icon="@Icons.Rounded.FileOpen"/>
                             <MudText Style="font-size: 14px;">Nouveau fichier</MudText>
                             <MudSpacer/>
-                            <MudText Style="font-size: 12px; color: gray;">^I</MudText>
+                            <MudText Style="font-size: 12px; color: gray;">^L</MudText>
                         </MudStack>
                     </MudListItem>
                     <MudDivider Class="my-2"/>
