@@ -100,7 +100,61 @@ public class FileService(IDbContextFactory<MainDbContext> dbContextFactory, ICon
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occured while creating user folder (user id: {id}).", file.UserIdentifier);
+            logger.LogError(e, "An error occured while creating user file (user id: {id}).", file.UserIdentifier);
+        }
+
+        return false;
+    }
+
+    public bool FinalDeleteFile(UserFile file)
+    {
+        var basePath = configuration["Files:ParentFolder"];
+        try
+        {
+            if (string.IsNullOrWhiteSpace(basePath))
+            { 
+                throw new InvalidOperationException("[Configuration] Files:ParentFolder parameter is null or empty.");
+            }
+            
+            var userPath = Path.Combine(Directory.GetCurrentDirectory(), basePath, file.UserIdentifier);
+            var fullPath = Path.Combine(userPath, file.GetFullPath());
+            if (File.Exists(fullPath))
+            {
+                File.Delete(fullPath);
+                logger.LogWarning("Deleted file (id: {fileId}) for user {userId}.", file.Id, file.UserIdentifier);
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "An error occured while deleting file (id: {fileId}) for user {userId}.", file.Id, file.UserIdentifier);
+        }
+
+        return false;
+    }
+    
+    public bool FinalDeleteDirectory(UserFolder folder)
+    {
+        var basePath = configuration["Files:ParentFolder"];
+        try
+        {
+            if (string.IsNullOrWhiteSpace(basePath))
+            { 
+                throw new InvalidOperationException("[Configuration] Files:ParentFolder parameter is null or empty.");
+            }
+            
+            var userPath = Path.Combine(Directory.GetCurrentDirectory(), basePath, folder.UserIdentifier);
+            var fullPath = Path.Combine(userPath, folder.GetFullPath());
+            if (File.Exists(fullPath))
+            {
+                File.Delete(fullPath);
+                logger.LogWarning("Deleted folder (id: {folderId}) for user {userId}.", folder.Id, folder.UserIdentifier);
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "An error occured while deleting folder (id: {folderId}) for user {userId}.", folder.Id, folder.UserIdentifier);
         }
 
         return false;

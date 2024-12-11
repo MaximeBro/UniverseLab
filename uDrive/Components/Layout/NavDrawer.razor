@@ -1,6 +1,5 @@
 ﻿<AuthorizeView>
     <Authorized>
-        
         <MudDrawer Elevation="5" Class="background-800 pt-2 pb-2" Style="overflow: hidden;" Variant="DrawerVariant.Mini" ClipMode="DrawerClipMode.Docked"
                    @bind-Open="_docked">
             <MudStack Row Justify="@(_docked ? Justify.FlexEnd : Justify.Center)">
@@ -35,19 +34,6 @@
             <MudSpacer/>
             <DrawerActionsMenu Class="my-2" Size="@(_docked ? Size.Medium : Size.Small)"/>
         </MudDrawer>
-            
     </Authorized>
-
-    <NotAuthorized>
-
-        <MudDrawer Elevation="5" Class="dark-bg pt-1" Open Variant="DrawerVariant.Responsive" ClipMode="DrawerClipMode.Docked">
-            <MudNavMenu Dense Color="Color.Surface" Class="px-3 pt-1">
-                <MudNavLink Match="NavLinkMatch.Prefix" Href="/" Icon="@Icons.Rounded.Home" Class="text-white rounded-nav mb-3">
-                    Accueil
-                </MudNavLink>
-            </MudNavMenu>
-        </MudDrawer>
-        
-    </NotAuthorized>
 </AuthorizeView>
 

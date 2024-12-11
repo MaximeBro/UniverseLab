@@ -14,8 +14,12 @@ public class UserFile
     public string Extension { get; set; } = string.Empty;
     public FileType FileType { get; set; }
     public string FileIcon { get; set; } = Icons.Custom.FileFormats.FileDocument;
+    public string Color { get; set; } = "#c5c7cd";
+
+    public bool DeletionAsked { get; set; } = false;
+    public DateTime? DeletionAskedAt { get; set; }
     
-    public Guid ParentId { get; set; }
+    public Guid? ParentId { get; set; }
     public UserFolder? Parent { get; set; }
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

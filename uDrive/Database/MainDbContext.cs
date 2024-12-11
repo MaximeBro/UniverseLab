@@ -62,6 +62,7 @@ public class MainDbContext : DbContext
             .HasOne(e => e.Parent)
             .WithMany()
             .HasForeignKey(e => e.ParentId)
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.Cascade);
         
         // Tables navigation

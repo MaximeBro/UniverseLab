@@ -1,15 +1,15 @@
-@using Microsoft.EntityFrameworkCore
-@using uDrive.Database
 <EditForm Model="@_model" OnValidSubmit="@Submit">
-    <MudDialog Class="dark-bg">
+    <MudDialog Class="background-800 dialog-full pa-2">
         <DialogContent>
             <MudStack Row="false" Spacing="0">
-                <DialogCloseButton Justify="Justify.FlexEnd" Dialog="@Dialog" ButtonClass="mr-n4 align-self-end"/>
-                <MudText Align="Align.Center">Création d'un dossier</MudText>
+                <DialogCloseButton Dialog="@Dialog" Class="absolute align-self-end pa-1" Style="border-radius: 6px;"/>
+                <MudText Class="ml-1" Align="Align.Left" Typo="Typo.h6">Création d'un dossier</MudText>
             </MudStack>
             
             <MudStack Class="px-12 py-4" Justify="Justify.SpaceEvenly" Row="false" Spacing="0">
-                <MudTextField T="string" @bind-Value="_model.Name" Variant="Variant.Text" Label="Nom du répertoire" Immediate/>
+                <MudFocusTrap DefaultFocus="DefaultFocus.FirstChild">
+                    <MudTextField T="string" @bind-Value="_model.Name" Variant="Variant.Outlined" Label="Nom du répertoire" Class="input-text" Immediate/>
+                </MudFocusTrap>
                 @if (DisplayError)
                 {
                     <MudAlert Severity="Severity.Error" Dense>

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using uDrive.Database;
 
@@ -10,9 +11,11 @@ using uDrive.Database;
 namespace uDrive.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    partial class MainDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241211132501_AddsColorToUserFile")]
+    partial class AddsColorToUserFile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
@@ -28,12 +31,6 @@ namespace uDrive.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("DeletionAsked")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("DeletionAskedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Extension")
@@ -85,12 +82,6 @@ namespace uDrive.Migrations
 
                     b.Property<string>("Color")
                         .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("DeletionAsked")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("DeletionAskedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")

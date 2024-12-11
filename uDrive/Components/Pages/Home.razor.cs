@@ -23,12 +23,16 @@ public partial class Home : AuthorizedComponentBase
         _breadcrumbItems.Add(new BreadcrumbItem("", null, true));
         
         await using var db = await Factory.CreateDbContextAsync();
-        var folders = db.UserFolders.Where(x => x.UserIdentifier == User!.Identifier).ToList();
-        var files = db.UserFiles.Where(x => x.UserIdentifier == User!.Identifier).ToList();
+        var folders = db.UserFolders.Where(x => !x.DeletionAsked && x.UserIdentifier == User!.Identifier).ToList();
+        var files = db.UserFiles.Where(x => !x.DeletionAsked && x.UserIdentifier == User!.Identifier).ToList();
         
         _items.AddRange(folders.Select(x => x.ToInteractiveItem()).ToList());
         _items.AddRange(files.Select(x => x.ToInteractiveItem()).ToList());
     }
-    
-    
+
+    private void DeleteItem(InteractiveItem item)
+    {
+        _items.Remove(item);
+        StateHasChanged();
+    }
 }

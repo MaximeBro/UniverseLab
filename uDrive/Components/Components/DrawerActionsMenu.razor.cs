@@ -40,7 +40,7 @@ public partial class DrawerActionsMenu : AuthorizedComponentBase
         
         var options = Hardcoded.DialogOptions;
         options.MaxWidth = MaxWidth.Medium;
-        var instance = await DialogService.ShowAsync<DirectoryDialog>(string.Empty, options);
+        var instance = await DialogService.ShowAsync<DirectoryDialog>(null, options);
         var result = await instance.Result;
 
         if (result is { Data: string name })
@@ -78,7 +78,6 @@ public partial class DrawerActionsMenu : AuthorizedComponentBase
                 UserIdentifier = User!.Identifier,
                 FileName = name,
                 FileIcon = name.IconByExtension(),
-                ParentId = _mainFolder.Id,
                 Extension = name.ExtractExtension(),
                 FileType = name.FileTypeByExtension(),
             };

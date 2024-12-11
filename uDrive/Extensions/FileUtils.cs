@@ -70,6 +70,7 @@ public static class FileUtils
         return new InteractiveItem
         {
             Id = @this.Id,
+            UserIdentifier = @this.UserIdentifier,
             Name = @this.Name,
             ParentId = @this.ParentId,
             Parent = @this.Parent,
@@ -83,11 +84,12 @@ public static class FileUtils
         return new InteractiveItem
         {
             Id = @this.Id,
+            UserIdentifier = @this.UserIdentifier,
             Name = @this.FileName,
             ParentId = @this.ParentId,
             Parent = @this.Parent,
             Type = ItemType.File,
-            Color = null
+            Color = @this.Color
         };
     }
 

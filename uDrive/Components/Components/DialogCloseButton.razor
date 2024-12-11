@@ -1,9 +1,7 @@
 @inherits ComponentBase
 
-<MudStack Justify="@Justify" Class="@Class">
-    <MudIconButton Class="@ButtonClass" Icon="@Icons.Filled.Close" Color="Color.Default" 
-                   Size="Size.Small" Ripple="false" OnClick="@(() => Dialog.Close())" />
-</MudStack>
+<MudIconButton Class="@Class" Icon="@Icons.Filled.Close" Color="Color.Default" 
+                Size="Size.Small" Ripple="false" OnClick="@(() => Dialog.Close())" Style="@Style" />
 
 @code {
     [Parameter]
@@ -12,11 +10,7 @@
     
     [Parameter]
     [Category(CategoryTypes.ComponentBase.Common)]
-    public string? ButtonClass { get; set; }
-    
-    [Parameter]
-    [Category(CategoryTypes.ComponentBase.Common)]
-    public Justify Justify { get; set; } = Justify.FlexEnd;
+    public string? Style { get; set; }
     
     [Parameter]
     public MudDialogInstance Dialog { get; set; } = null!;

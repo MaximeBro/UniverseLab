@@ -12,7 +12,6 @@ public static class Hardcoded
     {
         CloseOnEscapeKey = true,
         BackdropClick = true,
-        CloseButton = true,
         NoHeader = true
     };
 }
