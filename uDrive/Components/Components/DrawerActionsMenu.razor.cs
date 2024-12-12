@@ -40,7 +40,8 @@ public partial class DrawerActionsMenu : AuthorizedComponentBase
         
         var options = Hardcoded.DialogOptions;
         options.MaxWidth = MaxWidth.Medium;
-        var instance = await DialogService.ShowAsync<DirectoryDialog>(null, options);
+        var parameters = new DialogParameters<DirectoryDialog> { { x => x.UserIdentifier, User!.Identifier } };
+        var instance = await DialogService.ShowAsync<DirectoryDialog>(null, parameters, options);
         var result = await instance.Result;
 
         if (result is { Data: string name })
@@ -68,7 +69,8 @@ public partial class DrawerActionsMenu : AuthorizedComponentBase
         
         var options = Hardcoded.DialogOptions;
         options.MaxWidth = MaxWidth.Medium;
-        var instance = await DialogService.ShowAsync<FileDialog>(string.Empty, options);
+        var parameters = new DialogParameters<FileDialog> { { x => x.UserIdentifier, User!.Identifier } };
+        var instance = await DialogService.ShowAsync<FileDialog>(string.Empty, parameters, options);
         var result = await instance.Result;
 
         if (result is { Data: string name })

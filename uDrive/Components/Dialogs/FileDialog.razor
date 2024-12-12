@@ -1,29 +1,26 @@
-<EditForm @ref="_form" OnValidSubmit="@Submit">
+<EditForm Model="@_model" OnValidSubmit="@Submit">
     <DataAnnotationsValidator/>
     <MudDialog Class="background-800 dialog-full pa-2">
         <DialogContent>
             <MudStack Row="false" Spacing="0">
                 <DialogCloseButton Dialog="@Dialog" Class="absolute align-self-end pa-1" Style="border-radius: 6px;"/>
-                <MudText Class="ml-1" Align="Align.Left" Typo="Typo.h6">Création d'un dossier</MudText>
+                <MudText Class="ml-1" Align="Align.Left" Typo="Typo.h6">Création d'un fichier</MudText>
             </MudStack>
 
             <MudStack Class="px-12 py-4" Justify="Justify.SpaceEvenly" Row="false" Spacing="0">
                 <MudFocusTrap DefaultFocus="DefaultFocus.FirstChild">
                     <MudTextField T="string" @bind-Value="_model.Name" Variant="Variant.Outlined" Label="Nom du répertoire" Class="input-text" Immediate/>
-                    <ValidationMessage For="@(() => _model.Name)" style="color: red;"/>
                 </MudFocusTrap>
+                <ValidationMessage For="@(() => _model.Name)"/>
                 @if (DisplayError)
                 {
-                    <MudAlert Severity="Severity.Error" Dense>
-                        Ce fichier existe déjà.
-                    </MudAlert>
+                    <MudText>Ce fichier existe déjà.</MudText>
                 }
             </MudStack>
         </DialogContent>
         <DialogActions>
             <MudButton OnClick="@Close" Color="Color.Default">Annuler</MudButton>
-            <MudButton ButtonType="ButtonType.Submit" Color="Color.Success" Disabled="@DisplayError" 
-                       OnClick="@(() => _form.EditContext = new EditContext(_model))">
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Success" Disabled="@DisplayError">
                 Ok
             </MudButton>
         </DialogActions>
@@ -34,11 +31,9 @@
     [CascadingParameter] public MudDialogInstance Dialog { get; set; } = null!;
     
     [Parameter] public string UserIdentifier { get; set; } = null!;
-    [Parameter] public Guid? ParentId { get; set; }
     [Inject] public IDbContextFactory<MainDbContext> Factory { get; set; } = null!;
     [Inject] public ISnackbar Snackbar { get; set; } = null!;
-
-    private EditForm _form = null!;
+    
     private readonly FileModel _model = new();
     private string[] _forbiddenNames = [];
 
@@ -46,9 +41,8 @@
     
     protected override async Task OnInitializedAsync()
     {
-        _form.EditContext = new EditContext(_model);
         await using var db = await Factory.CreateDbContextAsync();
-        _forbiddenNames = db.UserFiles.Where(x => x.UserIdentifier == UserIdentifier && x.ParentId == ParentId).Select(x => x.FileName).ToArray();
+        _forbiddenNames = db.UserFiles.Where(x => x.UserIdentifier == UserIdentifier).Select(x => x.FileName).ToArray();
     }
 
     private void Close() => Dialog.Close();

@@ -11,33 +11,34 @@ public class FileModel
 
 sealed class ValidateFileName : ValidationAttribute
 {
+    private string InvalidCharsPattern => @"[^a-zA-Z0-9àâäéèêëîïôöùûüç\s._-]";
+    private string ExtensionPattern = @"\.[a-zA-Z0-9]+$";
+    
     public override bool IsValid(object? value)
     {
         string? fileName = value as string;
 
         if (string.IsNullOrEmpty(fileName))
         {
-            ErrorMessage += "Le nom est requis. " + Environment.NewLine;
+            ErrorMessage = "Le nom est requis.";
             return false;
-        }
+        } 
         
         if (fileName.Length < 3)
         {
-            ErrorMessage += "Le nom doit être composé de 3 caractères au minimum. " + Environment.NewLine;
+            ErrorMessage = "Le nom doit être composé de 3 caractères au minimum.";
             return false;
-        }
+        } 
         
-        string invalidCharsPattern = @"[^a-zA-Z0-9àâäéèêëîïôöùûüç\s._-]";
-        if (Regex.IsMatch(fileName, invalidCharsPattern))
+        if (Regex.IsMatch(fileName, InvalidCharsPattern))
         {
-            ErrorMessage += "Le nom contient des caractères interdits (\"/\", \"\\\", \":\", \"$\", \"$\", \"<\", \">\", \"?\", \"|\"). " + Environment.NewLine;
+            ErrorMessage = "Le nom contient des caractères interdits (/, \\, :, $, $, <, >, ?, |).";
             return false;
-        }
+        } 
         
-        string extensionPattern = @"\.[a-zA-Z0-9]+$";
-        if (!Regex.IsMatch(fileName, extensionPattern))
+        if (!Regex.IsMatch(fileName, ExtensionPattern))
         {
-            ErrorMessage = "Le fichier doit avoir une extension valide. ";
+            ErrorMessage = "Le fichier doit avoir une extension valide.";
             return false;
         }
 
