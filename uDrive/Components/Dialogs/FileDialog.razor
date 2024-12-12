@@ -1,13 +1,17 @@
-<EditForm Model="@_model" OnValidSubmit="@Submit">
-    <MudDialog Class="background-800">
+<EditForm @ref="_form" OnValidSubmit="@Submit">
+    <DataAnnotationsValidator/>
+    <MudDialog Class="background-800 dialog-full pa-2">
         <DialogContent>
             <MudStack Row="false" Spacing="0">
-                <DialogCloseButton Justify="Justify.FlexEnd" Dialog="@Dialog" ButtonClass="mr-n4 align-self-end"/>
-                <MudText Align="Align.Center">Création d'un fichier</MudText>
+                <DialogCloseButton Dialog="@Dialog" Class="absolute align-self-end pa-1" Style="border-radius: 6px;"/>
+                <MudText Class="ml-1" Align="Align.Left" Typo="Typo.h6">Création d'un dossier</MudText>
             </MudStack>
-            
+
             <MudStack Class="px-12 py-4" Justify="Justify.SpaceEvenly" Row="false" Spacing="0">
-                <MudTextField T="string" @bind-Value="_model.Name" Variant="Variant.Text" Label="Nom du fichier" Immediate/>
+                <MudFocusTrap DefaultFocus="DefaultFocus.FirstChild">
+                    <MudTextField T="string" @bind-Value="_model.Name" Variant="Variant.Outlined" Label="Nom du répertoire" Class="input-text" Immediate/>
+                    <ValidationMessage For="@(() => _model.Name)" style="color: red;"/>
+                </MudFocusTrap>
                 @if (DisplayError)
                 {
                     <MudAlert Severity="Severity.Error" Dense>
@@ -18,7 +22,10 @@
         </DialogContent>
         <DialogActions>
             <MudButton OnClick="@Close" Color="Color.Default">Annuler</MudButton>
-            <MudButton ButtonType="ButtonType.Submit" Color="Color.Success" Disabled="@DisplayError">Ok</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Success" Disabled="@DisplayError" 
+                       OnClick="@(() => _form.EditContext = new EditContext(_model))">
+                Ok
+            </MudButton>
         </DialogActions>
     </MudDialog>
 </EditForm>
@@ -29,7 +36,9 @@
     [Parameter] public string UserIdentifier { get; set; } = null!;
     [Parameter] public Guid? ParentId { get; set; }
     [Inject] public IDbContextFactory<MainDbContext> Factory { get; set; } = null!;
+    [Inject] public ISnackbar Snackbar { get; set; } = null!;
 
+    private EditForm _form = null!;
     private readonly FileModel _model = new();
     private string[] _forbiddenNames = [];
 
@@ -37,6 +46,7 @@
     
     protected override async Task OnInitializedAsync()
     {
+        _form.EditContext = new EditContext(_model);
         await using var db = await Factory.CreateDbContextAsync();
         _forbiddenNames = db.UserFiles.Where(x => x.UserIdentifier == UserIdentifier && x.ParentId == ParentId).Select(x => x.FileName).ToArray();
     }
