@@ -7,11 +7,11 @@
                 <MudText Align="Align.Center">@Text</MudText>
             </MudStack>
             <MudStack Class="px-3 mt-2" Row Spacing="3" Justify="Justify.FlexEnd">
-                <MudButton Variant="Variant.Filled" Size="Size.Small" Class="brand-700 mud-elevation-1" Style="text-transform: none;" 
+                <MudButton Variant="Variant.Filled" Size="Size.Small" Class="brand-700 mud-elevation-1 no-transform"
                            OnClick="@(() => Dialog.Close())">
                     Annuler
                 </MudButton>
-                <MudButton Size="Size.Small" Class="brand-500 mud-elevation-1" Style="text-transform: none;"
+                <MudButton Size="Size.Small" Class="brand-500 mud-elevation-1 no-transform"
                            OnClick="@(() => Dialog.Close(true))">
                     Valider
                 </MudButton>

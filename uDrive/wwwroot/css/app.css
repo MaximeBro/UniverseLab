@@ -88,3 +88,6 @@
     cursor: pointer;
 }
 
+.no-transform {
+    text-transform: none !important;
+}
