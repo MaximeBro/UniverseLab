@@ -75,7 +75,9 @@ public static class FileUtils
             ParentId = @this.ParentId,
             Parent = @this.Parent,
             Type = ItemType.Folder,
-            Color = @this.Color
+            Color = @this.Color,
+            CreatedAt = @this.CreatedAt,
+            LastEditedAt = @this.LastEditedAt
         };
     }
     
@@ -89,7 +91,9 @@ public static class FileUtils
             ParentId = @this.ParentId,
             Parent = @this.Parent,
             Type = ItemType.File,
-            Color = @this.Color
+            Color = @this.Color,
+            CreatedAt = @this.CreatedAt,
+            LastEditedAt = @this.LastEditedAt
         };
     }
 

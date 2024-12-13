@@ -9,15 +9,16 @@ using uDrive.Extensions;
 using uDrive.Models;
 using uDrive.Models.Enums;
 using uDrive.Models.Views;
+using uDrive.Services;
 
 namespace uDrive.Components.Components;
 
 public partial class InteractiveItemActionsMenu
 {
     [Parameter] public InteractiveItem Item { get; set; } = null!;
-    [Parameter] public Action<InteractiveItem>? OnDelete { get; set; }
     [Inject] public IDbContextFactory<MainDbContext> Factory { get; set; } = null!;
     [Inject] public IDialogService DialogService { get; set; } = null!;
+    [Inject] public InteractiveService InteractiveService { get; set; } = null!;
 
     private MudMenu _menu = null!;
     private MudColor _color = null!;
@@ -60,7 +61,7 @@ public partial class InteractiveItemActionsMenu
     {
         await _menu.CloseMenuAsync();
         await using var db = await Factory.CreateDbContextAsync();
-        var parameters = new DialogParameters<ConfirmDialog> { { x => x.Title, "Supprimer" }, { x => x.Text, $"Voulez-vous vraiment supprimer ce {Item.Type.Humanize()} ?" } };
+        var parameters = new DialogParameters<ConfirmDialog> { { x => x.Title, "Supprimer" }, { x => x.Text, $"Voulez-vous vraiment placer ce {Item.Type.Humanize()} dans la corbeille ? Il sera supprimé au bout de 30 jours si vous ne le récupérez pas." } };
         var instance = await DialogService.ShowAsync<ConfirmDialog>(null, parameters, Hardcoded.DialogOptions);
         var result = await instance.Result;
         
@@ -75,25 +76,26 @@ public partial class InteractiveItemActionsMenu
                     FileName = Item.Name,
                     Color = Item.Color,
                     DeletionAsked = true,
-                    DeletionAskedAt = DateTime.Now,
+                    DeletionAskedAt = DateTime.UtcNow,
                 });
             }
             else
             {
-                db.UserFolders.Remove(new UserFolder
+                db.UserFolders.Update(new UserFolder
                 {
                     Id = Item.Id,
                     UserIdentifier = Item.UserIdentifier,
                     Name = Item.Name,
                     Color = Item.Color,
                     DeletionAsked = true,
-                    DeletionAskedAt = DateTime.Now,
+                    DeletionAskedAt = DateTime.UtcNow,
                 });
             }
 
+            Item.LastEditedAt = DateTime.UtcNow;
             await db.SaveChangesAsync();
-            OnDelete?.Invoke(Item);
-            // TODO: Notify view
+            InteractiveService.InvokeOnItemDeleted(Item);
+            // TODO: Display custom toast
         }
     }
 }

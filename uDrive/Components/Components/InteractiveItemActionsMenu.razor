@@ -105,7 +105,7 @@
                 <MudStack Row="false" Spacing="0">
                     <MudColorPicker Style="background: #1a1a27!important;" ImmediateText ShowToolbar="false" ShowAlpha="false" ShowModeSwitch="false" ShowColorField
                                     ShowSliders ShowPreview ShowInputs ColorPickerMode="ColorPickerMode.HEX" PickerVariant="PickerVariant.Static" DragEffect
-                                    ThrottleInterval="50" @bind-Value="_color"/>
+                                    ThrottleInterval="10" @bind-Value="_color"/>
                     <MudStack Class="pb-1 px-1 mt-n2" Row Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
                         <MudButton Size="Size.Small" OnClick="@(async () => await OnColorChangedAsync("#c5c7cd"))"
                                    Style="text-transform: none;">

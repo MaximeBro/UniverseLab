@@ -17,7 +17,7 @@
                                 <MudIcon Icon="@(item.Hovered ? item.IconHovered() : item.Icon())" Style="@($"color: {item.Color}!important;")"/>
                                 <MudText>@item.Name</MudText>
                                 <MudSpacer/>
-                                <InteractiveItemActionsMenu OnDelete="@DeleteItem" Item="@item"/>
+                                <InteractiveItemActionsMenu Item="@item"/>
                             </MudPaper>
                         </MudLink>
                     </MudItem>

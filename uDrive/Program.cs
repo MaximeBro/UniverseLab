@@ -37,6 +37,7 @@ builder.Services.AddDbContextFactory<MainDbContext>(options => options.UseSqlite
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<FileService>();
+builder.Services.AddScoped<InteractiveService>();
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();

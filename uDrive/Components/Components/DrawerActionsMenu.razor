@@ -37,8 +37,12 @@
                         </MudStack>
                     </MudListItem>
                     <MudDivider Class="my-2"/>
-                    <MudListItem Class="py-1">Importer fichier</MudListItem>
-                    <MudListItem Class="py-1">Nouveau fichier</MudListItem>
+                    <MudListItem Class="py-1">
+                        <MudStack Row AlignItems="AlignItems.Center">
+                            <MudIcon Icon="@Icons.Rounded.UploadFile"/>
+                            <MudText Style="font-size: 14px;">Importer fichier</MudText>
+                        </MudStack>
+                    </MudListItem>
                 </MudList>
             </MudStack>
         </ChildContent>

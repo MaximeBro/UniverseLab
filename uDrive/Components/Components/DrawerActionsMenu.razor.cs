@@ -5,6 +5,8 @@ using uDrive.Components.Dialogs;
 using uDrive.Database;
 using uDrive.Extensions;
 using uDrive.Models;
+using uDrive.Models.Enums;
+using uDrive.Models.Views;
 using uDrive.Services;
 
 namespace uDrive.Components.Components;
@@ -22,6 +24,7 @@ public partial class DrawerActionsMenu : AuthorizedComponentBase
     [Inject] public IDialogService DialogService { get; set; } = null!;
     [Inject] public ISnackbar Snackbar { get; set; } = null!;
     [Inject] public FileService FileService { get; set; } = null!;
+    [Inject] public InteractiveService InteractiveService { get; set; } = null!;
     
     private MudMenu _actionsMenu = null!;
     private UserMainFolder _mainFolder = null!;
@@ -57,7 +60,15 @@ public partial class DrawerActionsMenu : AuthorizedComponentBase
                 await using var db = await Factory.CreateDbContextAsync();
                 db.UserFolders.Add(folder);
                 await db.SaveChangesAsync();
-                // TODO: Send notification to update user view & display custom toast
+                InteractiveService.InvokeOnItemAdded(new InteractiveItem
+                {
+                    Id = folder.Id,
+                    Name = folder.Name,
+                    UserIdentifier = folder.UserIdentifier,
+                    Type = ItemType.Folder,
+                    Color = folder.Color
+                });
+                // TODO: Display custom toast
                 Snackbar.Add<Toast>(null, Severity.Normal);
             }
         }
@@ -89,7 +100,15 @@ public partial class DrawerActionsMenu : AuthorizedComponentBase
                 await using var db = await Factory.CreateDbContextAsync();
                 db.UserFiles.Add(file);
                 await db.SaveChangesAsync();
-                // TODO: Send notification to update user view & display custom toast
+                InteractiveService.InvokeOnItemAdded(new InteractiveItem
+                {
+                    Id = file.Id,
+                    Name = file.FileName,
+                    UserIdentifier = file.UserIdentifier,
+                    Type = ItemType.Folder,
+                    Color = file.Color
+                });
+                // TODO: Display custom toast
                 Snackbar.Add<Toast>(null, Severity.Normal);
             }
         }

@@ -1,0 +1,30 @@
+@page "/trash"
+@inherits AuthorizedComponentBase
+
+<PageTitle>uDrive</PageTitle>
+<AuthorizeView>
+    <Authorized>
+        <MudContainer Class="pt-3" MaxWidth="MaxWidth.ExtraLarge">
+            <MudGrid Spacing="5" Justify="Justify.FlexStart">
+                @foreach (var item in _items)
+                {
+                    <MudItem xs="6" sm="4" md="3" lg="2" xl="2">
+                        <MudStack Row="false" Spacing="2">
+                            <MudPaper Class="@($"d-flex flex-row gap-2 background-800 pa-4 rounded-lg border {ItemClass(item)}")"
+                                      Style="@($"position: relative; cursor: pointer; border-color: {ItemStyle(item)};")" Elevation="5"
+                                      @onmouseenter="@(() => item.Hovered = true)"
+                                      @onmouseleave="@(() => item.Hovered = false)"
+                                      @onmouseup="@(() => item.Selected = !item.Selected)">
+                                <MudIcon Icon="@item.Icon()" Style="@($"color: {item.Color}!important;")"/>
+                                <MudText>@item.Name</MudText>
+                            </MudPaper>
+                            <MudText Class="px-3" Style="@($"font-size: 14px; font-style: italic; {(item.Selected ? "text-decoration: line-through;" : string.Empty)}")">
+                                Depuis le @item.LastEditedAt.ToString("dd/MM/yyyy")
+                            </MudText>
+                        </MudStack>
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudContainer>
+    </Authorized>
+</AuthorizeView>
