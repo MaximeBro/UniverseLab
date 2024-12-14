@@ -1,0 +1,52 @@
+<EditForm Model="@_model" OnValidSubmit="@Submit">
+    <DataAnnotationsValidator/>
+    <MudDialog Class="background-800 dialog-full pa-2">
+        <DialogContent>
+            <MudStack Row="false" Spacing="0">
+                <DialogCloseButton Dialog="@Dialog" Class="absolute align-self-end pa-1" Style="border-radius: 6px;"/>
+                <MudText Class="ml-1" Align="Align.Left" Typo="Typo.h6">Création d'un dossier</MudText>
+            </MudStack>
+
+            <MudStack Class="px-12 py-4" Justify="Justify.SpaceEvenly" Row="false" Spacing="0">
+                <MudFocusTrap DefaultFocus="DefaultFocus.FirstChild">
+                    <MudTextField T="string" @bind-Value="_model.Name" Variant="Variant.Text" Label="Nom du répertoire" Class="input-text" Immediate/>
+                </MudFocusTrap>
+                <ValidationMessage For="@(() => _model.Name)" class="mt-1" style="color: var(--brand-0);"/>
+                @if (DisplayError)
+                {
+                    <MudText Class="mt-1">Ce dossier existe déjà.</MudText>
+                }
+            </MudStack>
+            <MudStack Class="px-1 mt-2" Row Spacing="3" Justify="Justify.FlexEnd">
+                <MudButton OnClick="@Close" Color="Color.Default" Size="Size.Small" Class="brand-700 mud-elevation-1 no-transform" Style="text-transform: none;">
+                    Annuler
+                </MudButton>
+                <MudButton ButtonType="ButtonType.Submit" Size="Size.Small" Class="brand-500 mud-elevation-1 no-transform" Style="text-transform: none;"
+                           Disabled="@DisplayError">
+                    Ok
+                </MudButton>
+            </MudStack>
+        </DialogContent>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [CascadingParameter] public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter] public string UserIdentifier { get; set; } = null!;
+    [Inject] public IDbContextFactory<MainDbContext> Factory { get; set; } = null!;
+
+    private readonly DirectoryModel _model = new();
+    private string[] _forbiddenNames = [];
+
+    private bool DisplayError => _forbiddenNames.Contains(_model.Name, StringComparer.OrdinalIgnoreCase);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await using var db = await Factory.CreateDbContextAsync();
+        _forbiddenNames = db.UserFolders.Where(x => x.UserIdentifier == UserIdentifier).Select(x => x.Name).ToArray();
+    }
+
+    private void Close() => Dialog.Close();
+    private void Submit() => Dialog.Close(_model.Name);
+}

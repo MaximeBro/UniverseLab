@@ -1,0 +1,50 @@
+@inherits AuthorizedComponentBase
+
+<MudStack Class="@($"{Class}")">
+    <MudMenu @ref="_actionsMenu" OpenChanged="@OpenChangedHandler" AnchorOrigin="Origin.TopLeft" TransformOrigin="Origin.TopLeft"
+             PopoverClass="dark-bg" ListClass="rounded-lg"
+             Style="border: 1px solid transparent;">
+        <ActivatorContent>
+            @if (Size is Size.Medium or Size.Large)
+            {
+                <MudButton Variant="Variant.Filled" Size="Size.Small" StartIcon="@Icons.Rounded.Add"
+                           Class="brand-500" Style="border-radius: 4px; text-transform: none;">
+                    Ajouter
+                </MudButton>
+            }
+            else
+            {
+                <MudIconButton Icon="@Icons.Rounded.AddCircle" Color="Color.Primary" />   
+            }
+        </ActivatorContent>
+        <ChildContent>
+            <MudStack Class="py-2" Row="false" Spacing="0">
+                <MudList T="string">
+                    <MudListItem Class="py-1" OnClick="@CreateDirectoryAsync">
+                        <MudStack Row AlignItems="AlignItems.Center">
+                            <MudIcon Icon="@Icons.Rounded.CreateNewFolder"/>
+                            <MudText Style="font-size: 14px;">Nouveau dossier</MudText>
+                            <MudSpacer/>
+                            <MudText Style="font-size: 12px; color: gray;">^N</MudText>
+                        </MudStack>
+                    </MudListItem>
+                    <MudListItem Class="py-1" OnClick="@CreateFileAsync">
+                        <MudStack Row AlignItems="AlignItems.Center">
+                            <MudIcon Icon="@Icons.Rounded.FileOpen"/>
+                            <MudText Style="font-size: 14px;">Nouveau fichier</MudText>
+                            <MudSpacer/>
+                            <MudText Style="font-size: 12px; color: gray;">^L</MudText>
+                        </MudStack>
+                    </MudListItem>
+                    <MudDivider Class="my-2"/>
+                    <MudListItem Class="py-1">
+                        <MudStack Row AlignItems="AlignItems.Center">
+                            <MudIcon Icon="@Icons.Rounded.UploadFile"/>
+                            <MudText Style="font-size: 14px;">Importer fichier</MudText>
+                        </MudStack>
+                    </MudListItem>
+                </MudList>
+            </MudStack>
+        </ChildContent>
+    </MudMenu>
+</MudStack>

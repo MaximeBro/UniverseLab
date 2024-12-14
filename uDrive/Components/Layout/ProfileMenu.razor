@@ -1,0 +1,52 @@
+﻿<AuthorizeView>
+    <Authorized>
+
+        @if (_user is null)
+        {
+            return;
+        }
+
+        <MudText Class="text-white" Style="font-size: 1rem;">@_user.GivenName</MudText>
+        <MudMenu @ref="_menu" Size="Size.Small" Class="pa-1 ml-3" PopoverClass="dark-bg" ListClass="rounded-lg"
+                 Style="border: 1px solid transparent;" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopLeft">
+            <ActivatorContent>
+                <MudAvatar Class="mud-elevation-5" Style="border: 1px solid transparent;">
+                    <MudImage Src="@($"data:image/png;base64, {_user.Profile}")"/>
+                </MudAvatar>
+            </ActivatorContent>
+            <ChildContent>
+                <MudStack Class="pa-1" Row="false" Spacing="0">
+                    <MudList T="string">
+                        <MudText Class="mt-1 mb-2" GutterBottom Align="Align.Center">@_user.GivenName</MudText>
+                        <MudDivider Class="my-1"/>
+                        <MudListItem Class="rounded py-1">Profil</MudListItem>
+                        <MudListItem Class="rounded py-1">Espace Admin</MudListItem>
+                        <MudListItem Class="rounded py-1" Text="Paramètres" ExpandMoreIcon="" ExpandLessIcon="">
+                            <NestedList>
+                                <MudListItem Class="rounded py-1">Préférences</MudListItem>
+                                <MudListItem Class="rounded py-1">Raccourcis clavier</MudListItem>
+                            </NestedList>
+                        </MudListItem>
+                        <MudDivider Class="my-1"/>
+                        <MudListItem OnClick="@Logout" Class="rounded py-1">
+                            <MudStack Row AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="0">
+                                <MudIcon Icon="@Icons.Rounded.Logout" Size="Size.Small"/>
+                                <MudText Class="ml-2">Se déconnecter</MudText>
+                            </MudStack>
+                        </MudListItem>
+                    </MudList>
+                </MudStack>
+            </ChildContent>
+        </MudMenu>
+
+    </Authorized>
+        <NotAuthorized>
+            
+            <MudLink OnClick="@Login">
+                <MudAvatar Class="mud-elevation-5" Style="background-color: #fff; border: 1px solid transparent;">
+                    <MudIcon Icon="@Icons.Rounded.Person" Color="Color.Dark"/>
+                </MudAvatar>
+            </MudLink>
+            
+        </NotAuthorized>
+    </AuthorizeView>
