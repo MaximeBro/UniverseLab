@@ -1,0 +1,28 @@
+﻿<MudDialog Class="background-800 dialog-full">
+    <DialogContent>
+        <MudStack Row="false" Spacing="0" Class="pa-2">
+            <MudText Align="Align.Left" Typo="Typo.h6" Class="ml-1">@Title</MudText>
+            <DialogCloseButton Dialog="@Dialog" Class="absolute align-self-end pa-1" Style="border-radius: 6px;"/>
+            <MudStack Class="px-8 py-3" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <MudText Align="Align.Center">@Text</MudText>
+            </MudStack>
+            <MudStack Class="px-3 mt-2" Row Spacing="3" Justify="Justify.FlexEnd">
+                <MudButton Variant="Variant.Filled" Size="Size.Small" Class="brand-700 mud-elevation-1 no-transform"
+                           OnClick="@(() => Dialog.Close())">
+                    Annuler
+                </MudButton>
+                <MudButton Size="Size.Small" Class="brand-500 mud-elevation-1 no-transform"
+                           OnClick="@(() => Dialog.Close(true))">
+                    Valider
+                </MudButton>
+            </MudStack>
+        </MudStack>
+    </DialogContent>
+</MudDialog>
+
+
+@code {
+    [CascadingParameter] public MudDialogInstance Dialog { get; set; } = null!;
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public string? Text { get; set; }
+}

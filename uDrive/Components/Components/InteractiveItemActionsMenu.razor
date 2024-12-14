@@ -1,0 +1,123 @@
+<MudMenu @ref="_menu" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft" 
+         PopoverClass="dark-bg" ListClass="rounded-lg" Style="border: 1px solid transparent;">
+    <ActivatorContent>
+        <MudIconButton Class="ma-0" Icon="@Icons.Rounded.MoreVert" Size="Size.Small" Ripple="false"/>
+    </ActivatorContent>
+    <ChildContent>
+        <MudStack Class="py-2" Row="false" Spacing="0">
+            <MudList T="string">
+                @if (Item.Type == ItemType.File)
+                {
+                    @FileOpenMenu
+                }
+                else
+                {
+                    <MudListItem Class="py-1">
+                        <MudStack Row AlignItems="AlignItems.Center">
+                            <MudIcon Size="Size.Small" Icon="@IconsC.Uncategorized.FolderOpen"/>
+                            <MudText Style="font-size: 14px;">Ouvrir</MudText>
+                        </MudStack>
+                    </MudListItem>
+                }
+                <MudDivider Class="my-2"/>
+                <MudListItem Class="py-1">
+                    <MudStack Row AlignItems="AlignItems.Center">
+                        <MudIcon Size="Size.Small" Icon="@Icons.Rounded.DriveFileRenameOutline"/>
+                        <MudText Style="font-size: 14px;">Renommer</MudText>
+                    </MudStack>
+                </MudListItem>
+                @ItemCustomMenu
+                @if (Item.Type == ItemType.File)
+                {
+                    <MudListItem Class="py-1">
+                        <MudStack Row AlignItems="AlignItems.Center">
+                            <MudIcon Size="Size.Small" Icon="@Icons.Rounded.Download"/>
+                            <MudText Style="font-size: 14px;">Télécharger</MudText>
+                        </MudStack>
+                    </MudListItem>
+                }
+                <MudListItem Class="py-1" OnClick="@DeleteItemAsync">
+                    <MudStack Row AlignItems="AlignItems.Center">
+                        <MudIcon Size="Size.Small" Icon="@Icons.Rounded.DeleteSweep"/>
+                        <MudText Style="font-size: 14px;">Supprimer</MudText>
+                    </MudStack>
+                </MudListItem>
+                <MudDivider Class="my-2"/>
+                <MudListItem Class="py-1">
+                    <MudStack Row AlignItems="AlignItems.Center">
+                        <MudIcon Size="Size.Small" Icon="@Icons.Rounded.Info"/>
+                        <MudText Style="font-size: 14px;">Propriétés du @(Item.Type == ItemType.File ? "fichier" : "dossier")</MudText>
+                    </MudStack>
+                </MudListItem>
+            </MudList>
+        </MudStack>
+    </ChildContent>
+</MudMenu>
+
+@code {
+    private RenderFragment FileOpenMenu => 
+        @<MudMenu AnchorOrigin="Origin.TopRight" TransformOrigin="Origin.TopLeft" ActivationEvent="MouseEvent.MouseOver" Ripple="false"
+                  PopoverClass="background-800 ml-1 mt-n2" ListClass="rounded-lg" Class="smooth-transition" Style="background: transparent; width: 100%;">
+            <ActivatorContent>
+                <MudListItem T="string" Class="py-1">
+                    <MudStack Row AlignItems="AlignItems.Center">
+                        <MudIcon Size="Size.Small" Icon="@Icons.Rounded.OpenWith"/>
+                        <MudText Style="font-size: 14px;">Ouvrir avec</MudText>
+                        <MudSpacer/>
+                        <MudIcon Size="Size.Small" Icon="@Icons.Rounded.KeyboardArrowRight"/>
+                    </MudStack>
+                </MudListItem>
+            </ActivatorContent>
+            <ChildContent>
+                <MudStack Class="py-2" Row="false" Spacing="0">
+                    <MudList T="string">
+                        <MudListItem Class="py-1">
+                            <MudStack Row AlignItems="AlignItems.Center">
+                                <MudIcon Size="Size.Small" Icon="@Icons.Rounded.Visibility"/>
+                                <MudText Style="font-size: 14px;">Aperçu</MudText>
+                            </MudStack>
+                        </MudListItem>
+                        <MudListItem Class="py-1">
+                            <MudStack Row AlignItems="AlignItems.Center">
+                                <MudIcon Size="Size.Small" Icon="@Icons.Rounded.OpenInNew"/>
+                                <MudText Style="font-size: 14px;">Ouvrir dans un nouvel onglet</MudText>
+                            </MudStack>
+                        </MudListItem>
+                    </MudList>
+                </MudStack>
+            </ChildContent>
+        </MudMenu>;
+
+    private RenderFragment ItemCustomMenu =>
+        @<MudMenu AnchorOrigin="Origin.TopRight" TransformOrigin="Origin.TopLeft" Ripple="false" ActivationEvent="MouseEvent.MouseOver"
+                  PopoverClass="background-800" ListClass="rounded-lg" Class="smooth-transition" Style="background: transparent; width: 100%;">
+            <ActivatorContent>
+                <MudListItem T="string" Class="py-1">
+                    <MudStack Row AlignItems="AlignItems.Center">
+                        <MudIcon Size="Size.Small" Icon="@Icons.Rounded.Palette"/>
+                        <MudText Style="font-size: 14px;">Personnaliser</MudText>
+                        <MudSpacer/>
+                        <MudIcon Size="Size.Small" Icon="@Icons.Rounded.KeyboardArrowRight"/>
+                    </MudStack>
+                </MudListItem>
+            </ActivatorContent>
+            <ChildContent>
+                <MudStack Row="false" Spacing="0">
+                    <MudColorPicker Style="background: #1a1a27!important;" ImmediateText ShowToolbar="false" ShowAlpha="false" ShowModeSwitch="false" ShowColorField
+                                    ShowSliders ShowPreview ShowInputs ColorPickerMode="ColorPickerMode.HEX" PickerVariant="PickerVariant.Static" DragEffect
+                                    ThrottleInterval="10" @bind-Value="_color"/>
+                    <MudStack Class="pb-1 px-1 mt-n2" Row Spacing="0" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                        <MudButton Size="Size.Small" OnClick="@(async () => await OnColorChangedAsync("#c5c7cd"))"
+                                   Style="text-transform: none;">
+                            Réinitialiser
+                        </MudButton>
+                        <MudButton Size="Size.Small" OnClick="@(async () => await OnColorChangedAsync(_color.Value))" 
+                                   Style="text-transform: none;">
+                            Ok
+                        </MudButton>
+                    </MudStack>
+                </MudStack>
+            </ChildContent>
+        </MudMenu>;
+
+}

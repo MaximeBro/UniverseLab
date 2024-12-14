@@ -1,0 +1,26 @@
+﻿@inherits LayoutComponentBase
+@inject IWebHostEnvironment Environment
+
+<MudThemeProvider IsDarkMode />
+<MudSnackbarProvider />
+<MudPopoverProvider />
+<MudDialogProvider />
+
+<MudLayout>
+    <AppBar/>
+    <NavDrawer/>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.False" Class="pa-0 ma-0 background-600" Style="min-height: calc(100vh - 64px);">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@if (Environment.IsDevelopment())
+{
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+}

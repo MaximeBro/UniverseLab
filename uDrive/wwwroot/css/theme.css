@@ -1,0 +1,88 @@
+:root {
+    /* Brand Colors */
+    --brand-0: #FF6699;
+    --brand-100: #C484F1;
+    --brand-200: #A16EF6;
+    --brand-300: #7D57FA;
+    --brand-400: #594AE2;
+    --brand-500: #4F43C4;
+    --brand-600: #453BA6;
+    --brand-700: #322D69;
+    --brand-800: #262448;
+    --brand-900: #161621;
+
+    /* Background Colors */
+    --background-0: #fff;
+    --background-100: #969ba6;
+    --background-200: #565f70;
+    --background-300: #414b5e;
+    --background-400: #2c374c;
+    --background-500: #272f42;
+    --background-600: #232738;
+    --background-700: #1e1e2d;
+    --background-800: #1a1a27;
+    --background-900: #161621;
+}
+
+.brand,
+.brand-0 {
+    background-color: var(--brand-0) !important;
+}
+.brand-100 {
+    background-color: var(--brand-100) !important;
+}
+.brand-200 {
+    background-color: var(--brand-200) !important;
+}
+.brand-300 {
+    background-color: var(--brand-300) !important;
+}
+.brand-400 {
+    background-color: var(--brand-400) !important;
+}
+.brand-500 {
+    background-color: var(--brand-500) !important;
+}
+.brand-600 {
+    background-color: var(--brand-600) !important;
+}
+.brand-700 {
+    background-color: var(--brand-700) !important;
+}
+.brand-800 {
+    background-color: var(--brand-800) !important;
+}
+.brand-900 {
+    background-color: var(--brand-900) !important;
+}
+
+.background-0 {
+    background-color: var(--background-0) !important;
+}
+.background-100 {
+    background-color: var(--background-100) !important;
+}
+.background-200 {
+    background-color: var(--background-200) !important;
+}
+.background-300 {
+    background-color: var(--background-300) !important;
+}
+.background-400 {
+    background-color: var(--background-400) !important;
+}
+.background-500 {
+    background-color: var(--background-500) !important;
+}
+.background-600 {
+    background-color: var(--background-600) !important;
+}
+.background-700 {
+    background-color: var(--background-700) !important;
+}
+.background-800 {
+    background-color: var(--background-800) !important;
+}
+.background-900 {
+    background-color: var(--background-900) !important;
+}
