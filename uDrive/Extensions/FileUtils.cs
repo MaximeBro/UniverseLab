@@ -96,6 +96,36 @@ public static class FileUtils
             LastEditedAt = @this.LastEditedAt
         };
     }
+    
+    public static UserFile ToUserFile(this InteractiveItem @this)
+    {
+        return new UserFile
+        {
+            Id = @this.Id,
+            UserIdentifier = @this.UserIdentifier,
+            FileName = @this.Name,
+            ParentId = @this.ParentId,
+            Parent = @this.Parent,
+            Color = @this.Color,
+            CreatedAt = @this.CreatedAt,
+            LastEditedAt = @this.LastEditedAt
+        };
+    }
+    
+    public static UserFolder ToUserFolder(this InteractiveItem @this)
+    {
+        return new UserFolder
+        {
+            Id = @this.Id,
+            UserIdentifier = @this.UserIdentifier,
+            Name = @this.Name,
+            ParentId = @this.ParentId,
+            Parent = @this.Parent,
+            Color = @this.Color,
+            CreatedAt = @this.CreatedAt,
+            LastEditedAt = @this.LastEditedAt
+        };
+    }
 
     public static string ExtractExtension(this string @this) => @this.Split(".").LastOrDefault(string.Empty);
     

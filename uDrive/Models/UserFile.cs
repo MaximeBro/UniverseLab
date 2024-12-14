@@ -10,10 +10,8 @@ public class UserFile
     
     public string FileName { get; set; } = string.Empty;
     public long FileSize { get; set; } = 0L;
-    public string FilePath { get; set; } = string.Empty;
     public string Extension { get; set; } = string.Empty;
     public FileType FileType { get; set; }
-    public string FileIcon { get; set; } = Icons.Custom.FileFormats.FileDocument;
     public string Color { get; set; } = "#c5c7cd";
 
     public bool DeletionAsked { get; set; } = false;

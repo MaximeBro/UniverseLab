@@ -6,6 +6,26 @@
     <Authorized>
         <MudContainer Class="pt-3" MaxWidth="MaxWidth.ExtraLarge">
             <MudGrid Spacing="5" Justify="Justify.FlexStart">
+                <MudItem xs="12">
+                    <MudStack Class="px-3 py-2 background-800 rounded-xl mud-elevation-5" Spacing="1" Row Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+                        <MudTooltip Class="background-500 tooltip-arrow" Placement="Placement.Bottom" Text="@SelectButtonTooltip" Arrow>
+                            <MudIconButton Class="pa-1" Icon="@SelectButtonIcon" OnClick="@HandleSelection"/>
+                        </MudTooltip>
+                        <MudTooltip Class="background-500 tooltip-arrow" Placement="Placement.Bottom" Text="Actualiser" Arrow>
+                            <MudIconButton Class="pa-1" Icon="@Icons.Rounded.Refresh" OnClick="@RefreshDataAsync"/>
+                        </MudTooltip>
+                        @if (SelectedItems.Count > 0)
+                        {
+                            <MudTooltip Class="background-500 tooltip-arrow" Placement="Placement.Bottom" Text="Restaurer" Arrow>
+                                <MudIconButton Class="pa-1" Icon="@Icons.Rounded.Outbox" OnClick="@RestoreAsync"/>
+                            </MudTooltip>
+                            <MudTooltip Class="background-500 tooltip-arrow" Placement="Placement.Bottom" Text="Supprimer" Arrow>
+                                <MudIconButton Class="pa-1" Icon="@Icons.Rounded.DeleteOutline" OnClick="@ForciblyDeleteAsync"/>
+                            </MudTooltip>
+                        }
+                        <MudText Class="ml-1">@SelectedItemsText</MudText>
+                    </MudStack>
+                </MudItem>
                 @foreach (var item in _items)
                 {
                     <MudItem xs="6" sm="4" md="3" lg="2" xl="2">

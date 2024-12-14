@@ -90,7 +90,6 @@ public partial class DrawerActionsMenu : AuthorizedComponentBase
             {
                 UserIdentifier = User!.Identifier,
                 FileName = name,
-                FileIcon = name.IconByExtension(),
                 Extension = name.ExtractExtension(),
                 FileType = name.FileTypeByExtension(),
             };

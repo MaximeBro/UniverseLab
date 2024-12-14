@@ -61,7 +61,7 @@ public partial class InteractiveItemActionsMenu
     {
         await _menu.CloseMenuAsync();
         await using var db = await Factory.CreateDbContextAsync();
-        var parameters = new DialogParameters<ConfirmDialog> { { x => x.Title, "Supprimer" }, { x => x.Text, $"Voulez-vous vraiment placer ce {Item.Type.Humanize()} dans la corbeille ? Il sera supprimé au bout de 30 jours si vous ne le récupérez pas." } };
+        var parameters = new DialogParameters<ConfirmDialog> { { x => x.Title, "Placer dans la corbeille" }, { x => x.Text, $"Voulez-vous vraiment placer ce {Item.Type.Humanize()} dans la corbeille ? Il sera automatiquement supprimé au bout de 30 jours si vous ne le récupérez pas." } };
         var instance = await DialogService.ShowAsync<ConfirmDialog>(null, parameters, Hardcoded.DialogOptions);
         var result = await instance.Result;
         
