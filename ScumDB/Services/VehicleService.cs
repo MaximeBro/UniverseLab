@@ -1,12 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using ScumDB.Databases;
-using ScumDB.Extensions;
 using ScumDB.Models;
 using ScumDB.Models.Enums;
 
 namespace ScumDB.Services;
 
-public class VehicleService(IDbContextFactory<ScumDbContext> factory, IConfiguration configuration) : IVehicleService
+public class VehicleService(IDbContextFactory<ScumDbContext> factory) : IVehicleService
 {
     public async Task<List<VehicleModel>> GetAllAsync(bool bindOwner = true)
     {
@@ -114,7 +113,6 @@ public class VehicleService(IDbContextFactory<ScumDbContext> factory, IConfigura
                 {
                     vehicles.Add(new VehicleModel
                     {
-                        Name = Hardcoded.GetVehicleName(data[1], configuration),
                         Blueprint = data[1],
                         OwnerId = data[7],
                         VehicleId = int.Parse(data[0].Replace(":", string.Empty)),

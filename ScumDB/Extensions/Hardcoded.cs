@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using MudBlazor;
-using ScumDB.Components.Pages;
 
 namespace ScumDB.Extensions;
 
@@ -34,7 +33,7 @@ public static class Hardcoded
 	
 	public static string GetVehicleName(string blueprint, IConfiguration configuration)
 	{
-		var name = configuration[blueprint] ?? string.Empty;
+		var name = configuration[$"vehicles:{blueprint}"] ?? string.Empty;
 		return string.IsNullOrWhiteSpace(name) ? $"Inconnu {blueprint}" : name;
 	}
 

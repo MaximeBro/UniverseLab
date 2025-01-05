@@ -5,7 +5,7 @@ using ScumDB.Models;
 
 namespace ScumDB.Services;
 
-public class FetchService(IHttpClientFactory clientFactory, IDbContextFactory<ScumDbContext> factory) : IFetchService
+public class FetchService(ILogger<FetchService> logger, IHttpClientFactory clientFactory, IDbContextFactory<ScumDbContext> factory) : IFetchService
 {
 	/// <summary>
 	/// Fetches all the steam profiles of the given ids using configuration's api key
@@ -16,17 +16,40 @@ public class FetchService(IHttpClientFactory clientFactory, IDbContextFactory<Sc
 		List<SteamAccountModel> accounts = [];
 		
 		using var client = clientFactory.CreateClient();
+		client.Timeout = TimeSpan.FromSeconds(15);
 		foreach (var id in steamIDs)
 		{
 			if (id is null) continue;
-			var response = await client.GetAsync($"https://www.universestudio.net/api/v1/Steam/GetSteamAccount/{id}");
-			if (response.IsSuccessStatusCode)
+			
+			string uri = $"https://www.universestudio.net/api/v1/Steam/GetSteamAccount/{id}";
+			try
 			{
-				var content = await response.Content.ReadAsStringAsync();
-				var result = JsonSerializer.Deserialize<SteamAccountModel>(content);
-				if(result != null) accounts.Add(result);
-				response.Dispose();
+				var response = await client.GetAsync(uri);
+				if (response.IsSuccessStatusCode)
+				{
+					var content = await response.Content.ReadAsStringAsync();
+					var result = JsonSerializer.Deserialize<SteamAccountModel>(content);
+
+					if (result is null)
+					{
+						logger.LogWarning("[Request-Result] Result of {uri} is null ! The server responded with content: {content}.", uri, content);
+					}
+					else
+					{
+						accounts.Add(result);
+					}
+					response.Dispose();
+				}
+				else if ((int)response.StatusCode > 399)
+				{
+					logger.LogWarning("[Request] {uri} failed ! The server either took too long to respond or is down.", uri);
+				}
 			}
+			catch (Exception)
+			{
+				logger.LogWarning("[Request] {uri} failed ! The server either took too long to respond or is down.", uri);
+			}
+			
 		}
 		
 		return accounts;

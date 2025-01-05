@@ -18,7 +18,6 @@ public partial class Login
 	[Inject] public UserTokenHandler UserTokenHandler { get; set; } = null!;
 	[Inject] public NavigationManager NavManager { get; set; } = null!;
 	[Inject] public NotificationService NotificationService { get; set; } = null!;
-	[Inject] public PersistentData PersistentData { get; set; } = null!;
 	
 	[CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; } = null!;
 
@@ -39,14 +38,15 @@ public partial class Login
 
 	private void TryLogin()
 	{
-		var id = PersistentData.Accounts.Keys.FirstOrDefault(x => string.Equals(x, _model.Identifier, StringComparison.CurrentCultureIgnoreCase));
-		if (!string.IsNullOrWhiteSpace(id) && PersistentData.Accounts[id] == _model.Password)
+		var pwd = Configuration[_model.Identifier];
+		if (!string.IsNullOrEmpty(pwd) && pwd == _model.Password)
 		{
 			var guid = Guid.NewGuid();
-			var names = id.Split(".");
+			var names = _model.Identifier.Split(".");
 
 			var claims = new[]
 			{
+
 				new Claim(ClaimTypes.GivenName, string.Join(" ", names)),
 				new Claim(ClaimTypes.Role, UserRole.Admin.ToString()),
 				new Claim("token", guid.ToString()),

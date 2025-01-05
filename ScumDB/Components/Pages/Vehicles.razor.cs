@@ -12,12 +12,13 @@ using ScumDB.Services.Hubs;
 
 namespace ScumDB.Components.Pages;
 
-public partial class Vehicles : ComponentBase
+public partial class Vehicles : ComponentBase, IAsyncDisposable
 {
 	[Inject] public IDbContextFactory<ScumDbContext> Factory { get; set; } = null!;
 	[Inject] public IDialogService DialogService { get; set; } = null!;
 	[Inject] public IJSRuntime JsRuntime { get; set; } = null!;
 	[Inject] public ISnackbar Snackbar { get; set; } = null!;
+	[Inject] public IConfiguration Configuration { get; set; } = null!;
 	[Inject] public NavigationManager NavManager { get; set; } = null!;
 
 	private List<VehicleModel> _vehicles = [];
@@ -27,7 +28,6 @@ public partial class Vehicles : ComponentBase
 	private HubConnection? _hubConnection;
 	private Func<VehicleModel, bool> QuickFilter => x =>
 	{
-		if (x.Name.Contains(_search, StringComparison.OrdinalIgnoreCase)) return true;
 		if (!string.IsNullOrWhiteSpace(x.OwnerName) && x.OwnerName.Contains(_search, StringComparison.OrdinalIgnoreCase)) return true;
 		if (x.Blueprint.Contains(_search, StringComparison.OrdinalIgnoreCase)) return true;
 		if (x.OwnerId != null && x.OwnerId.ToString()!.Contains(_search, StringComparison.OrdinalIgnoreCase)) return true;
@@ -61,7 +61,7 @@ public partial class Vehicles : ComponentBase
 				});
 			}
 		});
-		
+
 		await _hubConnection.StartAsync();
 	}
 	
@@ -189,6 +189,14 @@ public partial class Vehicles : ComponentBase
 		foreach (var vehicle in _vehicles)
 		{
 			vehicle.OwnerName = accounts.FirstOrDefault(x => x.SteamId == vehicle.OwnerId)?.Name;
+		}
+	}
+
+	public async ValueTask DisposeAsync()
+	{
+		if (_hubConnection != null)
+		{
+			await _hubConnection.DisposeAsync();
 		}
 	}
 }

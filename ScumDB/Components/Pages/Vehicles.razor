@@ -28,7 +28,11 @@
         <Columns>
             <PropertyColumn Title="Propriétaire (nom)" Property="x => x.OwnerName" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" AggregateDefinition="Aggregation" />
             <PropertyColumn Title="Propriétaire (steamID)" Property="x => x.OwnerId" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border" />
-            <PropertyColumn Title="Véhicule (nom)" Property="x => x.Name" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border"/>
+            <TemplateColumn Title="Véhicule (type)" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border">
+                <CellTemplate Context="row">
+                    <MudText Align="Align.Left">@Hardcoded.GetVehicleName(row.Item.Blueprint, Configuration)</MudText>
+                </CellTemplate>
+            </TemplateColumn>
             <TemplateColumn Title="Véhicule (ID)" HeaderClass="dark-bg" FooterClass="dark-bg footer-dark-border">
                 <CellTemplate Context="row">
                     <MudStack Row Justify="Justify.Center">

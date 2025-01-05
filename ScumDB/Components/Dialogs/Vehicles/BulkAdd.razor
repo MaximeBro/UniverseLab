@@ -40,7 +40,11 @@
         {
             options.VisibleStateDuration = 1500;
         });
-        await FetchService.AddAccountsAsync(vehicles.Select(x => x.OwnerId).Distinct().ToArray());
+
+        _ = Task.Run(async () =>
+        {
+            await FetchService.AddAccountsAsync(vehicles.Select(x => x.OwnerId).Distinct().ToArray()).ConfigureAwait(false); // Requests will proceed in the background and the task context won't be retrieved by this component as no front updates are required
+        });
         _loading = false;
 
         Dialog.Close(true);

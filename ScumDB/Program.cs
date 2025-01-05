@@ -10,7 +10,9 @@ using ScumDB.Services.Hubs;
 var builder = WebApplication.CreateBuilder(args);
 
 var configPath = new DirectoryInfo(Path.Combine(builder.Environment.ContentRootPath, "../config/vehicles.json")).FullName;
+var accountsPath = new DirectoryInfo(Path.Combine(builder.Environment.ContentRootPath, "../config/scum-admin-accounts.json")).FullName;
 builder.Configuration.AddJsonFile(configPath, optional: false, reloadOnChange: true);
+builder.Configuration.AddJsonFile(accountsPath, optional: false, reloadOnChange: true);
 
 builder.WebHost.UseUrls("https://localhost:5005/", "http://localhost:5004/");
 builder.WebHost.UseStaticWebAssets();
@@ -33,11 +35,10 @@ builder.Services.AddMudServices();
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 
-builder.Services.AddSingleton<PersistentData>();
+builder.Services.AddSingleton<IFetchService, FetchService>();
+builder.Services.AddSingleton<IVehicleService, VehicleService>();
 builder.Services.AddSingleton<UserTokenHandler>();
 builder.Services.AddScoped<NotificationService>();
-builder.Services.AddScoped<IFetchService, FetchService>();
-builder.Services.AddScoped<IVehicleService, VehicleService>();
 
 builder.Services.AddSignalR();
 
@@ -45,7 +46,7 @@ builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();
 
 // Max data supported by interop calls (used for inputs)
-builder.Services.AddServerSideBlazor().AddHubOptions(options => options.MaximumReceiveMessageSize = 4 * 1024 * 1024);
+builder.Services.AddServerSideBlazor().AddHubOptions(options => options.MaximumReceiveMessageSize = 10 * 1024 * 1024);
 
 var app = builder.Build();
 
@@ -74,10 +75,6 @@ app.MapHub<VehiclesHub>(VehiclesHub.HubUrl);
 
 app.MapRazorComponents<App>()
 	.AddInteractiveServerRenderMode();
-
-var scope = app.Services.CreateScope();
-var persistentData = scope.ServiceProvider.GetRequiredService<PersistentData>();
-await persistentData.InitAsync(app);
 
 await RunMigrationAsync<ScumDbContext>(app);
 
