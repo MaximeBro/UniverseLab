@@ -14,7 +14,7 @@ public class UpdateController(IConfiguration configuration) : Controller
     {
         if (Maintenance)
         {
-            return StatusCode((int)HttpStatusCode.ServiceUnavailable, "This features is temporary unavailable. Please contact our developers if you think something might be wrong.");
+            return StatusCode((int)HttpStatusCode.ServiceUnavailable, "This feature is temporary unavailable. Please contact our developers if you think something might be wrong.");
         }
 
         return Ok(configuration["app-version"]);

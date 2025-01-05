@@ -6,16 +6,16 @@ namespace UniverseStudio.Controllers;
 
 public class SteamControllerFilter : IActionFilter
 {
-    private readonly bool isAvailable;
+    private readonly bool _isAvailable;
     
     public SteamControllerFilter(IConfiguration configuration)
     {
-        isAvailable = !bool.Parse(configuration.GetSection("Controllers")["maintenance"]!);
+        _isAvailable = !bool.Parse(configuration.GetSection("Controllers")["maintenance"]!);
     }
     
     public void OnActionExecuting(ActionExecutingContext context)
     {
-        if (!isAvailable)
+        if (!_isAvailable)
         {
             context.Result = new ContentResult
             {
