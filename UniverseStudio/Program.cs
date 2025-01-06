@@ -5,7 +5,6 @@ using UniverseStudio.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.WebHost.UseUrls("https://localhost:5010/", "http://localhost:5009/");
 builder.WebHost.UseStaticWebAssets();
 
 builder.Services.AddMudServices();
@@ -30,6 +29,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseRouting();
 app.UseAntiforgery();
 
 app.MapControllers();
@@ -37,4 +37,4 @@ app.MapControllers();
 app.MapRazorComponents<App>()
 	.AddInteractiveServerRenderMode();
 
-app.Run();
+await app.RunAsync();

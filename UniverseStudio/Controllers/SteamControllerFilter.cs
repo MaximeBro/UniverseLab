@@ -6,20 +6,20 @@ namespace UniverseStudio.Controllers;
 
 public class SteamControllerFilter : IActionFilter
 {
-    private readonly bool isAvailable;
+    private readonly bool _isAvailable;
     
     public SteamControllerFilter(IConfiguration configuration)
     {
-        isAvailable = !bool.Parse(configuration.GetSection("Controllers")["maintenance"]!);
+        _isAvailable = !bool.Parse(configuration["maintenance"]!);
     }
     
     public void OnActionExecuting(ActionExecutingContext context)
     {
-        if (!isAvailable)
+        if (!_isAvailable)
         {
             context.Result = new ContentResult
             {
-                Content = "This features is temporary unavailable. Please contact our developers if you think something might be wrong.",
+                Content = "This feature is temporary unavailable. Please contact our developers if you think something might be wrong.",
                 StatusCode = (int) HttpStatusCode.ServiceUnavailable
             };
         }

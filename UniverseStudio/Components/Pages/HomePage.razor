@@ -22,8 +22,8 @@
                     <MudSpacer/>
                     <MudText Class="text-white bold">État</MudText>
                     <MudText Class="text-white bold">-</MudText>
-                    <MudTooltip Text="@(steamApiAvailable ? "En ligne" : "Hors ligne")" Placement="Placement.Top" Arrow>
-                        <MudIcon Icon="@(steamApiAvailable ? IconsF.SignalCellularAlt : IconsF.Warning)" Color="@(steamApiAvailable ? Color.Success : Color.Error)"/>
+                    <MudTooltip Text="@(_steamApiAvailable ? "En ligne" : "Hors ligne")" Placement="Placement.Top" Arrow>
+                        <MudIcon Icon="@(_steamApiAvailable ? IconsF.SignalCellularAlt : IconsF.Warning)" Color="@(_steamApiAvailable ? Color.Success : Color.Error)"/>
                     </MudTooltip>
                 </MudStack>
             </MudPaper>
@@ -37,32 +37,16 @@
         <MudItem xs="12" md="8">
             <MudPaper Class="dark-bg rounded-md py-3 pl-4 pr-8" Elevation="5">
                 <MudStack Row AlignItems="AlignItems.Center">
-                    <MudButton Class="clickable-app px-3" Href="https://vps.universestudio.net/" Target="_blank">
-                        <MudText Class="gradient-title bold" Typo="Typo.h6" Inline>Subsistence</MudText>
-                        <MudText Class="text-white bold" Typo="Typo.h6" Inline>API</MudText>
-                    </MudButton>
-                    <MudSpacer/>
-                    <MudText Class="text-white bold">Status</MudText>
-                    <MudText Class="text-white bold">-</MudText>
-                    <MudTooltip Text="En maintenance" Placement="Placement.Top" Arrow>
-                        <MudIcon Icon="@IconsF.Update" Color="Color.Warning"/>
-                    </MudTooltip>
-                </MudStack>
-            </MudPaper>
-        </MudItem>
-        <MudItem xs="12" md="8">
-            <MudPaper Class="dark-bg rounded-md py-3 pl-4 pr-8" Elevation="5">
-                <MudStack Row AlignItems="AlignItems.Center">
                     <MudButton Class="clickable-app px-3" Href="https://scum.universestudio.net/" Target="_blank">
                         <MudText Class="gradient-title bold" Typo="Typo.h6" Inline>Scum</MudText>
                         <MudText Class="text-white bold" Typo="Typo.h6" Inline>Db</MudText>
                     </MudButton>
-                    <MudText Class="text-white bold">v@(scumAppVersion)</MudText>
+                    <MudText Class="text-white bold">v@(_scumAppVersion)</MudText>
                     <MudSpacer/>
                     <MudText Class="text-white bold">Status</MudText>
                     <MudText Class="text-white bold">-</MudText>
-                    <MudTooltip Text="@(scumAppAvailable ? "Opérationnel" : "En maintenance")" Placement="Placement.Top" Arrow>
-                        <MudIcon Icon="@(scumAppAvailable ? IconsF.SignalCellularAlt : IconsF.Update)" Color="@(scumAppAvailable ? Color.Success : Color.Warning)"/>
+                    <MudTooltip Text="@(_scumAppAvailable ? "Opérationnel" : "En maintenance")" Placement="Placement.Top" Arrow>
+                        <MudIcon Icon="@(_scumAppAvailable ? IconsF.SignalCellularAlt : IconsF.Update)" Color="@(_scumAppAvailable ? Color.Success : Color.Warning)"/>
                     </MudTooltip>
                 </MudStack>
             </MudPaper>
