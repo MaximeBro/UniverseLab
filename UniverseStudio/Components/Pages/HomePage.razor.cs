@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 
 namespace UniverseStudio.Components.Pages;
 
@@ -16,8 +16,8 @@ public partial class HomePage : ComponentBase
     {
         _steamApiAvailable = !bool.Parse(Configuration["maintenance"]!);
         _client = new HttpClient();
-        _scumAppAvailable = await GetMaintenanceAsync("https://localhost:5005") ?? true;
-        _scumAppVersion = await GetVersionAsync("https://localhost:5005") ?? "1.0.0";
+        _scumAppAvailable = await GetMaintenanceAsync("https://scum.universestudio.net") ?? true;
+        _scumAppVersion = await GetVersionAsync("https://scum.universestudio.net") ?? "~1.0.0";
     }
 
     private async Task<bool?> GetMaintenanceAsync(string appUrl)

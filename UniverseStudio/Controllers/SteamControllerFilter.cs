@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -19,7 +19,7 @@ public class SteamControllerFilter : IActionFilter
         {
             context.Result = new ContentResult
             {
-                Content = "This features is temporary unavailable. Please contact our developers if you think something might be wrong.",
+                Content = "This feature is temporary unavailable. Please contact our developers if you think something might be wrong.",
                 StatusCode = (int) HttpStatusCode.ServiceUnavailable
             };
         }
