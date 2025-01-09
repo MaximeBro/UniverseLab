@@ -23,8 +23,8 @@ builder.Services.AddAuthentication(options =>
 	}).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
 	{
 		options.Cookie.Name = "UniverseStudio.Auth";
-		options.LoginPath = "/api/v1/auth/login";
-		options.LogoutPath = "/api/v1/auth/logout";
+		options.LoginPath = "/api/v1/auth/internal/login";
+		options.LogoutPath = "/api/v1/auth/internal/logout";
 	})
 	.AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
 	{

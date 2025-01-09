@@ -50,7 +50,7 @@ public class GoogleAuthController : AuthenticationController
             
             var token = new UserTokenModel() { User = existingUser, Type = AuthType.Custom };
             TokensCache.AddToken(existingUser.InternalIdentifier, token);
-            // TODO: Check if user is already authentified
+            // TODO: Check if user is already authenticated
             
             return Ok(token);
         }

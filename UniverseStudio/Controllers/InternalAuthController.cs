@@ -9,6 +9,7 @@ using UniverseStudio.Services;
 
 namespace UniverseStudio.Controllers;
 
+[Route("/api/v1/auth/internal")]
 public class InternalAuthController : AuthenticationController
 {
     public InternalAuthController(TokensCacheService tokensCacheService, IDbContextFactory<MainDbContext> factory) 
