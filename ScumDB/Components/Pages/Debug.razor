@@ -1,0 +1,29 @@
+@page "/debug"
+
+<PageTitle>ScumDb - Debug</PageTitle>
+
+<MudStack Row="false" Spacing="10" AlignItems="AlignItems.Center" Justify="Justify.Center" Class="pt-n16" Style="height: calc(100vh - 64px);">
+    <MudPaper Class="py-6 px-8 dark-bg rounded-md light-border" Elevation="5" Style="border: 1px solid;">
+        <MudStack Row="false">
+            <MudText>Session debug</MudText>
+            @if (_claims != null)
+            {
+                <MudGrid>
+                    @foreach (var claim in _claims.Claims)
+                    {
+                        <MudItem xs="6" Style="text-decoration: underline;">
+                            <MudText>@claim.Type</MudText>
+                        </MudItem>
+                        <MudItem xs="6" Style="font-weight: bold;">
+                            <MudText>@claim.Value</MudText>
+                        </MudItem>
+                    }
+                </MudGrid>
+            }
+            else
+            {
+                <MudText Align="Align.Center">User is not authenticated</MudText>   
+            }
+        </MudStack>
+    </MudPaper>
+</MudStack>

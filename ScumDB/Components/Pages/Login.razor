@@ -3,24 +3,36 @@
 <PageTitle>ScumDb - Connexion</PageTitle>
 
 <MudStack Row="false" Spacing="10" AlignItems="AlignItems.Center" Justify="Justify.Center" Class="pt-n16" Style="height: calc(100vh - 64px);">
-    <MudPaper Class="py-6 px-8 dark-bg" Elevation="5">
+    <MudPaper Class="py-6 px-8 dark-bg rounded-md light-border" Elevation="5" Style="border: 1px solid;">
         <MudStack Row="false">
-            <MudText Class="text-white" Align="Align.Center" Typo="Typo.h4" Style="font-weight: bold;">Connexion</MudText>
+            <MudText Class="text-white" Align="Align.Center" Typo="Typo.h5">Connexion</MudText>
             <EditForm Model="@_model" OnValidSubmit="@TryLogin">
                 <DataAnnotationsValidator/>
-                <MudTextField T="string" @bind-Value="_model.Identifier" Label="Identifiant" Variant="Variant.Filled"
-                              Placeholder="nick.name" For="@(() => _model.Identifier)" Class="white-all mb-4" Style="min-width: 300px;"/>
-
-                <MudTextField T="string" @bind-Value="_model.Password" Label="Mot de passe" Variant="Variant.Filled"
-                              Placeholder="Mdp compte admin US" For="@(() => _model.Password)" Class="white-all my-4" Style="min-width: 300px;"
+                <MudTextField T="string" @bind-Value="_model.Identifier" Label="Identifiant" Variant="Variant.Outlined"
+                              Placeholder=" " For="@(() => _model.Identifier)" Class="white-all mb-4 input-text" Style="min-width: 300px;"/>
+                
+                <MudTextField T="string" @bind-Value="_model.Password" Label="Mot de passe" Variant="Variant.Outlined"
+                              Placeholder="" For="@(() => _model.Password)" Class="white-all my-4 input-text" Style="min-width: 300px;"
                               InputType="@PasswordInputType" Adornment="Adornment.End" AdornmentIcon="@PasswordIcon" OnAdornmentClick="@(() => _shown = !_shown)"/>
-                <MudStack Class="mt-2" Row Justify="Justify.Center">
-                    <MudButton Class="text-white" ButtonType="ButtonType.Submit" Variant="Variant.Filled">Se connecter</MudButton>
+                
+                <MudStack Class="mt-3" Row="false" Justify="Justify.Center">
+                    <LoadingButton Class="text-white no-transform" ButtonType="ButtonType.Submit" Color="Color.Success" Variant="Variant.Filled"
+                                   IsLoading="@_internalLoading">
+                        Se connecter
+                    </LoadingButton>
+                </MudStack>
+                <MudStack Class="mt-6" Row="false" Justify="Justify.Center">
+                    <LoadingButton Class="text-dark no-transform white-bg" OnClick="@TryGoogleAuthAsync" StartIcon="@Hardcoded.Icons.Google" IsLoading="@_googleLoading" 
+                                   LoadingColor="Color.Dark" Variant="Variant.Filled" LoadingIconSize="Size.Small" DropShadow>
+                        Google
+                    </LoadingButton>
+                </MudStack>
+                <MudStack Class="mt-3" Row="false" Justify="Justify.Center">
+                    <LoadingButton Class="text-white no-transform" StartIcon="@IconsC.Brands.Steam" Variant="Variant.Filled" IsLoading="@_steamLoading">
+                        Steam
+                    </LoadingButton>
                 </MudStack>
             </EditForm>
         </MudStack>
     </MudPaper>
-    <MudAlert Class="dark-bg" Variant="Variant.Filled" Icon="@IconsM.Filled.Info" Elevation="3">
-        L'authentification se fait à l'aide d'un compte administrateur ou modérateur réservé au staff de UniverseStudio.
-    </MudAlert>
 </MudStack>

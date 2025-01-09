@@ -6,7 +6,9 @@
 }
 
 .text-white { color: #fff!important; }
+.text-dark { color: #161621!important; }
 .white-all * { color: #fff!important; }
+.no-transform { text-transform: none!important; }
 
 .icon-hoverable:hover {
     background-color: rgba(0, 0, 0, .1)!important;
@@ -34,12 +36,16 @@
 .darkless-bg { background-color: #1E1E2D!important; }
 .dark-bg { background-color: #1A1A27!important; }
 .darker-bg { background-color: #161621!important; }
+.white-bg { background-color: #fff!important; }
 .purple-font { color: #7d57fa!important; }
 
+.light-border { border-color: #92929F!important; }
 .dark-border { border-color: #1A1A27!important; }
 .footer-dark-border { border-top: 1px solid var(--mud-palette-table-lines); }
 
-
+.input-text * label {
+    background-color: #1A1A27!important;
+}
 
 /* Home Page */
 

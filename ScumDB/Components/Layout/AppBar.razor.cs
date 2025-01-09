@@ -8,6 +8,7 @@ namespace ScumDB.Components.Layout;
 
 public partial class AppBar
 {
+    [Inject] public IWebHostEnvironment Environment { get; set; } = null!;
     [Inject] public NotificationService NotificationService { get; set; } = null!;
     [Inject] public NavigationManager NavManager { get; set; } = null!;
         

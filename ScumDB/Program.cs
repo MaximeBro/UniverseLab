@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using ScumDB.Components;
-using ScumDB.Databases;
+using ScumDB.Database;
 using ScumDB.Extensions;
 using ScumDB.Services;
 using ScumDB.Services.Hubs;
@@ -10,11 +10,8 @@ using ScumDB.Services.Hubs;
 var builder = WebApplication.CreateBuilder(args);
 
 var configPath = new DirectoryInfo(Path.Combine(builder.Environment.ContentRootPath, "../config/vehicles.json")).FullName;
-var accountsPath = new DirectoryInfo(Path.Combine(builder.Environment.ContentRootPath, "../config/scum-admin-accounts.json")).FullName;
 builder.Configuration.AddJsonFile(configPath, optional: false, reloadOnChange: true);
-builder.Configuration.AddJsonFile(accountsPath, optional: false, reloadOnChange: true);
 
-builder.WebHost.UseUrls("https://localhost:5005/", "http://localhost:5004/");
 builder.WebHost.UseStaticWebAssets();
 
 builder.Services.AddHttpContextAccessor();

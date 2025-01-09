@@ -27,6 +27,10 @@ public partial class Login
 	private InputType PasswordInputType => _shown ? InputType.Text : InputType.Password;
 	private string PasswordIcon => _shown ? IconsM.Filled.VisibilityOff : IconsM.Filled.Visibility;
 
+	private bool _internalLoading;
+	private bool _googleLoading;
+	private bool _steamLoading;
+
 	protected override async Task OnInitializedAsync()
 	{
 		var state = await AuthenticationState;
@@ -58,12 +62,21 @@ public partial class Login
 			UserTokenHandler.Tokens.Add(guid, claimsPrincipal);
 			NavManager.NavigateTo($"/api/login/{guid}", true);
 			NotificationService.SendAuthNotification();
-			return;
 		}
 		else
 		{
 			Snackbar.Add("Mauvais couple d'identifiants", Severity.Error, Hardcoded.SnackbarOptions);
 		}
+	}
+
+	private async Task TryGoogleAuthAsync()
+	{
+		if (_googleLoading) return;
+		
+		_googleLoading = true;
+		await Task.Delay(4000);
+		// $"{@Configuration["Services:UniverseStudio"]}api/v1/auth/google/login"
+		_googleLoading = false;
 	}
 	
 	private sealed class LoginModel

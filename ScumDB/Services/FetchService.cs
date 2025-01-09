@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using ScumDB.Databases;
+using ScumDB.Database;
 using ScumDB.Models;
 
 namespace ScumDB.Services;

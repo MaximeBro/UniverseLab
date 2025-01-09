@@ -3,8 +3,7 @@
         <MudImage Height="32" Style="width: auto;" Src="/assets/U_transparent.png" Alt="UniverseStudio"/>
     </MudLink>
     <MudButton Href="/" Class="appbar-btn ml-4" Style="text-transform: none;">
-        <MudText Class="gradient-title" Style="font-weight: 700; font-size: 1rem;" Inline>Scum</MudText>
-        <MudText Class="text-white" Style="font-weight: 700; font-size: 1rem;" Inline>Db</MudText>
+        <MudText Class="gradient-title" Style="font-weight: 700; font-size: 1rem;">ScumDB</MudText>
     </MudButton>
     <MudButton Href="/vehicles" StartIcon="@IconsM.Filled.Toys" Class="appbar-btn text-white ml-4" Style="text-transform: none;">Véhicules</MudButton>
     <AuthorizeView>
@@ -12,6 +11,9 @@
             <MudButton Href="/admin/web-panel" StartIcon="@IconsM.Filled.AdminPanelSettings" Class="appbar-btn text-white ml-4" Style="text-transform: none;">WebPanel</MudButton>
         </Authorized>
     </AuthorizeView>
+
+    <MudButton Href="/debug" StartIcon="@IconsM.Filled.CleaningServices" Class="appbar-btn text-white ml-4" Style="text-transform: none;">Debug</MudButton>
+    
     <MudSpacer/>
     
     <AuthorizeView Context="userMenuCtx">

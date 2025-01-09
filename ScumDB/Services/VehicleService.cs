@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using ScumDB.Databases;
+using ScumDB.Database;
+using ScumDB.Extensions;
 using ScumDB.Models;
 using ScumDB.Models.Enums;
 

@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using ScumDB.Components.Dialogs;
 using ScumDB.Components.Dialogs.SteamAccounts;
-using ScumDB.Databases;
+using ScumDB.Database;
 using ScumDB.Extensions;
 using ScumDB.Models;
 using ScumDB.Services;

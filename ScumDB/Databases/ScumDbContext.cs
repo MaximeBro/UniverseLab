@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ScumDB.Models;
 
-namespace ScumDB.Databases;
+namespace ScumDB.Database;
 
 public class ScumDbContext : DbContext
 {

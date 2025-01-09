@@ -5,7 +5,7 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using ScumDB.Components.Dialogs;
 using ScumDB.Components.Dialogs.Vehicles;
-using ScumDB.Databases;
+using ScumDB.Database;
 using ScumDB.Extensions;
 using ScumDB.Models;
 using ScumDB.Services.Hubs;
